@@ -1,0 +1,92 @@
+{
+  "teachers": [
+    { "id": "t1", "name": "Alice Smith", "email": "alice@school.edu" },
+    { "id": "t2", "name": "Bob Jones", "email": "bob@school.edu" }
+  ],
+  "slots": [
+    { "start": "08:00", "end": "08:45" },
+    { "start": "08:55", "end": "09:40" },
+    { "start": "09:50", "end": "10:35" },
+    { "start": "10:45", "end": "11:30" },
+    { "start": "11:40", "end": "12:25" },
+    { "start": "12:35", "end": "13:20" },
+    { "start": "13:30", "end": "14:15" },
+    { "start": "14:25", "end": "15:10" }
+  ],
+  "lessonTypes": [
+    { "id": "math", "name": "Math", "iconId": "math", "color": "#FFD700" },
+    { "id": "english", "name": "English", "iconId": "english", "color": "#87CEEB" },
+    { "id": "science", "name": "Science", "iconId": "science", "color": "#98FB98" },
+    { "id": "history", "name": "History", "iconId": "history", "color": "#FFB6C1" },
+    { "id": "art", "name": "Art", "iconId": "art", "color": "#FFA07A" },
+    { "id": "pe", "name": "PE", "iconId": "pe", "color": "#20B2AA" },
+    { "id": "music", "name": "Music", "iconId": "music", "color": "#9370DB" }
+  ],
+  "days": [
+    {
+      "name": "Monday",
+      "lessons": [
+        { "lessonId": "math", "teacherId": "t1" },
+        { "lessonId": "english", "teacherId": "t2" },
+        { "lessonId": "science", "teacherId": "t2" },
+        { "lessonId": "history", "teacherId": "t1" },
+        { "lessonId": "art", "teacherId": "t1" },
+        { "lessonId": "pe", "teacherId": "t2" },
+        { "lessonId": "music", "teacherId": "t1" },
+        { "lessonId": "math", "teacherId": "t1" }
+      ]
+    },
+    {
+      "name": "Tuesday",
+      "lessons": [
+        { "lessonId": "english", "teacherId": "t2" },
+        { "lessonId": "science", "teacherId": "t2" },
+        { "lessonId": "history", "teacherId": "t1" },
+        { "lessonId": "art", "teacherId": "t1" },
+        { "lessonId": "pe", "teacherId": "t2" },
+        { "lessonId": "music", "teacherId": "t1" },
+        { "lessonId": "math", "teacherId": "t1" },
+        { "lessonId": "english", "teacherId": "t2" }
+      ]
+    },
+    {
+      "name": "Wednesday",
+      "lessons": [
+        { "lessonId": "science", "teacherId": "t2" },
+        { "lessonId": "history", "teacherId": "t1" },
+        { "lessonId": "art", "teacherId": "t1" },
+        { "lessonId": "pe", "teacherId": "t2" },
+        { "lessonId": "music", "teacherId": "t1" },
+        { "lessonId": "math", "teacherId": "t1" },
+        { "lessonId": "english", "teacherId": "t2" },
+        { "lessonId": "science", "teacherId": "t2" }
+      ]
+    },
+    {
+      "name": "Thursday",
+      "lessons": [
+        { "lessonId": "history", "teacherId": "t1" },
+        { "lessonId": "art", "teacherId": "t1" },
+        { "lessonId": "pe", "teacherId": "t2" },
+        { "lessonId": "music", "teacherId": "t1" },
+        { "lessonId": "math", "teacherId": "t1" },
+        { "lessonId": "english", "teacherId": "t2" },
+        { "lessonId": "science", "teacherId": "t2" },
+        { "lessonId": "history", "teacherId": "t1" }
+      ]
+    },
+    {
+      "name": "Friday",
+      "lessons": [
+        { "lessonId": "art", "teacherId": "t1" },
+        { "lessonId": "pe", "teacherId": "t2" },
+        { "lessonId": "music", "teacherId": "t1" },
+        { "lessonId": "math", "teacherId": "t1" },
+        { "lessonId": "english", "teacherId": "t2" },
+        { "lessonId": "science", "teacherId": "t2" },
+        { "lessonId": "history", "teacherId": "t1" },
+        { "lessonId": "art", "teacherId": "t1" }
+      ]
+    }
+  ]
+}
