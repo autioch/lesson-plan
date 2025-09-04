@@ -1,0 +1,31 @@
+---
+// Cell.astro: Table cell for a lesson
+export interface Props {
+  lesson: any;
+  lessonType: any;
+  teacher: any;
+}
+const { lesson, lessonType, teacher } = Astro.props;
+---
+<div
+  class={`cell lesson-cell${!lesson ? ' empty' : ''}`}
+  style={`background:${lessonType?.color ?? '#eee'};`}
+>
+  {lesson ? (
+    <div class="lesson-content">
+      {lessonType?.iconId && (
+        <img
+          src={`/src/assets/${lessonType.iconId}.svg`}
+          alt={lessonType.name}
+          class="lesson-icon"
+          width="36"
+          height="36"
+        />
+      )}
+      <div class="lesson-text">
+        <div class="lesson-name">{lessonType?.name ?? '—'}</div>
+        <div class="teacher-name">{teacher?.name ?? ''}</div>
+      </div>
+    </div>
+  ) : null}
+</div>

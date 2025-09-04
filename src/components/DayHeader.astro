@@ -1,0 +1,8 @@
+---
+// DayHeader.astro: Table header cell for a day
+export interface Props {
+  name: string;
+}
+const { name } = Astro.props;
+---
+<div class="cell day-header">{name}</div>

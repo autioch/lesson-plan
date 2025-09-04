@@ -1,0 +1,162 @@
+---
+// filepath: d:\projects\lesson-plan\src\components\table.astro
+import type { LessonsPlan } from "../data/lessonTypes";
+import Cell from "./Cell.astro";
+import DayHeader from "./DayHeader.astro";
+import RowHeader from "./RowHeader.astro";
+
+export interface Props {
+  lessonsData: LessonsPlan;
+}
+
+const { lessonsData } = Astro.props;
+const { slots, days, teachers, lessonTypes } = lessonsData;
+
+// Helper to get lesson name, color, and icon by id
+function getLessonType(lessonId: string) {
+  return lessonTypes.find((l) => l.id === lessonId);
+}
+
+// Helper to get teacher name by id
+function getTeacher(teacherId: string) {
+  return teachers.find((t) => t.id === teacherId);
+}
+---
+
+<div class="lessons-table">
+  <div class="header-row">
+    <div class="cell time-header"></div>
+    {days.map((day) => <DayHeader name={day.name} />)}
+  </div>
+  {slots.map((slot, rowIdx) => {
+    let diff = 0;
+    if (rowIdx < slots.length - 1) {
+      // Calculate end time for current slot
+      const [startHour, startMin] = slot.start.split(":").map(Number);
+      const endTotal = startHour * 60 + startMin + slot.duration;
+      // Next slot start
+      const [nextStartHour, nextStartMin] = slots[rowIdx + 1].start.split(":").map(Number);
+      const nextStartTotal = nextStartHour * 60 + nextStartMin;
+      diff = nextStartTotal - endTotal;
+    }
+    return (
+      <div class="row">
+        <RowHeader start={slot.start} duration={slot.duration} breakDuration={diff} />
+        {days.map((day) => {
+          const lesson = day.lessons[rowIdx];
+          const lessonType = lesson ? getLessonType(lesson.lessonId) : null;
+          const teacher = lesson ? getTeacher(lesson.teacherId) : null;
+          return <Cell lesson={lesson} lessonType={lessonType} teacher={teacher} />;
+        })}
+      </div>
+    );
+  })}
+</div>
+
+<style is:global>
+
+  .lessons-table {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 600px;
+    height: 100%;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    border: 1px solid #ddd;
+    overflow: hidden;
+  }
+
+
+  .header-row {
+    display: flex;
+    width: 100%;
+    height: 56px;
+    flex-shrink: 0;
+  }
+  .row {
+    display: flex;
+    width: 100%;
+    flex: 1 1 0;
+    min-height: 0;
+  }
+
+
+  .cell {
+    flex: 1 1 0;
+    padding: 8px 4px;
+    box-sizing: border-box;
+    border: none;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    min-width: 80px;
+    min-height: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+  }
+  .row .cell:last-child,
+  .header-row .cell:last-child {
+    border-right: none;
+  }
+  .row:last-child .cell {
+    border-bottom: none;
+  }
+
+  .time-header,
+  .time-cell {
+    background: #f0f0f0;
+    font-weight: bold;
+    min-width: 110px;
+    max-width: 110px;
+    width: 110px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .day-header {
+    background: #e0e7ff;
+    font-weight: bold;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lesson-cell {
+    background: #fafafa;
+    transition: background 0.2s;
+    padding: 0;
+  }
+
+  .lesson-cell.empty {
+    background: #fff;
+  }
+
+  .lesson-content {
+    display: flex;
+    align-items: center;
+    padding: 6px 8px;
+  }
+
+  .lesson-icon {
+    margin-right: 10px;
+    flex-shrink: 0;
+    display: block;
+  }
+
+  .lesson-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .lesson-name {
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+
+  .teacher-name {
+    font-size: 0.95em;
+    color: #555;
+  }
+</style>

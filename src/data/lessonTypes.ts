@@ -6,7 +6,7 @@ export type Teacher = {
 
 export type Slot = {
     start: string;
-    end: string;
+    duration: number;
 };
 
 export type LessonType = {

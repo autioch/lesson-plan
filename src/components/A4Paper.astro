@@ -1,0 +1,21 @@
+---
+// A4Paper.astro: A4 paper layout wrapper
+---
+<div class="a4-paper">
+  <slot />
+</div>
+
+<style>
+.a4-paper {
+  height: 210mm;
+  width: 297mm;
+  margin: 32px auto;
+  background: #f5f5f5;
+  box-shadow: 0 4px 24px #aaa;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 1cm;
+  box-sizing: border-box;
+}
+</style>
