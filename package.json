@@ -2,6 +2,7 @@
   "name": "lesson-plan2",
   "type": "module",
   "version": "0.0.1",
+  "homepage": "https://autioch.github.io/lesson-plan/",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",

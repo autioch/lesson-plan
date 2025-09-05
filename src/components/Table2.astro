@@ -1,5 +1,4 @@
 ---
-// filepath: d:\projects\lesson-plan\src\components\table.astro
 import type { LessonsPlan } from "../data/lessonTypes";
 import Cell from "./Cell.astro";
 import DayHeader from "./DayHeader.astro";
@@ -9,6 +8,7 @@ export interface Props {
   lessonsData: LessonsPlan;
 }
 
+// test
 const { lessonsData } = Astro.props;
 const { slots, days, teachers, lessonTypes } = lessonsData;
 
