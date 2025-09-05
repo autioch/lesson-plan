@@ -1,31 +1,46 @@
 ---
-// Cell.astro: Table cell for a lesson
+import type { LessonType, Teacher } from '../data/lessonTypes';
+
 export interface Props {
-  lesson: any;
-  lessonType: any;
-  teacher: any;
+    lessonType?: LessonType;
+    teacher?: Teacher;
 }
-const { lesson, lessonType, teacher } = Astro.props;
+const { lessonType, teacher } = Astro.props;
 ---
-<div
-  class={`cell lesson-cell${!lesson ? ' empty' : ''}`}
-  style={`background:${lessonType?.color ?? '#eee'};`}
->
-  {lesson ? (
-    <div class="lesson-content">
-      {lessonType?.iconId && (
-        <img
-          src={`/src/assets/${lessonType.iconId}.svg`}
-          alt={lessonType.name}
-          class="lesson-icon"
-          width="36"
-          height="36"
-        />
-      )}
-      <div class="lesson-text">
-        <div class="lesson-name">{lessonType?.name ?? '—'}</div>
-        <div class="teacher-name">{teacher?.name ?? ''}</div>
-      </div>
-    </div>
-  ) : null}
+
+<div class="lesson" style={`background:${lessonType?.color ?? "#fff"};`}>
+    <div class="lesson-name">{lessonType?.name ?? ""}</div>
+    <div class="teacher-name">{teacher?.name ?? ""}</div>
 </div>
+
+<style>
+    .lesson {
+        flex: 1 1 0;
+        padding: 6px 4px;
+        box-sizing: border-box;
+        border: none;
+        border-right: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+        min-width: 80px;
+        min-height: 48px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+
+    .lesson-name {
+        width: 100%;
+        text-align: center;
+    }
+
+    .teacher-name {
+        font-size: 0.6em;
+        color: #888;
+        position: absolute;
+        left: 6px;
+        bottom: 4px;
+        text-align: left;
+    }
+</style>

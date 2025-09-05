@@ -1,7 +1,12 @@
 {
   "teachers": [
-    { "id": "t1", "name": "Alice Smith", "email": "alice@school.edu" },
-    { "id": "t2", "name": "Bob Jones", "email": "bob@school.edu" }
+    { "id": "t1", "name": "MSkrzypczak", "email": "alice@school.edu" },
+    { "id": "t2", "name": "APiskorska/IGłowacka", "email": "bob@school.edu" },
+    { "id": "t3", "name": "IGruszka", "email": "bob@school.edu" },
+    { "id": "t4", "name": "ESzymańska", "email": "bob@school.edu" },
+    { "id": "t5", "name": "AKozłowska", "email": "bob@school.edu" },
+    { "id": "t6", "name": "ABartkowski", "email": "bob@school.edu" },
+    { "id": "t7", "name": "multiple", "email": "bob@school.edu" }
   ],
   "slots": [
     { "start": "07:30", "duration": 45 },
@@ -16,78 +21,75 @@
     { "start": "15:45", "duration": 45 }
   ],
   "lessonTypes": [
-    { "id": "math", "name": "Math", "iconId": "math", "color": "#FFD700" },
-    { "id": "english", "name": "English", "iconId": "english", "color": "#87CEEB" },
-    { "id": "science", "name": "Science", "iconId": "science", "color": "#98FB98" },
-    { "id": "history", "name": "History", "iconId": "history", "color": "#FFB6C1" },
-    { "id": "art", "name": "Art", "iconId": "art", "color": "#FFA07A" },
-    { "id": "pe", "name": "PE", "iconId": "pe", "color": "#20B2AA" },
-    { "id": "music", "name": "Music", "iconId": "music", "color": "#9370DB" }
+    { "id": "1_ep", "name": "Edukacja", "iconId": "math", "color": "#ffffff" },
+    { "id": "2_eng", "name": "Angielski", "iconId": "english", "color": "#80d7f1" },
+    { "id": "3_wfew", "name": "W/F ew", "iconId": "pe", "color": "#9bf093" },
+    { "id": "4_pool", "name": "Basen", "iconId": "science", "color": "#57d14c" },
+    { "id": "5_wf", "name": "W/F", "iconId": "history", "color": "#9bf093" },
+    { "id": "6_art", "name": "Zajęcia Twórcze", "iconId": "art", "color": "#f7aec6" },
+    { "id": "7_extra", "name": "Kółko", "iconId": "music", "color": "#ffb8bd" },
+    { "id": "8_gimkor", "name": "Gimnastyka korekcyjna", "iconId": "music", "color": "#7cd874" },
+    { "id": "9_ethics", "name": "Religia/Etyka", "iconId": "music", "color": "#92cbe2" },
+    { "id": "9_rhytm", "name": "Rytmika", "iconId": "music", "color": "#fcb8e7" }
   ],
   "days": [
     {
-      "name": "Monday",
+      "name": "Poniedziałek",
       "lessons": [
-        { "lessonId": "math", "teacherId": "t1" },
-        { "lessonId": "english", "teacherId": "t2" },
-        { "lessonId": "science", "teacherId": "t2" },
-        { "lessonId": "history", "teacherId": "t1" },
-        { "lessonId": "art", "teacherId": "t1" },
-        { "lessonId": "pe", "teacherId": "t2" },
-        { "lessonId": "music", "teacherId": "t1" },
-        { "lessonId": "math", "teacherId": "t1" }
+        {},
+        { "lessonId": "1_ep", "teacherId": "t1" },
+        { "lessonId": "1_ep", "teacherId": "t1" },
+        { "lessonId": "1_ep", "teacherId": "t1" },
+        { "lessonId": "1_ep", "teacherId": "t1" },
+        { "lessonId": "1_ep", "teacherId": "t1" },
+        { "lessonId": "2_eng", "teacherId": "t2" }
       ]
     },
     {
-      "name": "Tuesday",
+      "name": "Wtorek",
       "lessons": [
-        { "lessonId": "english", "teacherId": "t2" },
-        { "lessonId": "science", "teacherId": "t2" },
-        { "lessonId": "history", "teacherId": "t1" },
-        { "lessonId": "art", "teacherId": "t1" },
-        { "lessonId": "pe", "teacherId": "t2" },
-        { "lessonId": "music", "teacherId": "t1" },
-        { "lessonId": "math", "teacherId": "t1" },
-        { "lessonId": "english", "teacherId": "t2" }
+        {},
+        { "lessonId": "1_ep", "teacherId": "t1" },
+        { "lessonId": "3_wfew", "teacherId": "t1" },
+        { "lessonId": "1_ep", "teacherId": "t1" },
+        { "lessonId": "1_ep", "teacherId": "t1" },
+        { "lessonId": "2_eng", "teacherId": "t2" },
+        { "lessonId": "8_gimkor", "teacherId": "t3" }
       ]
     },
     {
-      "name": "Wednesday",
+      "name": "Środa",
       "lessons": [
-        { "lessonId": "science", "teacherId": "t2" },
-        { "lessonId": "history", "teacherId": "t1" },
-        { "lessonId": "art", "teacherId": "t1" },
-        { "lessonId": "pe", "teacherId": "t2" },
-        { "lessonId": "music", "teacherId": "t1" },
-        { "lessonId": "math", "teacherId": "t1" },
-        { "lessonId": "english", "teacherId": "t2" },
-        { "lessonId": "science", "teacherId": "t2" }
+        {},
+        { "lessonId": "1_ep", "teacherId": "t1" },
+        { "lessonId": "2_eng", "teacherId": "t2" },
+        { "lessonId": "4_pool", "teacherId": "t7" },
+        { "lessonId": "4_pool", "teacherId": "t7" },
+        { "lessonId": "9_ethics", "teacherId": "t6" },
+        { "lessonId": "9_rhytm", "teacherId": "t4" }
       ]
     },
     {
-      "name": "Thursday",
+      "name": "Czwartek",
       "lessons": [
-        { "lessonId": "history", "teacherId": "t1" },
-        { "lessonId": "art", "teacherId": "t1" },
-        { "lessonId": "pe", "teacherId": "t2" },
-        { "lessonId": "music", "teacherId": "t1" },
-        { "lessonId": "math", "teacherId": "t1" },
-        { "lessonId": "english", "teacherId": "t2" },
-        { "lessonId": "science", "teacherId": "t2" },
-        { "lessonId": "history", "teacherId": "t1" }
+        {},
+        { "lessonId": "1_ep", "teacherId": "t1" },
+        { "lessonId": "5_wf", "teacherId": "t3" },
+        { "lessonId": "1_ep", "teacherId": "t1" },
+        { "lessonId": "1_ep", "teacherId": "t1" },
+        { "lessonId": "1_ep", "teacherId": "t1" },
+        { "lessonId": "1_ep", "teacherId": "t1" }
       ]
     },
     {
-      "name": "Friday",
+      "name": "Piątek",
       "lessons": [
-        { "lessonId": "art", "teacherId": "t1" },
-        { "lessonId": "pe", "teacherId": "t2" },
-        { "lessonId": "music", "teacherId": "t1" },
-        { "lessonId": "math", "teacherId": "t1" },
-        { "lessonId": "english", "teacherId": "t2" },
-        { "lessonId": "science", "teacherId": "t2" },
-        { "lessonId": "history", "teacherId": "t1" },
-        { "lessonId": "art", "teacherId": "t1" }
+        {},
+        { "lessonId": "1_ep", "teacherId": "t1" },
+        { "lessonId": "6_art", "teacherId": "t1" },
+        { "lessonId": "6_art", "teacherId": "t1" },
+        { "lessonId": "5_wf", "teacherId": "t3" },
+        { "lessonId": "7_extra", "teacherId": "t1" }
       ]
     }
   ]

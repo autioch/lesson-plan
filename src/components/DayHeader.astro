@@ -6,3 +6,12 @@ export interface Props {
 const { name } = Astro.props;
 ---
 <div class="cell day-header">{name}</div>
+<style>
+  .day-header {
+    background: #f1f1f1;
+    font-weight: bold;
+    align-items: center;
+    justify-content: center;
+    color: #444;
+  }
+</style>

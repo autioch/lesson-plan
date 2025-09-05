@@ -1,32 +1,45 @@
 ---
 // RowHeader.astro: Table row header cell for time slot
 export interface Props {
-  start: string;
-  duration: number;
-  breakDuration?: number;
+    start: string;
+    duration: number;
+    breakDuration?: number;
 }
 const { start, duration, breakDuration } = Astro.props;
 
 function getEndTime(start: string, duration: number) {
-  const [h, m] = start.split(":").map(Number);
-  const total = h * 60 + m + duration;
-  const endH = Math.floor(total / 60);
-  const endM = total % 60;
-  return `${String(endH).padStart(2, "0")}:${String(endM).padStart(2, "0")}`;
+    const [h, m] = start.split(":").map(Number);
+    const total = h * 60 + m + duration;
+    const endH = Math.floor(total / 60);
+    const endM = total % 60;
+    return `${String(endH).padStart(2, "0")}:${String(endM).padStart(2, "0")}`;
 }
 ---
+
 <div class="cell time-cell">
-  {start} - {getEndTime(start, duration)}
-  {typeof breakDuration === 'number' && breakDuration > 0 && (
-    <div class="break-duration">{breakDuration}min przerwy</div>
-  )}
+    {start} - {getEndTime(start, duration)}
+    {
+        typeof breakDuration === "number" && breakDuration > 0 && (
+            <div class="break-duration">+{breakDuration}min przerwy</div>
+        )
+    }
 </div>
 
-  <style>
-  .break-duration {
-    font-size: 0.8em;
-    color: #555;
-    font-weight: normal;
-  }
-  </style>
-</div>
+<style is:global>
+    .break-duration {
+        font-size: 0.8em;
+        color: #555;
+        font-weight: normal;
+    }
+
+    .time-cell {
+        background: #f1f1f1;
+        font-weight: bold;
+        min-width: 110px;
+        max-width: 110px;
+        width: 110px;
+        align-items: center;
+        justify-content: center;
+        color: #444;
+    }
+</style>

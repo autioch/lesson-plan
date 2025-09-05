@@ -25,7 +25,7 @@ function getTeacher(teacherId: string) {
 
 <div class="lessons-table">
   <div class="header-row">
-    <div class="cell time-header"></div>
+    <div class="cell time-cell"></div>
     {days.map((day) => <DayHeader name={day.name} />)}
   </div>
   {slots.map((slot, rowIdx) => {
@@ -44,9 +44,9 @@ function getTeacher(teacherId: string) {
         <RowHeader start={slot.start} duration={slot.duration} breakDuration={diff} />
         {days.map((day) => {
           const lesson = day.lessons[rowIdx];
-          const lessonType = lesson ? getLessonType(lesson.lessonId) : null;
-          const teacher = lesson ? getTeacher(lesson.teacherId) : null;
-          return <Cell lesson={lesson} lessonType={lessonType} teacher={teacher} />;
+          const lessonType = lesson ? getLessonType(lesson.lessonId) : undefined;
+          const teacher = lesson ? getTeacher(lesson.teacherId) : undefined;
+          return <Cell lessonType={lessonType} teacher={teacher} />;
         })}
       </div>
     );
@@ -63,7 +63,8 @@ function getTeacher(teacherId: string) {
     height: 100%;
     box-sizing: border-box;
     font-family: sans-serif;
-    border: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
     overflow: hidden;
   }
 
@@ -94,69 +95,6 @@ function getTeacher(teacherId: string) {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: stretch;
-  }
-  .row .cell:last-child,
-  .header-row .cell:last-child {
-    border-right: none;
-  }
-  .row:last-child .cell {
-    border-bottom: none;
   }
 
-  .time-header,
-  .time-cell {
-    background: #f0f0f0;
-    font-weight: bold;
-    min-width: 110px;
-    max-width: 110px;
-    width: 110px;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .day-header {
-    background: #e0e7ff;
-    font-weight: bold;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .lesson-cell {
-    background: #fafafa;
-    transition: background 0.2s;
-    padding: 0;
-  }
-
-  .lesson-cell.empty {
-    background: #fff;
-  }
-
-  .lesson-content {
-    display: flex;
-    align-items: center;
-    padding: 6px 8px;
-  }
-
-  .lesson-icon {
-    margin-right: 10px;
-    flex-shrink: 0;
-    display: block;
-  }
-
-  .lesson-text {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .lesson-name {
-    font-weight: 500;
-    margin-bottom: 2px;
-  }
-
-  .teacher-name {
-    font-size: 0.95em;
-    color: #555;
-  }
 </style>
