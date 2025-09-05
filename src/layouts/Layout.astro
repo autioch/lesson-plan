@@ -9,7 +9,7 @@ import A4Paper from "../components/A4Paper.astro";
         <meta name="viewport" content="width=device-width" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <meta name="generator" content={Astro.generator} />
-        <title>Astro Basics</title>
+        <title>Plan lekcji</title>
     </head>
     <body>
         <A4Paper>
@@ -22,17 +22,18 @@ import A4Paper from "../components/A4Paper.astro";
     html,
     body {
         margin: 0;
-        overflow: auto;
+        border: 0;
+        box-sizing: border-box;
     }
-
     @media (min-width: 297mm) and (min-height: 210mm) {
         html,
         body {
             width: 100%;
             height: 100%;
             background: #fff;
-            overflow: hidden;
-            overflow: hidden;
+        }
+        body {
+            padding: 1em;
         }
     }
 </style>

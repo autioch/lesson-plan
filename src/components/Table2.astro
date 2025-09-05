@@ -74,7 +74,6 @@ function getTeacher(teacherId: string) {
     font-family: sans-serif;
     border-top: 1px solid #ddd;
     border-left: 1px solid #ddd;
-    overflow: hidden;
   }
 
   .header-row {
@@ -84,7 +83,7 @@ function getTeacher(teacherId: string) {
     flex-shrink: 0;
     z-index: 2;
   }
-  @media (max-width: 600px) {
+  @media (max-width: 297mm) and (max-height: 210mm) {
     .header-row {
       position: sticky;
       top: 0;
@@ -112,21 +111,22 @@ function getTeacher(teacherId: string) {
 
   @media (min-width: 297mm) and (min-height: 210mm) {
     .row {
-      min-height: 0;
+      min-height: 1px;
     }
   }
 
   .cell {
     flex: 1 1 0;
-    padding: 8px 4px;
+    padding: 0.5em 0.25em;
     box-sizing: border-box;
     border: none;
     border-right: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
-    min-width: 80px;
-    min-height: 48px;
+    min-width: 9em;
+    /* min-height: 2em; */
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
   }
 </style>

@@ -8,31 +8,17 @@ export interface Props {
 const { lessonType, teacher } = Astro.props;
 ---
 
-<div class="lesson" style={`background-color:${lessonType?.color ?? "#fff"};`}>
+<div class="cell lesson" style={`background-color:${lessonType?.color ?? "#fff"};`}>
     <div class="lesson-name">{lessonType?.name ?? ""}</div>
     <div class="teacher-name">{teacher?.name ?? ""}</div>
 </div>
 
 <style>
     .lesson {
-        flex: 1 1 0;
-        padding: 6px 4px;
-        box-sizing: border-box;
-        border: none;
-        border-right: 1px solid #ddd;
-        border-bottom: 1px solid #ddd;
-        min-width: 80px;
-        min-height: 48px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
         position: relative;
-        padding-bottom: 20px !important; /* space for absolute footer */
     }
 
     .lesson-name {
-        width: 100%;
         text-align: center;
     }
 

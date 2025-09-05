@@ -10,7 +10,6 @@
     .a4-paper {
         display: flex;
         flex-direction: column;
-        /* overflow: hidden; */
         box-sizing: border-box;
         height: auto;
     }
@@ -21,14 +20,15 @@
             height: 210mm;
             width: 297mm;
             box-shadow: 0 4px 24px #aaa;
-            margin: 32px auto;
+            margin: auto;
         }
     }
 
     @media print {
         .a4-paper {
-            margin: 0.25cm;
+            /* margin: 0.25cm; */
             box-shadow: none;
+            padding: 0px;
             width: calc(100% - 1cm);
             height: calc(100% - 1cm);
             -webkit-print-color-adjust: exact;
