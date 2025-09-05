@@ -8,15 +8,21 @@
 
 <style is:global>
     .a4-paper {
-        height: 210mm;
-        width: 297mm;
-        margin: 32px auto;
-        box-shadow: 0 4px 24px #aaa;
         display: flex;
         flex-direction: column;
-        overflow: hidden;
-        padding: 1cm;
+        /* overflow: hidden; */
         box-sizing: border-box;
+        height: auto;
+    }
+
+    @media (min-width: 297mm) and (min-height: 210mm) {
+        .a4-paper {
+            padding: 1cm;
+            height: 210mm;
+            width: 297mm;
+            box-shadow: 0 4px 24px #aaa;
+            margin: 32px auto;
+        }
     }
 
     @media print {
@@ -25,6 +31,8 @@
             box-shadow: none;
             width: calc(100% - 1cm);
             height: calc(100% - 1cm);
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
         }
     }
 </style>
