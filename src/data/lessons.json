@@ -6,7 +6,8 @@
     { "id": "t4", "name": "ESzymańska", "email": "bob@school.edu" },
     { "id": "t5", "name": "AKozłowska", "email": "bob@school.edu" },
     { "id": "t6", "name": "ABartkowski", "email": "bob@school.edu" },
-    { "id": "t7", "name": "multiple", "email": "bob@school.edu" }
+    { "id": "t7", "name": "multiple", "email": "bob@school.edu" },
+    { "id": "t8", "name": "Joanna Nikuła-Szymaniak", "email": "bob@school.edu" }
   ],
   "slots": [
     { "start": "07:30", "duration": 45 },
@@ -30,7 +31,8 @@
     { "id": "7_extra", "name": "Kółko", "iconId": "music", "color": "#ffb8bd" },
     { "id": "8_gimkor", "name": "Gimnastyka korekcyjna", "iconId": "music", "color": "#7cd874" },
     { "id": "9_ethics", "name": "Religia/Etyka", "iconId": "music", "color": "#92cbe2" },
-    { "id": "9_rhytm", "name": "Rytmika", "iconId": "music", "color": "#fcb8e7" }
+    { "id": "9_rhytm", "name": "Rytmika", "iconId": "music", "color": "#fcb8e7" },
+    { "id": "9_logo", "name": "Logopedia", "iconId": "music", "color": "#fcb8e7" }
   ],
   "days": [
     {
@@ -54,7 +56,9 @@
         { "lessonId": "1_ep", "teacherId": "t1" },
         { "lessonId": "1_ep", "teacherId": "t1" },
         { "lessonId": "2_eng", "teacherId": "t2" },
-        { "lessonId": "8_gimkor", "teacherId": "t3" }
+        { "lessonId": "8_gimkor", "teacherId": "t3" },
+        {},
+        { "lessonId": "9_logo", "teacherId": "t8" }
       ]
     },
     {
