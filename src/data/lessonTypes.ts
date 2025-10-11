@@ -19,6 +19,7 @@ export type LessonType = {
 export type Lesson = {
     lessonId: string;
     teacherId: string;
+    paused: boolean;
 };
 
 export type Day = {

@@ -4,13 +4,17 @@ import type { LessonType, Teacher } from "../data/lessonTypes";
 export interface Props {
     lessonType?: LessonType;
     teacher?: Teacher;
+    paused?: boolean;
 }
-const { lessonType, teacher } = Astro.props;
+const { lessonType, teacher, paused } = Astro.props;
 ---
 
-<div class="cell lesson" style={`background-color:${lessonType?.color ?? "#fff"};`}>
+<div
+    class={`cell lesson ${paused ? 'paused' : ''}`}
+    style={`background-color:${paused ? "#e8e8e8" : (lessonType?.color ?? "#fff")};`}
+>
     <div class="lesson-name">{lessonType?.name ?? ""}</div>
-    <div class="teacher-name">{teacher?.name ?? ""}</div>
+    <div class="teacher-name">{paused ? '' : (teacher?.name ?? "")}</div>
 </div>
 
 <style>
@@ -29,5 +33,10 @@ const { lessonType, teacher } = Astro.props;
         left: 6px;
         bottom: 4px;
         text-align: left;
+    }
+
+    .paused {
+        text-decoration: line-through;
+        color: #888;
     }
 </style>

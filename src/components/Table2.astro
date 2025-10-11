@@ -55,7 +55,10 @@ function getTeacher(teacherId: string) {
               ? getLessonType(lesson.lessonId)
               : undefined;
             const teacher = lesson ? getTeacher(lesson.teacherId) : undefined;
-            return <Cell lessonType={lessonType} teacher={teacher} />;
+            const paused = lesson?.paused ?? false;
+            return (
+              <Cell lessonType={lessonType} teacher={teacher} paused={paused} />
+            );
           })}
         </div>
       );
