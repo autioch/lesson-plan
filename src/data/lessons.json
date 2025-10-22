@@ -57,8 +57,7 @@
         { "lessonId": "1_ep", "teacherId": "t1" },
         { "lessonId": "1_ep", "teacherId": "t1" },
         { "lessonId": "2_eng", "teacherId": "t2" },
-        { "lessonId": "12_", "teacherId": "t9", "paused": true },
-        { "lessonId": "12_", "teacherId": "t9", "paused": true }
+        { "lessonId": "12_", "teacherId": "t9" }
       ]
     },
     {
