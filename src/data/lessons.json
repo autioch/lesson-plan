@@ -84,9 +84,7 @@
         { "lessonId": "9_ethics", "teacherId": "t6" },
         { "lessonId": "10_rhytm", "teacherId": "t4" },
         {},
-        { "lessonId": "11_", "teacherId": "t8" },
-        { "lessonId": "16_", "teacherId": "t9",
-          "paused": true }
+        { "lessonId": "11_", "teacherId": "t8" }
       ]
     },
     {
@@ -100,9 +98,7 @@
         { "lessonId": "1_ep", "teacherId": "t1" },
         { "lessonId": "1_ep", "teacherId": "t1" },
         { "lessonId": "17_", "teacherId": "t9" },
-        { "lessonId": "19_", "teacherId": "t9" },
-        { "lessonId": "18_", "teacherId": "t9",
-          "paused": true }
+        { "lessonId": "19_", "teacherId": "t9" }
       ]
     },
     {
