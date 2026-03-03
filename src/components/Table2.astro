@@ -51,10 +51,14 @@ function getTeacher(teacherId: string) {
           />
           {days.map((day) => {
             const lesson = day.lessons[rowIdx];
-            const lessonType = lesson
-              ? getLessonType(lesson.lessonId)
-              : undefined;
-            const teacher = lesson ? getTeacher(lesson.teacherId) : undefined;
+            const lessonType =
+              lesson && !lesson.ignored
+                ? getLessonType(lesson.lessonId)
+                : undefined;
+            const teacher =
+              lesson && !lesson.ignored
+                ? getTeacher(lesson.teacherId)
+                : undefined;
             const paused = lesson?.paused ?? false;
             return (
               <Cell lessonType={lessonType} teacher={teacher} paused={paused} />

@@ -1,117 +1,398 @@
 {
   "teachers": [
-    { "id": "t1", "name": "MSkrzypczak", "email": "alice@school.edu" },
-    { "id": "t2", "name": "APiskorska/IGłowacka", "email": "bob@school.edu" },
-    { "id": "t3", "name": "IGruszka", "email": "bob@school.edu" },
-    { "id": "t4", "name": "ESzymańska", "email": "bob@school.edu" },
-    { "id": "t5", "name": "AKozłowska", "email": "bob@school.edu" },
-    { "id": "t6", "name": "ABartkowski", "email": "bob@school.edu" },
-    { "id": "t7", "name": "multiple", "email": "bob@school.edu" },
-    { "id": "t8", "name": "Joanna Nikuła-Szymaniak", "email": "bob@school.edu" },
-    { "id": "t9", "name": "<extra>", "email": "bob@school.edu" }
+    {
+      "id": "t1",
+      "name": "MSkrzypczak",
+      "email": "alice@school.edu"
+    },
+    {
+      "id": "t2",
+      "name": "APiskorska/IGłowacka",
+      "email": "bob@school.edu"
+    },
+    {
+      "id": "t3",
+      "name": "IGruszka",
+      "email": "bob@school.edu"
+    },
+    {
+      "id": "t4",
+      "name": "ESzymańska",
+      "email": "bob@school.edu"
+    },
+    {
+      "id": "t5",
+      "name": "AKozłowska",
+      "email": "bob@school.edu"
+    },
+    {
+      "id": "t6",
+      "name": "ABartkowski",
+      "email": "bob@school.edu"
+    },
+    {
+      "id": "t7",
+      "name": "multiple",
+      "email": "bob@school.edu"
+    },
+    {
+      "id": "t8",
+      "name": "Joanna Nikuła-Szymaniak",
+      "email": "bob@school.edu"
+    },
+    {
+      "id": "t9",
+      "name": "<extra>",
+      "email": "bob@school.edu"
+    }
   ],
   "slots": [
-    { "start": "07:30", "duration": 45 },
-    { "start": "08:15", "duration": 45 },
-    { "start": "09:05", "duration": 45 },
-    { "start": "10:00", "duration": 45 },
-    { "start": "11:00", "duration": 45 },
-    { "start": "11:55", "duration": 45 },
-    { "start": "13:00", "duration": 45 },
-    { "start": "14:05", "duration": 45 },
-    { "start": "14:55", "duration": 45 },
-    { "start": "15:45", "duration": 45 },
-    { "start": "16:45", "duration": 60 }
+    {
+      "start": "07:30",
+      "duration": 45
+    },
+    {
+      "start": "08:15",
+      "duration": 45
+    },
+    {
+      "start": "09:05",
+      "duration": 45
+    },
+    {
+      "start": "10:00",
+      "duration": 45
+    },
+    {
+      "start": "11:00",
+      "duration": 45
+    },
+    {
+      "start": "11:55",
+      "duration": 45
+    },
+    {
+      "start": "13:00",
+      "duration": 45
+    },
+    {
+      "start": "14:05",
+      "duration": 45
+    },
+    {
+      "start": "14:55",
+      "duration": 45
+    },
+    {
+      "start": "15:45",
+      "duration": 45
+    },
+    {
+      "start": "16:45",
+      "duration": 60
+    }
   ],
   "lessonTypes": [
-    { "id": "1_ep", "name": "Edukacja", "iconId": "math", "color": "#ffffff" },
-    { "id": "2_eng", "name": "Angielski", "iconId": "english", "color": "#80d7f1" },
-    { "id": "3_wfew", "name": "W/F ew", "iconId": "pe", "color": "#9bf093" },
-    { "id": "4_pool", "name": "Basen", "iconId": "science", "color": "#57d14c" },
-    { "id": "5_wf", "name": "W/F", "iconId": "history", "color": "#9bf093" },
-    { "id": "6_art", "name": "Zajęcia Twórcze", "iconId": "art", "color": "#f7aec6" },
-    { "id": "7_extra", "name": "Kółko", "iconId": "music", "color": "#ffb8bd" },
-    { "id": "8_gimkor", "name": "Gimnastyka korekcyjna", "iconId": "music", "color": "#7cd874" },
-    { "id": "9_ethics", "name": "Religia/Etyka", "iconId": "music", "color": "#92cbe2" },
-    { "id": "10_rhytm", "name": "Rytmika", "iconId": "music", "color": "#fcb8e7" },
-    { "id": "11_", "name": "Logopedia", "iconId": "music", "color": "#fcb8e7" },
-    { "id": "12_", "name": "Akrobatyka", "iconId": "music", "color": "#08f" },
-    { "id": "13_", "name": "Trening Umiejętności Społecznych", "iconId": "music", "color": "#08f" },
-    { "id": "14_", "name": "Kółko etyczno-filozoficzne", "iconId": "music", "color": "#ff8" },
-    { "id": "15_", "name": "Arteterapia", "iconId": "music", "color": "#ff8" },
-    { "id": "16_", "name": "Aikido", "iconId": "music", "color": "#08f" },
-    { "id": "17_", "name": "Robotyka", "iconId": "music", "color": "#08f" },
-    { "id": "18_", "name": "Kółko muzyczne \"Chórek\"", "iconId": "music", "color": "#ff8" },
-    { "id": "19_", "name": "Dance 4 Friends", "iconId": "music", "color": "#08f" },
-    { "id": "20_", "name": "Akademia Gier CUBE", "iconId": "music", "color": "#08f" },
-    { "id": "21_", "name": "Szachy", "iconId": "music", "color": "#08f" }
+    {
+      "id": "1_ep",
+      "name": "Edukacja",
+      "iconId": "math",
+      "color": "#ffffff"
+    },
+    {
+      "id": "2_eng",
+      "name": "Angielski",
+      "iconId": "english",
+      "color": "#80d7f1"
+    },
+    {
+      "id": "3_wfew",
+      "name": "W/F ew",
+      "iconId": "pe",
+      "color": "#9bf093"
+    },
+    {
+      "id": "4_pool",
+      "name": "Basen",
+      "iconId": "science",
+      "color": "#57d14c"
+    },
+    {
+      "id": "5_wf",
+      "name": "W/F",
+      "iconId": "history",
+      "color": "#9bf093"
+    },
+    {
+      "id": "6_art",
+      "name": "Zajęcia Twórcze",
+      "iconId": "art",
+      "color": "#f7aec6"
+    },
+    {
+      "id": "7_extra",
+      "name": "Kółko",
+      "iconId": "music",
+      "color": "#ffb8bd"
+    },
+    {
+      "id": "8_gimkor",
+      "name": "Gimnastyka korekcyjna",
+      "iconId": "music",
+      "color": "#7cd874"
+    },
+    {
+      "id": "9_ethics",
+      "name": "Religia/Etyka",
+      "iconId": "music",
+      "color": "#92cbe2"
+    },
+    {
+      "id": "10_rhytm",
+      "name": "Rytmika",
+      "iconId": "music",
+      "color": "#fcb8e7"
+    },
+    {
+      "id": "11_",
+      "name": "Logopedia",
+      "iconId": "music",
+      "color": "#fcb8e7"
+    },
+    {
+      "id": "12_",
+      "name": "Akrobatyka",
+      "iconId": "music",
+      "color": "#08f"
+    },
+    {
+      "id": "13_",
+      "name": "Trening Umiejętności Społecznych",
+      "iconId": "music",
+      "color": "#08f"
+    },
+    {
+      "id": "14_",
+      "name": "Kółko etyczno-filozoficzne",
+      "iconId": "music",
+      "color": "#ff8"
+    },
+    {
+      "id": "15_",
+      "name": "Arteterapia",
+      "iconId": "music",
+      "color": "#ff8"
+    },
+    {
+      "id": "16_",
+      "name": "Aikido",
+      "iconId": "music",
+      "color": "#08f"
+    },
+    {
+      "id": "17_",
+      "name": "Robotyka",
+      "iconId": "music",
+      "color": "#08f"
+    },
+    {
+      "id": "18_",
+      "name": "Kółko muzyczne \"Chórek\"",
+      "iconId": "music",
+      "color": "#ff8"
+    },
+    {
+      "id": "19_",
+      "name": "Dance 4 Friends",
+      "iconId": "music",
+      "color": "#08f"
+    },
+    {
+      "id": "20_",
+      "name": "Akademia Gier CUBE",
+      "iconId": "music",
+      "color": "#08f"
+    },
+    {
+      "id": "21_",
+      "name": "Szachy",
+      "iconId": "music",
+      "color": "#08f"
+    }
   ],
   "days": [
     {
       "name": "Poniedziałek",
       "lessons": [
         {},
-        { "lessonId": "1_ep", "teacherId": "t1" },
-        { "lessonId": "1_ep", "teacherId": "t1" },
-        { "lessonId": "1_ep", "teacherId": "t1" },
-        { "lessonId": "1_ep", "teacherId": "t1" },
-        { "lessonId": "1_ep", "teacherId": "t1" },
-        { "lessonId": "2_eng", "teacherId": "t2" },
-        { "lessonId": "12_", "teacherId": "t9" }
+        {
+          "lessonId": "1_ep",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "1_ep",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "1_ep",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "1_ep",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "1_ep",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "2_eng",
+          "teacherId": "t2"
+        },
+        {
+          "lessonId": "12_",
+          "teacherId": "t9"
+        }
       ]
     },
     {
       "name": "Wtorek",
       "lessons": [
         {},
-        { "lessonId": "1_ep", "teacherId": "t1" },
-        { "lessonId": "3_wfew", "teacherId": "t1" },
-        { "lessonId": "1_ep", "teacherId": "t1" },
-        { "lessonId": "1_ep", "teacherId": "t1" },
-        { "lessonId": "2_eng", "teacherId": "t2" },
-        { "lessonId": "8_gimkor", "teacherId": "t3" },
-        { "lessonId": "13_", "teacherId": "t9" }
+        {
+          "lessonId": "1_ep",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "3_wfew",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "1_ep",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "1_ep",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "2_eng",
+          "teacherId": "t2"
+        },
+        {
+          "lessonId": "8_gimkor",
+          "teacherId": "t3"
+        },
+        {
+          "lessonId": "13_",
+          "teacherId": "t9",
+          "ignored": true
+        }
       ]
     },
     {
       "name": "Środa",
       "lessons": [
         {},
-        { "lessonId": "1_ep", "teacherId": "t1" },
-        { "lessonId": "2_eng", "teacherId": "t2" },
-        { "lessonId": "4_pool", "teacherId": "t7" },
-        { "lessonId": "4_pool", "teacherId": "t7" },
-        { "lessonId": "9_ethics", "teacherId": "t6" },
-        { "lessonId": "10_rhytm", "teacherId": "t4" },
+        {
+          "lessonId": "1_ep",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "2_eng",
+          "teacherId": "t2"
+        },
+        {
+          "lessonId": "4_pool",
+          "teacherId": "t7"
+        },
+        {
+          "lessonId": "4_pool",
+          "teacherId": "t7"
+        },
+        {
+          "lessonId": "9_ethics",
+          "teacherId": "t6"
+        },
+        {
+          "lessonId": "10_rhytm",
+          "teacherId": "t4"
+        },
         {},
-        { "lessonId": "11_", "teacherId": "t8" }
+        {
+          "lessonId": "11_",
+          "teacherId": "t8",
+          "ignored": true
+        }
       ]
     },
     {
       "name": "Czwartek",
       "lessons": [
         {},
-        { "lessonId": "1_ep", "teacherId": "t1" },
-        { "lessonId": "5_wf", "teacherId": "t3" },
-        { "lessonId": "1_ep", "teacherId": "t1" },
-        { "lessonId": "1_ep", "teacherId": "t1" },
-        { "lessonId": "1_ep", "teacherId": "t1" },
-        { "lessonId": "1_ep", "teacherId": "t1" },
-        { "lessonId": "17_", "teacherId": "t9" },
-        { "lessonId": "19_", "teacherId": "t9" }
+        {
+          "lessonId": "1_ep",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "5_wf",
+          "teacherId": "t3"
+        },
+        {
+          "lessonId": "1_ep",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "1_ep",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "1_ep",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "1_ep",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "17_",
+          "teacherId": "t9"
+        },
+        {
+          "lessonId": "19_",
+          "teacherId": "t9"
+        }
       ]
     },
     {
       "name": "Piątek",
       "lessons": [
         {},
-        { "lessonId": "1_ep", "teacherId": "t1" },
-        { "lessonId": "6_art", "teacherId": "t1" },
-        { "lessonId": "6_art", "teacherId": "t1" },
-        { "lessonId": "5_wf", "teacherId": "t3" },
-        { "lessonId": "7_extra", "teacherId": "t1" },
+        {
+          "lessonId": "1_ep",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "6_art",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "6_art",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "5_wf",
+          "teacherId": "t3"
+        },
+        {
+          "lessonId": "7_extra",
+          "teacherId": "t1"
+        },
         {},
-        { "lessonId": "20_", "teacherId": "t1" }
+        {
+          "lessonId": "20_",
+          "teacherId": "t1"
+        }
       ]
     }
   ]
