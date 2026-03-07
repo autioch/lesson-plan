@@ -319,10 +319,11 @@
           "teacherId": "t4"
         },
         {},
+        {},
+        {},
         {
           "lessonId": "11_",
-          "teacherId": "t8",
-          "ignored": true
+          "teacherId": "t8"
         }
       ]
     },
