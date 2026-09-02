@@ -6,15 +6,13 @@ Manual steps only the repo owner can do. Delete a line once it's done.
   Monday 14:05 and `ew` on Friday 08:15, group 2 has them the other way round. `2026.json` assumes
   **group 1**. If it is group 2, swap those two entries — delete `lessons.mon.s8`, and change
   `lessons.fri.s2` to `{ "lessonId": "it", "teacherId": "t13" }`.
-- **Re-print the plan.** The sheet is no longer a separate markup tree — it is the screen's own DOM
-  with paper overrides, so every printed pixel moved even though the design did not. Verified by
-  forcing the `@media print` rules on in a browser at A4-landscape pixel size (the method is in
-  [styling.md](standards/styling.md#commands)): 297 × 210mm exactly, one page, eleven rows, no
-  clipped cell, legend on one line, no "DZIŚ" on any weekday. **Not verified by an actual print** —
-  that check has never been run on this plan, and it is the only one that covers `@page` margins and
-  how the printer renders the six lesson colours. Open `/`, print to PDF in Chrome with "Background
-  graphics" on, and confirm. If Chrome's margin setting is anything but zero, say so — the sheet is
-  built for `@page { margin: 0 }` and reserves 24pt of its own for the printer's dead strip.
+- **Print the plan on paper, not to PDF.** The layout is confirmed: a print to PDF showed the
+  unified sheet correct — one page, legend across the bottom, no "DZIŚ". What that PDF **cannot**
+  show is the palette, which changed afterwards: the six lesson colours are now 50% white tints, and
+  a wash that reads calm on a screen is the first thing a tired school printer loses. Print one on
+  the machine the sheet will actually come off, with "Background graphics" on, and confirm the tiles
+  are still visible as tiles from across a room. If they wash out, the fix is one number — the mix
+  level in [styling.md](standards/styling.md#visual-conventions) — not six hand-picked hexes.
 - **Check the plan on a real phone.** The three bands were verified with browser viewport emulation.
   A physical phone confirms the touch targets, the swipe, and that the day fits without scrolling
   under the browser's own chrome — now 11 rows at ~78px rather than 7 at ~120px.

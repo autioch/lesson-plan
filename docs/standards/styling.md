@@ -58,6 +58,13 @@ construction. Three rules keep that true, and breaking any one of them breaks th
   Each one must clear 4.5:1 at 14px against **both** ink tokens — check the new colour by hand,
   nothing enforces it — and stay separable from the other five under red-green colour blindness. A
   lesson that asks nothing of the family (Kółko, Religia/Etyka) is plain white.
+- **The six are tints, not colours** — each is its saturated base mixed 50% with white, so a tile
+  reads as tinted paper and the lesson name keeps the emphasis. Measured at that mix: worst ink
+  contrast **7.5:1**, tightest pair **ΔE 6.1** (pool/creative under deuteranopia), and every tile at
+  least **ΔE 19** from the white page. To make them quieter or stronger, **move the mix and re-check
+  those three numbers** — hand-picking a hex per colour is what breaks the set. Pale costs
+  separability fastest: at a 70% mix the tightest pair falls to ΔE 3.6 and the palest tiles are only
+  ΔE 12 from the page, which is where a tile stops reading as a tile.
 - **Everything else is a token** from `src/assets/tokens.css` — type scale, spacing ramp, radii,
   lines, surfaces, text ink, accent. No values from outside the ramp, and the only inline style on a
   cell is `--cell-bg`.
