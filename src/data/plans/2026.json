@@ -1,0 +1,381 @@
+{
+  "locale": "pl",
+  "labels": {
+    "pageTitle": "Plan lekcji",
+    "today": "DZIŚ",
+    "todayAria": "dziś",
+    "freeSlot": "wolne",
+    "dayTabsLabel": "Dzień tygodnia",
+    "legendTitle": "Legenda kolorów",
+    "legendHint": "dotknij, aby zamknąć",
+    "breakMinutes": "+{value}min przerwy",
+    "breakHours": "+{value}h przerwy"
+  },
+  "palette": [
+    {
+      "id": "plain",
+      "hex": "#ffffff",
+      "legendTitle": "Zwykła lekcja",
+      "inLegend": false
+    },
+    {
+      "id": "lang",
+      "hex": "#4fb0f0",
+      "legendTitle": "Język obcy",
+      "inLegend": true
+    },
+    {
+      "id": "kit",
+      "hex": "#b6ee7a",
+      "legendTitle": "Spakuj strój",
+      "inLegend": true
+    },
+    {
+      "id": "pool",
+      "hex": "#7fe7d5",
+      "legendTitle": "Basen — kąpielówki i czepek",
+      "inLegend": true
+    },
+    {
+      "id": "creative",
+      "hex": "#ff8fb1",
+      "legendTitle": "Zajęcia twórcze",
+      "inLegend": true
+    },
+    {
+      "id": "individual",
+      "hex": "#dcc0ff",
+      "legendTitle": "Zajęcia indywidualne i rytmika",
+      "inLegend": true
+    },
+    {
+      "id": "extra",
+      "hex": "#ffcf4d",
+      "legendTitle": "Dodatkowe",
+      "inLegend": true
+    }
+  ],
+  "teachers": [
+    {
+      "id": "t1",
+      "name": "MSkrzypczak"
+    },
+    {
+      "id": "t2",
+      "name": "APiskorska/PŁuczak"
+    },
+    {
+      "id": "t3",
+      "name": "KOrdza"
+    },
+    {
+      "id": "t4",
+      "name": "KRadziłowska/MWołejnio"
+    },
+    {
+      "id": "t5",
+      "name": "AKozłowska/ABartkowski"
+    },
+    {
+      "id": "t6",
+      "name": "JProniewski"
+    },
+    {
+      "id": "t7",
+      "name": "multiple",
+      "anonymous": true
+    },
+    {
+      "id": "t8",
+      "name": "Instruktor szachy",
+      "anonymous": true
+    }
+  ],
+  "slots": [
+    {
+      "start": "07:30",
+      "duration": 45
+    },
+    {
+      "start": "08:15",
+      "duration": 45
+    },
+    {
+      "start": "09:05",
+      "duration": 45
+    },
+    {
+      "start": "10:00",
+      "duration": 45
+    },
+    {
+      "start": "11:00",
+      "duration": 45
+    },
+    {
+      "start": "11:55",
+      "duration": 45
+    },
+    {
+      "start": "13:00",
+      "duration": 45
+    },
+    {
+      "start": "14:05",
+      "duration": 45
+    },
+    {
+      "start": "14:55",
+      "duration": 45
+    },
+    {
+      "start": "15:45",
+      "duration": 45
+    }
+  ],
+  "lessonTypes": [
+    {
+      "id": "1_ew",
+      "name": "Edukacja",
+      "colorId": "plain"
+    },
+    {
+      "id": "2_eng",
+      "name": "Angielski",
+      "colorId": "lang"
+    },
+    {
+      "id": "3_lang2",
+      "name": "Niemiecki/Hiszpański",
+      "short": "Niem/Hisz",
+      "colorId": "lang"
+    },
+    {
+      "id": "4_wf",
+      "name": "W/F",
+      "colorId": "kit"
+    },
+    {
+      "id": "5_wfew",
+      "name": "W/F ew",
+      "colorId": "kit"
+    },
+    {
+      "id": "6_gym",
+      "name": "Gimnastyka kompensacyjna",
+      "short": "Gimnastyka",
+      "colorId": "kit"
+    },
+    {
+      "id": "7_pool",
+      "name": "Basen",
+      "colorId": "pool"
+    },
+    {
+      "id": "8_relig",
+      "name": "Religia/Etyka",
+      "short": "Religia",
+      "colorId": "plain"
+    },
+    {
+      "id": "9_club",
+      "name": "Kółko",
+      "colorId": "plain"
+    },
+    {
+      "id": "10_inf",
+      "name": "Informatyka",
+      "short": "Inform.",
+      "colorId": "plain"
+    },
+    {
+      "id": "11_art",
+      "name": "Zajęcia Twórcze",
+      "short": "Twórcze",
+      "colorId": "creative"
+    },
+    {
+      "id": "12_chess",
+      "name": "Szachy",
+      "colorId": "extra"
+    }
+  ],
+  "days": [
+    {
+      "name": "Poniedziałek",
+      "short": "Pn",
+      "weekday": 1,
+      "lessons": [
+        {},
+        {
+          "lessonId": "3_lang2",
+          "teacherId": "t4"
+        },
+        {
+          "lessonId": "4_wf",
+          "teacherId": "t3"
+        },
+        {
+          "lessonId": "2_eng",
+          "teacherId": "t2"
+        },
+        {
+          "lessonId": "1_ew",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "1_ew",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "1_ew",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "10_inf",
+          "teacherId": "t6"
+        }
+      ]
+    },
+    {
+      "name": "Wtorek",
+      "short": "Wt",
+      "weekday": 2,
+      "lessons": [
+        {},
+        {
+          "lessonId": "8_relig",
+          "teacherId": "t5"
+        },
+        {
+          "lessonId": "3_lang2",
+          "teacherId": "t4"
+        },
+        {
+          "lessonId": "4_wf",
+          "teacherId": "t3"
+        },
+        {
+          "lessonId": "1_ew",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "1_ew",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "1_ew",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "2_eng",
+          "teacherId": "t2"
+        }
+      ]
+    },
+    {
+      "name": "Środa",
+      "short": "Śr",
+      "weekday": 3,
+      "lessons": [
+        {},
+        {
+          "lessonId": "1_ew",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "1_ew",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "1_ew",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "7_pool",
+          "teacherId": "t7"
+        },
+        {
+          "lessonId": "7_pool",
+          "teacherId": "t7"
+        },
+        {
+          "lessonId": "9_club",
+          "teacherId": "t1"
+        }
+      ]
+    },
+    {
+      "name": "Czwartek",
+      "short": "Cz",
+      "weekday": 4,
+      "lessons": [
+        {},
+        {
+          "lessonId": "6_gym",
+          "teacherId": "t3"
+        },
+        {
+          "lessonId": "1_ew",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "1_ew",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "2_eng",
+          "teacherId": "t2"
+        },
+        {
+          "lessonId": "1_ew",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "1_ew",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "1_ew",
+          "teacherId": "t1"
+        }
+      ]
+    },
+    {
+      "name": "Piątek",
+      "short": "Pt",
+      "weekday": 5,
+      "lessons": [
+        {},
+        {
+          "lessonId": "1_ew",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "5_wfew",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "11_art",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "11_art",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "12_chess",
+          "teacherId": "t8"
+        },
+        {
+          "lessonId": "1_ew",
+          "teacherId": "t1"
+        },
+        {
+          "lessonId": "2_eng",
+          "teacherId": "t2"
+        }
+      ]
+    }
+  ]
+}

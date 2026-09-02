@@ -17,11 +17,13 @@
 import type { LessonsPlan } from "../types";
 
 import y2025 from "./2025.json";
+import y2026 from "./2026.json";
 
 /** Keyed by the September the plan starts. */
 export const plans: Record<string, LessonsPlan> = {
   "2025": y2025,
+  "2026": y2026,
 };
 
 /** The year the site renders. The only line that moves in September. */
-export const ACTIVE_YEAR = "2025";
+export const ACTIVE_YEAR = "2026";
