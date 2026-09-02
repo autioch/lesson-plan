@@ -36,16 +36,18 @@ Core rules:
 
 ```text
 src/
-├─ components/       # Astro components (DayTabs, WeekGrid, Legend, PrintSheet)
+├─ components/       # Astro components (DayTabs, WeekGrid, Legend)
 ├─ data/             # plans/ — one JSON per school year, the source of record — and its types
 ├─ layouts/          # Page wrapper (shared head, structure)
 ├─ pages/            # Astro pages (one per route) and the page script
 ├─ utils/            # Pure build-time transforms (no rendering, no I/O, no clock)
-└─ assets/           # tokens.css, plan.css (screen), print.css
+└─ assets/           # tokens.css, plan.css (screen + the bands paper shares), print.css (deltas)
 ```
 
 One route: `/`, the responsive plan built to `designs/`. It renders three screen bands and an
-A4-landscape print sheet from the same DOM.
+A4-landscape print sheet **from one DOM** — there is no second markup tree for paper, and adding one
+is a regression, not a shortcut. The sheet is band C's layout at a scale of its own; `print.css`
+holds only what paper alone changes. See [styling.md](styling.md#surfaces).
 
 The site is published to GitHub Pages under the project subpath `/lesson-plan/`. That subpath is
 defined once in `src/site.mjs`: `astro.config.mjs` feeds it to the build as `base`, and layouts

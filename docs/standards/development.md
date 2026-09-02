@@ -25,7 +25,9 @@ system is built**; read this before writing code for **how to write it here**.
 - **Data is read-only:** JSON files in `src/data/` are the source of record. Transformations are
   pure functions in TypeScript modules, never mutations.
 - **Props are closed:** variant / option props are enums or string literals; content is free-form.
-- **Reuse shared components** from `src/components/` instead of duplicating HTML.
+- **Reuse shared components** from `src/components/` instead of duplicating HTML. **A surface is not
+  a reason to duplicate one** — screen and paper render the same tree, and the difference is CSS.
+  See [styling.md](styling.md#surfaces).
 - **Docs and code travel together.** A change to data shape, a new component, or a layout change
   updates this doc in the same commit — never a tree where docs contradict code.
 
@@ -53,6 +55,7 @@ system is built**; read this before writing code for **how to write it here**.
 | A component reading labels  | [src/components/WeekGrid.astro](../../src/components/WeekGrid.astro)   |
 | Build-time transform        | [src/utils/plan.ts](../../src/utils/plan.ts)                           |
 | Band-aware layout CSS       | [src/assets/plan.css](../../src/assets/plan.css)                       |
+| A paper-only override       | [src/assets/print.css](../../src/assets/print.css)                     |
 | Runtime (clock, day pick)   | the `<script>` in [src/pages/index.astro](../../src/pages/index.astro) |
 
 ## Keeping docs in sync

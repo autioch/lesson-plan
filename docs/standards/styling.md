@@ -19,6 +19,19 @@ Bands are chosen by **width only**. A phone in landscape is 915px wide and lands
 orientation queries are never needed and must not be added — they misfire on tablets. Reference
 canvas for band A is 412 × 915.
 
+**All four surfaces render one DOM.** Paper is not a second markup tree — it takes band C's layout
+and adds only its own deltas, so a change to the week grid reaches the printed sheet by
+construction. Three rules keep that true, and breaking any one of them breaks the sheet silently:
+
+- **Paper is band C, never band B.** The two blocks band C needs also list `print`
+  (`@media (min-width: 1024px), print`); the bands paper must never take are scoped to `screen`. A
+  width query left unscoped lets the **print dialog's margin setting** pick the band — a non-zero
+  margin narrows the page box under 1024px and strips the teacher names off the sheet.
+- **Paper has its own scale**, last block in `tokens.css`: one size, 16px = 12pt, the school's floor.
+  The desk scale's 20/17 does not fit eleven rows and a legend on 210mm.
+- **`print.css` holds deltas only** — the page box, the legend moving under the grid, the "today"
+  mark coming off, and the ink. Anything it restates from `plan.css` is drift waiting to happen.
+
 **Unsupported:** old browsers (no polyfills, no IE).
 
 ## Floors — non-negotiable
@@ -73,4 +86,12 @@ canvas for band A is 412 × 915.
 ## Commands
 
 No separate style build — CSS is bundled by Astro. Verify with `npm run dev` at 412 × 915, 915 × 412
-and 1440 × 900, and in the browser's print preview.
+and 1440 × 900.
+
+**Print is checked at 1122 × 794** — A4 landscape in CSS pixels — with the `@media print` rules
+forced on: collect every `document.styleSheets` rule whose `media.mediaText` is exactly `print` and
+append their bodies as a plain `<style>`. That reproduces the print cascade in the same order the
+bundle emits it, so `.plan` can be measured against 297 × 210mm and cells checked for clipping
+(`scrollHeight > clientHeight`). It does **not** reproduce `@page`, paper colour management, or the
+print dialog's own margins — **the browser's print preview is still the authority**, and a real
+print to PDF with "Background graphics" on is what closes a print change out.

@@ -8,8 +8,8 @@
  * The design flips the whole scale with one `data-surface` attribute
  * (phone | desk). This page is one responsive tree, so the same switch is made
  * by viewport instead: the phone scale is the default, the desk scale takes
- * over at 1024px. Layout metrics that change per band (the time gutter) ride
- * along in the same blocks.
+ * over at 1024px, and paper takes a third scale of its own. Layout metrics that
+ * change per band (the time gutter) ride along in the same blocks.
  */
 
 :root {
@@ -71,8 +71,9 @@
 }
 
 /* Band B — phone landscape and tablet. Same type scale, wider gutter: the
- * break text sits beside the hours instead of under them. */
-@media (min-width: 481px) {
+ * break text sits beside the hours instead of under them. Screen only: paper is
+ * band C whatever its page box measures, so a width query must not reach it. */
+@media screen and (min-width: 481px) {
   :root {
     --gutter: 244px;
   }
@@ -85,6 +86,30 @@
     --fs-md: 24px;
     --fs-sm: 20px;
     --fs-xs: 17px;
+    --gutter: 156px;
+  }
+}
+
+/* Paper. The sheet is band C's layout at its own scale — this block is the
+ * "scale" half, `print.css` the layout half. It comes last so it wins over the
+ * desk block whether or not the page box is wide enough to match it.
+ *
+ * One size for everything: 16px is 12pt, the floor the school set for the
+ * printed sheet, and 11 rows plus a legend only fit 210mm at that floor — the
+ * desk scale's 20/17 spills onto a second page.
+ */
+@media print {
+  :root {
+    --fs-lg: 16px;
+    --fs-md: 16px;
+    --fs-sm: 16px;
+    --fs-xs: 16px;
+
+    /* Toner is not a screen. A 6%-black hairline does not survive the print
+     * pipeline, so the rules and borders take a solid grey instead. */
+    --line-subtle: #c9c4b6;
+    --overlay-tint: #c9c4b6;
+
     --gutter: 156px;
   }
 }

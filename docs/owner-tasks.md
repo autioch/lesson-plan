@@ -6,12 +6,15 @@ Manual steps only the repo owner can do. Delete a line once it's done.
   Monday 14:05 and `ew` on Friday 08:15, group 2 has them the other way round. `2026.json` assumes
   **group 1**. If it is group 2, swap those two entries — delete `lessons.mon.s8`, and change
   `lessons.fri.s2` to `{ "lessonId": "it", "teacherId": "t13" }`.
-- **Re-print the plan to confirm the header fixes.** The last real print showed three faults, all
-  now fixed: the day-name band sat flush against the paper's top edge, an 18px white gap broke the
-  column rules between that band and the grid, and the pool legend wrapped to three lines. Verified
-  by applying the print stylesheet in a browser at A4-landscape pixel size — 24pt now reserved above
-  the band, zero gap below it, legend on one line, one page — but not by an actual print. Open `/`,
-  print to PDF in Chrome with "Background graphics" on, and confirm.
+- **Re-print the plan.** The sheet is no longer a separate markup tree — it is the screen's own DOM
+  with paper overrides, so every printed pixel moved even though the design did not. Verified by
+  forcing the `@media print` rules on in a browser at A4-landscape pixel size (the method is in
+  [styling.md](standards/styling.md#commands)): 297 × 210mm exactly, one page, eleven rows, no
+  clipped cell, legend on one line, no "DZIŚ" on any weekday. **Not verified by an actual print** —
+  that check has never been run on this plan, and it is the only one that covers `@page` margins and
+  how the printer renders the six lesson colours. Open `/`, print to PDF in Chrome with "Background
+  graphics" on, and confirm. If Chrome's margin setting is anything but zero, say so — the sheet is
+  built for `@page { margin: 0 }` and reserves 24pt of its own for the printer's dead strip.
 - **Check the plan on a real phone.** The three bands were verified with browser viewport emulation.
   A physical phone confirms the touch targets, the swipe, and that the day fits without scrolling
   under the browser's own chrome — now 11 rows at ~78px rather than 7 at ~120px.

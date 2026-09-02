@@ -1,10 +1,11 @@
 ---
 import DayTabs from "../components/DayTabs.astro";
 import Legend from "../components/Legend.astro";
-import PrintSheet from "../components/PrintSheet.astro";
 import WeekGrid from "../components/WeekGrid.astro";
 import Layout from "../layouts/Layout.astro";
 
+/* After `Layout`, which pulls in `plan.css`: the print rules override the
+ * screen ones at equal specificity, so they have to land last. */
 import "../assets/print.css";
 
 import { ACTIVE_YEAR, plans } from "../data/plans";
@@ -41,13 +42,6 @@ const { labels } = plan;
       </div>
     </div>
   </div>
-
-  <PrintSheet
-    days={plan.days}
-    rows={plan.rows}
-    legend={plan.legend}
-    labels={labels}
-  />
 </Layout>
 
 <script>
