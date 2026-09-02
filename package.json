@@ -3,13 +3,25 @@
   "type": "module",
   "version": "0.0.1",
   "homepage": "https://autioch.github.io/lesson-plan/",
+  "engines": {
+    "node": ">=24.11.1",
+    "npm": ">=11.6.2"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "ci:ts": "astro sync && tsc --noEmit",
+    "ci:knip": "knip",
+    "ci": "npm run ci:ts && npm run ci:knip",
+    "verify": "npm run ci && npm run build",
     "astro": "astro"
   },
   "dependencies": {
     "astro": "^5.13.5"
+  },
+  "devDependencies": {
+    "knip": "^6.34.0",
+    "typescript": "^5.9.3"
   }
 }

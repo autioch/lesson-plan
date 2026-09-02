@@ -16,7 +16,7 @@
 
 import type { Labels, LessonsPlan } from "../data/types";
 
-export interface PlanCell {
+interface PlanCell {
   /** Full lesson name, as it is in the data. Empty slots carry "". */
   name: string;
   /** Name shortened for narrow columns; equals `name` when nothing is shortened. */

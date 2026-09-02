@@ -2,6 +2,31 @@
 
 Finished units of work, newest first. One self-contained entry each.
 
+## A real gate: type-check, knip, CI on pull requests — September 2026
+
+The repo had no git hooks, no PR check and no type-check, while CLAUDE.md, workflow.md and qa.md all
+described a gate that existed only on paper — `astro build` transpiles and never checks types.
+Adopted the minimum from the sibling `lullaby-dashboard-2` pipeline that fits a one-page static
+site: `ci:ts` (`astro sync && tsc --noEmit`), `ci:knip`, composed as `npm run ci`, with
+`npm run verify` adding the build. A `ci.yml` runs it on every pull request; `deploy.yml` re-runs it
+on `main` before publishing, and both read the Node version from a new `.nvmrc`.
+
+Headline decisions: **plain `tsc`, not `@astrojs/check`** — one devDependency instead of two, and
+the coverage difference is `.astro` frontmatter, which the conventions now keep free of logic
+anyway. **knip is in the gate, not advisory** — the preceding refactor had to find `iconId`,
+`teachers[].email` and `Lesson.paused` by hand, and knip immediately flagged seven exported types
+nothing imported (now un-exported). **No test runner, deliberately**: one pure transform behind one
+page does not earn vitest, and qa.md was rewritten to say so instead of demanding unit tests nobody
+would write. **Visual regression was rejected** — Playwright baselines are OS-font-sensitive and run
+advisory even in the sibling repo; the date-dependent check that actually mattered is a stubbed
+clock, now a rule in qa.md. Prettier, ESLint and husky were considered and left out: prettier alone
+would reflow 32 files, and it should land as its own reviewable commit.
+
+Flagged, not fixed: `npm audit` reports 13 advisories against `astro@5.13.5` — see
+[owner-tasks.md](owner-tasks.md).
+
+PR: https://github.com/autioch/lesson-plan/pull/2
+
 ## One plan, one source, no baked "today" — September 2026
 
 The route swap the v2 rebuild left open, plus the two things it had deferred. v1 is deleted

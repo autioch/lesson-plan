@@ -85,18 +85,22 @@ when you add a new doc or code area.
 
 ## Full command reference
 
-| Command           | Purpose                                    |
-| ----------------- | ------------------------------------------ |
-| `npm run dev`     | Dev server with hot reload                 |
-| `npm run build`   | Production static build. Confirms compile. |
-| `npm run preview` | Preview the production build locally       |
+| Command           | Purpose                                             |
+| ----------------- | ---------------------------------------------------- |
+| `npm run dev`     | Dev server with hot reload                          |
+| `npm run build`   | Production static build. Confirms compile.          |
+| `npm run preview` | Preview the production build locally                |
+| `npm run ci:ts`   | `astro sync && tsc --noEmit` — type-check           |
+| `npm run ci:knip` | Unused files, exports, types and dependencies       |
+| `npm run ci`      | Both of the above, in order                         |
+| `npm run verify`  | `npm run ci` then `npm run build` — the full gate    |
 
-**The gate** is `npm run build`. It runs at pre-push and in CI.
+**The gate** is `npm run verify`. There are **no git hooks in this repo** — run it yourself before
+pushing. CI is the authority: [ci.yml](../../.github/workflows/ci.yml) runs it on every pull
+request, and [deploy.yml](../../.github/workflows/deploy.yml) re-runs it on `main` before deploying.
 
-**What the gate does not do:** it does not typecheck. `astro build` transpiles; `@astrojs/check` is
-not installed, so a type error in `.astro` frontmatter compiles and ships. Until that is fixed
-(`docs/owner-tasks.md`), typecheck a changed `.ts` module by hand:
+**What the type-check does not cover:** `tsc` reads `.ts` only, so a type error inside `.astro`
+frontmatter still compiles. Keep logic in `src/utils/` and `src/data/`, where it is checked; a
+component's frontmatter should be assignment and markup.
 
-```bash
-npx tsc --noEmit --strict --resolveJsonModule --module esnext --moduleResolution bundler --target es2022 --skipLibCheck src/utils/plan.ts
-```
+Node is pinned in [.nvmrc](../../.nvmrc); both workflows read it, so local and CI never drift.

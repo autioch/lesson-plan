@@ -27,28 +27,28 @@ export type Labels = {
  * `legendTitle` says what the colour means; a colour that asks nothing of the
  * family (plain white) sits out of the legend with `inLegend: false`.
  */
-export type PaletteColor = {
+type PaletteColor = {
   id: string;
   hex: string;
   legendTitle: string;
   inLegend: boolean;
 };
 
-export type Teacher = {
+type Teacher = {
   id: string;
   name: string;
   /** A placeholder record ("multiple", "<extra>") — never rendered as a name. */
   anonymous?: boolean;
 };
 
-export type Slot = {
+type Slot = {
   /** "HH:MM" */
   start: string;
   /** Minutes. */
   duration: number;
 };
 
-export type LessonType = {
+type LessonType = {
   id: string;
   name: string;
   /** Abbreviation for the narrow band; the full name is used when absent. */
@@ -57,14 +57,14 @@ export type LessonType = {
 };
 
 /** An empty slot is `{}` — a lesson without an id is one. */
-export type Lesson = {
+type Lesson = {
   lessonId?: string;
   teacherId?: string;
   /** Scheduled but not attended; rendered as an empty slot. */
   ignored?: boolean;
 };
 
-export type Day = {
+type Day = {
   name: string;
   /** Two-letter label for the phone tabs. */
   short: string;

@@ -181,9 +181,8 @@ The same ending for Bounded and Feature:
   report), wait for **green CI**, merge, delete the branch, return to trunk.
 - **Red CI → fix-forward on the same branch.** A flake → re-run it; a real failure → fix the cause
   and re-push. The work isn't closed until the green merge, so a CI failure never reopens anything.
-- **The hooks are the gate** — pre-commit formats, pre-push runs the full gate, CI re-runs it as the
-  authority. Bypassing is for a real emergency only. Don't pre-run the gate by hand before a
-  close-out; the hooks cover it.
+- **You are the gate locally** — there are no git hooks. Run `npm run verify` yourself before you
+  push; CI re-runs it on the PR and on `main` as the authority.
 - Conventional Commits subjects.
 
 ## Handing off

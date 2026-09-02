@@ -10,4 +10,5 @@ in [`src/data/lessons.json`](src/data/lessons.json). Editing the plan means edit
 npm run dev
 ```
 
-`npm run build` is the gate. Working rules: [CLAUDE.md](CLAUDE.md) and [docs/](docs/).
+`npm run verify` is the gate — type-check, dead-code scan, build. Working rules:
+[CLAUDE.md](CLAUDE.md) and [docs/](docs/).
