@@ -61,10 +61,11 @@ one of them, and passes it through one transform:
 
 - **`src/data/plans/commons.json`** — what the school fixes and a year does not: `locale`, `labels`
   (every fixed string), `palette` (`{ id, hex, legendTitle, inLegend }` — the only place a colour is
-  written), `slots` (the bell day), `days` (`name`, `short`, `weekday`).
+  written), `slots` (the bell day: `id`, `start`, `duration`), `days` (`id`, `name`, `short`,
+  `weekday`).
 - **`src/data/plans/<year>.json`** — what one year decides, named for the September it starts. Root
-  keys: `teachers`, `lessonTypes` (referencing a colour by `colorId`), and `lessons` — the week,
-  keyed by day name, one entry per slot in `slots` order.
+  keys: `teachers`, `lessonTypes` (referencing a colour by `colorId`), and `lessons` — the week, as
+  `Day.id` → `Slot.id` → `{ lessonId, teacherId }`. A slot with no entry is free.
 - **`src/data/plans/index.ts`** — merges commons into **every** year to build `plans`, and names the
   live one in `ACTIVE_YEAR`. Only the active year reaches the page; the rest are merged purely so
   `astro check` types them against `LessonsPlan` and a type change names every file it breaks.
@@ -75,6 +76,25 @@ one of them, and passes it through one transform:
 Past years are never edited: a published year is a snapshot of the week that hung on the wall. The
 split is what makes that affordable — an edit to commons reaches back into published years, which is
 accepted for copy, colours and bell times and for nothing else.
+
+### Data modelling rules
+
+The JSON is shaped as if it were tables that will move to a database one day. That is not a plan to
+migrate; it is the discipline that keeps the files honest while they are hand-edited.
+
+- **Every table has an `id`, and references use it.** `palette`, `teachers`, `lessonTypes`, `slots`
+  and `days` all carry one; `colorId`, `lessonId`, `teacherId` and the two levels of `lessons` are
+  foreign keys to them. **Nothing is referenced by array position** — order is presentation, and a
+  row inserted mid-list must never re-point an existing reference.
+- **An id is opaque and permanent, display text is not.** `Slot.id` is `s1`, never the start time,
+  because bell times move and a key that is also displayed data starts lying the day it changes.
+  `Day.id` is readable (`mon`) only because a day's identity genuinely cannot change. **A retired id
+  is never reused** — one quietly pointing at a different subject, colour or hour repaints the plan
+  and nothing fails.
+- **Absence is a fact, not a blank row.** A free slot has no entry; there is no empty-lesson shape.
+- **Every foreign key is resolved, never trusted.** `src/utils/plan.ts` throws on any id that does
+  not resolve and on any `lessons` key that names no day or slot. A school timetable with a blank
+  tile is worse than a red build.
 
 `src/pages/index.astro` reads the active year once and `src/utils/plan.ts` turns it into the render shape
 (shared row set, breaks, cells, legend). Components lay that out and compute nothing. A reference

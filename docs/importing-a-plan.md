@@ -105,14 +105,16 @@ niem` in grade 8 is taught by KRadziłowska, so in 1b's `KRadziłowska / MWołej
 3. **Revise the reference tables first**, before any lesson: `teachers` and `lessonTypes`. Add and
    remove freely, but **never reuse an id whose meaning changed** — an id quietly pointing at a
    different subject or colour repaints the legend and nothing fails.
-4. **Then transcribe `lessons`.** One key per day, spelled exactly as `commons.json` spells it — a
-   key that doesn't match a day fails the build, in both directions. Under each key, one entry per
-   slot in `slots` order; an unused slot is `{}`; trailing empty slots may be omitted. A lesson that
-   is scheduled but not attended is `ignored: true`, which renders as free but records that the
-   school put something there.
+4. **Then transcribe `lessons`** — `Day.id` → `Slot.id` → `{ lessonId, teacherId }`, both ids from
+   `commons.json`. A free slot gets no entry at all. A lesson that is scheduled but not attended is
+   `ignored: true`, which renders as free but records that the school put something there. Every key
+   on both levels is checked against `commons.json`, so a typo is a red build, not a lost lesson.
 5. **Only if the school moved something**, edit `commons.json`: bell times in `slots`, a new colour
    in `palette`, a copy fix in `labels`. It is shared, so that edit re-renders **every** published
    year — which is right for a corrected label and wrong for anything this year alone decided.
+   **Adding a bell means a new slot id, never renumbering the existing ones**; retiring one means
+   deleting its row and leaving its id dead. Every year's lessons point at those ids, so renumbering
+   would silently re-time the whole archive.
 6. **Register the year** in `src/data/plans/index.ts`: import it, add it to `years`, move
    `ACTIVE_YEAR`.
 7. **Verify** — below. **Flag every guess** to the human, and file the unresolved ones in
@@ -123,13 +125,13 @@ niem` in grade 8 is taught by KRadziłowska, so in 1b's `KRadziłowska / MWołej
 
 `npm run verify` is necessary and **not sufficient**.
 
-What the build catches, by throwing in `src/utils/plan.ts`: an unknown `lessonId`, `colorId` or
-`teacherId`, a day with no `lessons` key, and a `lessons` key naming no day. Typos are a red build,
-never a blank tile.
+What the build catches, by throwing in `src/utils/plan.ts`: an unknown `lessonId`, `colorId`,
+`teacherId` or `slotId`, a day with no `lessons` key, and a `lessons` key naming no day. Typos are a
+red build, never a blank tile.
 
-What nothing catches, and so has to be checked cell by cell against the script's grid: a lesson in
-the wrong slot or on the wrong day, the right subject with the wrong teacher, a slot left `{}` that
-should hold a lesson, bell times left in `commons.json` when the PDF moved them.
+What nothing catches, and so has to be checked cell by cell against the script's grid: a lesson
+filed under the wrong slot id or the wrong day, the right subject with the wrong teacher, a lesson
+left out entirely, bell times left in `commons.json` when the PDF moved them.
 
 The cheap way to do that check: build, then read the cells out of `dist/index.html` and compare them
 to the grid the script printed. Then confirm the legend shows every colour the week uses and no

@@ -98,28 +98,34 @@ export function buildPlan(data: LessonsPlan): Plan {
     return data.labels.breakMinutes.replace("{value}", String(gapMinutes));
   }
 
-  /* Every day must have its lessons filed under its exact name. A day the year
-   * file never mentions is a renamed key or a typo, and rendering it as a blank
-   * column would hide the mistake behind a plausible-looking week. */
+  /* Both levels of `lessons` are foreign keys, so both are checked here rather
+   * than trusted. A key that resolves to nothing would render as a blank column
+   * or a lost lesson — a plausible-looking week hiding a typo. */
+  const slotIds = new Set(data.slots.map((slot) => slot.id));
+
   const week = data.days.map((day) => {
-    const lessons = data.lessons[day.name];
-    if (!lessons) {
-      throw new Error(`No lessons filed for day "${day.name}"`);
+    const rows = data.lessons[day.id];
+    if (!rows) {
+      throw new Error(`No lessons filed for day "${day.id}"`);
     }
-    return lessons;
+    for (const slotId of Object.keys(rows)) {
+      if (!slotIds.has(slotId)) {
+        throw new Error(`Day "${day.id}": unknown slotId "${slotId}"`);
+      }
+    }
+    return rows;
   });
 
-  for (const name of Object.keys(data.lessons)) {
-    if (!data.days.some((day) => day.name === name)) {
-      throw new Error(`Lessons filed under unknown day "${name}"`);
+  for (const dayId of Object.keys(data.lessons)) {
+    if (!data.days.some((day) => day.id === dayId)) {
+      throw new Error(`Lessons filed under unknown day "${dayId}"`);
     }
   }
 
-  /** A lesson counts only when it has a type and is not marked ignored. */
-  const lessonAt = (dayIndex: number, slotIndex: number) => {
-    const lesson = week[dayIndex][slotIndex];
-    if (!lesson?.lessonId || lesson.ignored) return null;
-    return lesson;
+  /** A slot with no row is free; so is one the family does not attend. */
+  const lessonAt = (dayIndex: number, slotId: string) => {
+    const lesson = week[dayIndex][slotId];
+    return lesson && !lesson.ignored ? lesson : null;
   };
 
   const usedColorIds = new Set<string>();
@@ -144,13 +150,13 @@ export function buildPlan(data: LessonsPlan): Plan {
       range: `${slot.start} - ${toTime(end)}`,
       breakText: formatBreak(gap),
       cells: data.days.map((day, dayIndex) => {
-        const lesson = lessonAt(dayIndex, slotIndex);
-        if (!lesson?.lessonId) return EMPTY_CELL;
+        const lesson = lessonAt(dayIndex, slot.id);
+        if (!lesson) return EMPTY_CELL;
 
         const type = types.get(lesson.lessonId);
         if (!type) {
           throw new Error(
-            `${day.name}, slot ${slotIndex}: unknown lessonId "${lesson.lessonId}"`,
+            `${day.id}/${slot.id}: unknown lessonId "${lesson.lessonId}"`,
           );
         }
 
@@ -161,12 +167,10 @@ export function buildPlan(data: LessonsPlan): Plan {
           );
         }
 
-        const teacher = lesson.teacherId
-          ? teachers.get(lesson.teacherId)
-          : undefined;
-        if (lesson.teacherId && !teacher) {
+        const teacher = teachers.get(lesson.teacherId);
+        if (!teacher) {
           throw new Error(
-            `${day.name}, slot ${slotIndex}: unknown teacherId "${lesson.teacherId}"`,
+            `${day.id}/${slot.id}: unknown teacherId "${lesson.teacherId}"`,
           );
         }
 
@@ -175,7 +179,7 @@ export function buildPlan(data: LessonsPlan): Plan {
         return {
           name: type.name,
           short: type.short ?? type.name,
-          teacher: teacher && !teacher.anonymous ? teacher.name : "",
+          teacher: teacher.anonymous ? "" : teacher.name,
           color: color.hex,
           empty: false,
         };

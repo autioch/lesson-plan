@@ -53,6 +53,12 @@ type Teacher = {
 };
 
 type Slot = {
+  /**
+   * Opaque and permanent. Deliberately not the time: bell times move, and a
+   * key that is also displayed data either has to be rewritten everywhere or
+   * starts lying. A retired slot's id is never reused.
+   */
+  id: string;
   /** "HH:MM" */
   start: string;
   /** Minutes. */
@@ -67,16 +73,25 @@ type LessonType = {
   colorId: string;
 };
 
-/** An empty slot is `{}` — a lesson without an id is one. */
+/**
+ * One lesson. A free slot has no row at all — absence is what "wolne" means,
+ * so there is no empty-lesson shape to get wrong. Both references are required:
+ * a lesson nobody teaches uses one of the anonymous teacher records.
+ */
 type Lesson = {
-  lessonId?: string;
-  teacherId?: string;
-  /** Scheduled but not attended; rendered as an empty slot. */
+  lessonId: string;
+  teacherId: string;
+  /** Scheduled but not attended; rendered as a free slot. */
   ignored?: boolean;
 };
 
 type Day = {
-  /** Also the key a year files its lessons under. */
+  /**
+   * Readable, unlike a slot's — a day's identity cannot change, so there is
+   * nothing here to rot.
+   */
+  id: string;
+  /** Display only. */
   name: string;
   /** Two-letter label for the phone tabs. */
   short: string;
@@ -101,12 +116,11 @@ export type SchoolYear = {
   teachers: Teacher[];
   lessonTypes: LessonType[];
   /**
-   * Keyed by `Day.name`, one entry per slot in `slots` order; trailing slots
-   * may be omitted. Every day needs a key and every key must name a day —
-   * `buildPlan` throws otherwise, so a renamed day can never silently blank a
-   * week.
+   * `Day.id` → `Slot.id` → the lesson. Every key on both levels must resolve
+   * or `buildPlan` throws, so a retired slot or a mistyped day can never
+   * silently blank a week. A slot with no entry is free.
    */
-  lessons: Record<string, Lesson[]>;
+  lessons: Record<string, Record<string, Lesson>>;
 };
 
 export type LessonsPlan = PlanCommons & SchoolYear;

@@ -101,156 +101,151 @@
     }
   ],
   "lessons": {
-    "Poniedziałek": [
-      {},
-      {
+    "mon": {
+      "s2": {
         "lessonId": "3_es",
         "teacherId": "t4"
       },
-      {
+      "s3": {
         "lessonId": "4_wf",
         "teacherId": "t3"
       },
-      {
+      "s4": {
         "lessonId": "2_eng",
         "teacherId": "t2"
       },
-      {
+      "s5": {
         "lessonId": "1_ew",
         "teacherId": "t1"
       },
-      {
+      "s6": {
         "lessonId": "1_ew",
         "teacherId": "t1"
       },
-      {
+      "s7": {
         "lessonId": "1_ew",
         "teacherId": "t1"
       },
-      {
+      "s8": {
         "lessonId": "10_inf",
         "teacherId": "t6"
       }
-    ],
-    "Wtorek": [
-      {},
-      {
+    },
+    "tue": {
+      "s2": {
         "lessonId": "8_ethics",
         "teacherId": "t5"
       },
-      {
+      "s3": {
         "lessonId": "3_es",
         "teacherId": "t4"
       },
-      {
+      "s4": {
         "lessonId": "4_wf",
         "teacherId": "t3"
       },
-      {
+      "s5": {
         "lessonId": "1_ew",
         "teacherId": "t1"
       },
-      {
+      "s6": {
         "lessonId": "1_ew",
         "teacherId": "t1"
       },
-      {
+      "s7": {
         "lessonId": "1_ew",
         "teacherId": "t1"
       },
-      {
+      "s8": {
         "lessonId": "2_eng",
         "teacherId": "t2"
       }
-    ],
-    "Środa": [
-      {},
-      {
+    },
+    "wed": {
+      "s2": {
         "lessonId": "1_ew",
         "teacherId": "t1"
       },
-      {
+      "s3": {
         "lessonId": "1_ew",
         "teacherId": "t1"
       },
-      {
+      "s4": {
         "lessonId": "1_ew",
         "teacherId": "t1"
       },
-      {
+      "s5": {
         "lessonId": "7_pool",
         "teacherId": "t7"
       },
-      {
+      "s6": {
         "lessonId": "7_pool",
         "teacherId": "t7"
       },
-      {
+      "s7": {
         "lessonId": "9_club",
         "teacherId": "t1"
       }
-    ],
-    "Czwartek": [
-      {},
-      {
+    },
+    "thu": {
+      "s2": {
         "lessonId": "6_gym",
         "teacherId": "t3"
       },
-      {
+      "s3": {
         "lessonId": "1_ew",
         "teacherId": "t1"
       },
-      {
+      "s4": {
         "lessonId": "1_ew",
         "teacherId": "t1"
       },
-      {
+      "s5": {
         "lessonId": "2_eng",
         "teacherId": "t2"
       },
-      {
+      "s6": {
         "lessonId": "1_ew",
         "teacherId": "t1"
       },
-      {
+      "s7": {
         "lessonId": "1_ew",
         "teacherId": "t1"
       },
-      {
+      "s8": {
         "lessonId": "1_ew",
         "teacherId": "t1"
       }
-    ],
-    "Piątek": [
-      {},
-      {
+    },
+    "fri": {
+      "s2": {
         "lessonId": "1_ew",
         "teacherId": "t1"
       },
-      {
+      "s3": {
         "lessonId": "5_wfew",
         "teacherId": "t1"
       },
-      {
+      "s4": {
         "lessonId": "11_art",
         "teacherId": "t1"
       },
-      {
+      "s5": {
         "lessonId": "11_art",
         "teacherId": "t1"
       },
-      {
+      "s6": {
         "lessonId": "12_chess",
         "teacherId": "t8"
       },
-      {
+      "s7": {
         "lessonId": "1_ew",
         "teacherId": "t1"
       },
-      {
+      "s8": {
         "lessonId": "2_eng",
         "teacherId": "t2"
       }
-    ]
+    }
   }
 }
