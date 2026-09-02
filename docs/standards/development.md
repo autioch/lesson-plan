@@ -101,6 +101,9 @@ when you add a new doc or code area.
 | `npm run fix`       | `eslint --fix` then `prettier --write`                |
 | `npm run verify`    | `fix`, then `ci`, then `build` — **the gate**         |
 
+One tool sits outside npm: `node scripts/read-plan-pdf.mjs <pdf> [class]` prints a class's week out
+of the school's timetable PDF, once a year. See [importing-a-plan.md](../importing-a-plan.md).
+
 **The gate** is `npm run verify`. There are **no git hooks in this repo** — run it yourself before
 pushing. CI is the authority: [ci.yml](../../.github/workflows/ci.yml) runs `ci` + `build` on every
 pull request, and [deploy.yml](../../.github/workflows/deploy.yml) re-runs them on `main` before
