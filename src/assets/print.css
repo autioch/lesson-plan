@@ -29,7 +29,12 @@
     print-color-adjust: exact;
   }
 
+  /* The screen view must lose to the sheet regardless of stylesheet order:
+   * `.plan` is set to flex in plan.css at equal specificity, and bundling
+   * decides which file lands last. `@media print` does not raise specificity,
+   * so !important is what makes the override deterministic. */
   .plan {
+    /* eslint-disable-next-line css/no-important */
     display: none !important;
   }
 

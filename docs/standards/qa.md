@@ -29,19 +29,18 @@ Rules keep the answer deterministic:
 
 ## Operational stages
 
-| Stage                   | What                                            | Runs where                                   |
+| Stage                   | What                                            | Runs where                                    |
 | ----------------------- | ----------------------------------------------- | --------------------------------------------- |
-| **The gate** _(always)_ | Type-check, dead-code scan, build               | `npm run verify` — by hand, then PR CI + main |
+| **The gate** _(always)_ | Types, lint, dead code, format, build           | `npm run verify` — by hand, then PR CI + main |
 | **Visual check**        | Rendered output on the dev server looks correct | `npm run dev` + browser                       |
 
-**The gate** is `npm run verify` — `ci:ts` (`astro sync && tsc --noEmit`), `ci:knip`, then
-`npm run build`. A green run means:
+**The gate** is `npm run verify` — `fix`, then `ci` (`ci:ts` → `ci:lint` → `ci:knip` →
+`ci:format`), then `build`. A green run means:
 
-- TypeScript types check out **in `.ts` files** — `tsc` does not read `.astro`, so frontmatter is
-  unchecked. Keep logic out of frontmatter.
+- Types check out, `.astro` frontmatter included (`astro check`, not bare `tsc`)
+- Lint passes over JS/TS, `.astro`, CSS, JSON and Markdown
 - No unused file, export, type or dependency is left behind
-- JSON parses correctly and all imports resolve
-- The static output builds
+- Formatting is settled, JSON parses, imports resolve, the static output builds
 
 No git hook runs this. Run it yourself before pushing.
 

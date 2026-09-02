@@ -2,25 +2,31 @@
 
 Finished units of work, newest first. One self-contained entry each.
 
-## A real gate: type-check, knip, CI on pull requests — September 2026
+## A real gate: astro check, ESLint, knip, Prettier, CI on pull requests — September 2026
 
-The repo had no git hooks, no PR check and no type-check, while CLAUDE.md, workflow.md and qa.md all
-described a gate that existed only on paper — `astro build` transpiles and never checks types.
-Adopted the minimum from the sibling `lullaby-dashboard-2` pipeline that fits a one-page static
-site: `ci:ts` (`astro sync && tsc --noEmit`), `ci:knip`, composed as `npm run ci`, with
-`npm run verify` adding the build. A `ci.yml` runs it on every pull request; `deploy.yml` re-runs it
+The repo had no git hooks, no PR check, no type-check, no linter and no formatter, while CLAUDE.md,
+workflow.md and qa.md all described a gate that existed only on paper — `astro build` transpiles and
+never checks types. Ported the parts of the sibling `lullaby-dashboard-2` pipeline that fit a
+one-page static site: `ci:ts` (`astro check`), `ci:lint` (ESLint), `ci:knip`, `ci:format`
+(Prettier), composed as `npm run ci`, with `npm run fix` for the writing half and `npm run verify`
+= fix + ci + build. A `ci.yml` runs `ci` + `build` on every pull request; `deploy.yml` re-runs them
 on `main` before publishing, and both read the Node version from a new `.nvmrc`.
 
-Headline decisions: **plain `tsc`, not `@astrojs/check`** — one devDependency instead of two, and
-the coverage difference is `.astro` frontmatter, which the conventions now keep free of logic
-anyway. **knip is in the gate, not advisory** — the preceding refactor had to find `iconId`,
-`teachers[].email` and `Lesson.paused` by hand, and knip immediately flagged seven exported types
-nothing imported (now un-exported). **No test runner, deliberately**: one pure transform behind one
-page does not earn vitest, and qa.md was rewritten to say so instead of demanding unit tests nobody
-would write. **Visual regression was rejected** — Playwright baselines are OS-font-sensitive and run
-advisory even in the sibling repo; the date-dependent check that actually mattered is a stubbed
-clock, now a rule in qa.md. Prettier, ESLint and husky were considered and left out: prettier alone
-would reflow 32 files, and it should land as its own reviewable commit.
+Headline decisions: **`astro check`, not bare `tsc`** — `tsc` never reads `.astro`, so frontmatter
+would have stayed unchecked. **knip is in the gate, not advisory** — the preceding refactor had to
+find `iconId`, `teachers[].email` and `Lesson.paused` by hand, and knip immediately flagged seven
+exported types nothing imported (now un-exported). **ESLint lints CSS, JSON and Markdown too**, via
+the `@eslint/*` language plugins: `css/no-invalid-properties` runs with `allowUnknownVariables`
+because tokens are declared in one file and consumed from another, and `css/use-baseline` is set to
+`newly` to match the "modern desktop browsers" floor. Four deliberate CSS choices carry a
+line-level disable with its reason — `text-wrap: pretty` twice, `user-select`, and the `!important`
+that makes the print sheet beat the screen view regardless of bundle order. **No test runner and no
+visual regression**, deliberately: one pure transform behind one page earns neither, and the
+date-dependent check that actually mattered is a stubbed clock, now a rule in qa.md. **husky and
+lint-staged were left out** — the gate is one command you run yourself.
+
+Prettier's first pass reformatted 18 files; that churn is in this commit rather than spread through
+later diffs.
 
 Flagged, not fixed: `npm audit` reports 13 advisories against `astro@5.13.5` — see
 [owner-tasks.md](owner-tasks.md).

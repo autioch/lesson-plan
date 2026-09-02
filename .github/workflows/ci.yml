@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   ci:
-    name: Type-check, knip, build
+    name: Types, lint, knip, format, build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -27,8 +27,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Read-only verification first (ci:ts -> ci:knip), then the build that
-      # actually ships. One job: the checks are seconds and share one install.
+      # Read-only verification first (ci:ts -> ci:lint -> ci:knip -> ci:format),
+      # then the build that actually ships. `npm run ci` never rewrites files —
+      # that is `npm run fix`, which belongs on a developer's machine, not here.
+      # One job: the checks take seconds and share a single install.
       - name: Run checks
         run: npm run ci
 

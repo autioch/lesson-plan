@@ -40,13 +40,13 @@ system is built**; read this before writing code for **how to write it here**.
 
 **Copy from** — canonical examples for building blocks:
 
-| Building…                  | Copy the pattern from                                        |
-| -------------------------- | ------------------------------------------------------------ |
-| Page structure / layout    | [src/pages/index.astro](../../src/pages/index.astro)         |
-| Data type definitions      | [src/data/types.ts](../../src/data/types.ts)                 |
-| A component reading labels | [src/components/WeekGrid.astro](../../src/components/WeekGrid.astro) |
-| Build-time transform       | [src/utils/plan.ts](../../src/utils/plan.ts)                 |
-| Band-aware layout CSS      | [src/assets/plan.css](../../src/assets/plan.css)             |
+| Building…                  | Copy the pattern from                                                  |
+| -------------------------- | ---------------------------------------------------------------------- |
+| Page structure / layout    | [src/pages/index.astro](../../src/pages/index.astro)                   |
+| Data type definitions      | [src/data/types.ts](../../src/data/types.ts)                           |
+| A component reading labels | [src/components/WeekGrid.astro](../../src/components/WeekGrid.astro)   |
+| Build-time transform       | [src/utils/plan.ts](../../src/utils/plan.ts)                           |
+| Band-aware layout CSS      | [src/assets/plan.css](../../src/assets/plan.css)                       |
 | Runtime (clock, day pick)  | the `<script>` in [src/pages/index.astro](../../src/pages/index.astro) |
 
 ## Keeping docs in sync
@@ -85,22 +85,26 @@ when you add a new doc or code area.
 
 ## Full command reference
 
-| Command           | Purpose                                             |
-| ----------------- | ---------------------------------------------------- |
-| `npm run dev`     | Dev server with hot reload                          |
-| `npm run build`   | Production static build. Confirms compile.          |
-| `npm run preview` | Preview the production build locally                |
-| `npm run ci:ts`   | `astro sync && tsc --noEmit` — type-check           |
-| `npm run ci:knip` | Unused files, exports, types and dependencies       |
-| `npm run ci`      | Both of the above, in order                         |
-| `npm run verify`  | `npm run ci` then `npm run build` — the full gate    |
+| Command             | Purpose                                               |
+| ------------------- | ----------------------------------------------------- |
+| `npm run dev`       | Dev server with hot reload                            |
+| `npm run build`     | Production static build. Confirms compile.            |
+| `npm run preview`   | Preview the production build locally                  |
+| `npm run ci:ts`     | `astro check` — types, including `.astro` frontmatter |
+| `npm run ci:lint`   | ESLint over JS/TS, `.astro`, CSS, JSON and Markdown   |
+| `npm run ci:knip`   | Unused files, exports, types and dependencies         |
+| `npm run ci:format` | `prettier --check .`                                  |
+| `npm run ci`        | All four, in that order — read-only                   |
+| `npm run fix`       | `eslint --fix` then `prettier --write`                |
+| `npm run verify`    | `fix`, then `ci`, then `build` — **the gate**         |
 
 **The gate** is `npm run verify`. There are **no git hooks in this repo** — run it yourself before
-pushing. CI is the authority: [ci.yml](../../.github/workflows/ci.yml) runs it on every pull
-request, and [deploy.yml](../../.github/workflows/deploy.yml) re-runs it on `main` before deploying.
+pushing. CI is the authority: [ci.yml](../../.github/workflows/ci.yml) runs `ci` + `build` on every
+pull request, and [deploy.yml](../../.github/workflows/deploy.yml) re-runs them on `main` before
+deploying. CI runs `ci`, never `fix` — a check that rewrites files is not a check.
 
-**What the type-check does not cover:** `tsc` reads `.ts` only, so a type error inside `.astro`
-frontmatter still compiles. Keep logic in `src/utils/` and `src/data/`, where it is checked; a
-component's frontmatter should be assignment and markup.
+Configs: [eslint.config.mjs](../../eslint.config.mjs),
+[prettier.config.mjs](../../prettier.config.mjs), [knip.json](../../knip.json). `designs/` is
+excluded from all of them — it is a verbatim design snapshot, not our code.
 
 Node is pinned in [.nvmrc](../../.nvmrc); both workflows read it, so local and CI never drift.
