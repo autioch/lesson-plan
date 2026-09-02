@@ -14,7 +14,7 @@ Read:   JSON files → component rendering → static HTML
 
 | Layer               | Does                                                                                            | Must not                                                 |
 | ------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| **JSON file**       | Source of record for everything displayed: schedule, palette, day names, and every fixed string | Hold HTML, rendering logic, or component state           |
+| **JSON files**      | Source of record for everything displayed: schedule, palette, day names, and every fixed string | Hold HTML, rendering logic, or component state           |
 | **Data processing** | Transform JSON into the shape components need; computed fields (derived times, timetable grids) | Be intermingled with component rendering; read the clock |
 | **Components**      | Render headers, cells, and document structure; read the processed data                          | Load or transform JSON directly; hold logic or copy      |
 | **Page script**     | The two runtime facts: which weekday it is, and which day the phone shows                       | Hold data, copy, or layout decisions                     |
@@ -26,7 +26,7 @@ Core rules:
 - **Components are presentation-only.** They read prepared data and render HTML; no data fetching,
   no logic beyond layout and markup decisions, and no copy of their own — every visible string is a
   label from the data.
-- **Nothing user-visible lives outside the year's plan file.** Colours, day names and abbreviations, page
+- **Nothing user-visible lives outside the plan data.** Colours, day names and abbreviations, page
   title, "DZIŚ", "wolne", the legend titles and the break templates are all data. Code holds
   structure; CSS holds theme.
 - **The build never reads the clock.** The site is generated once a term, so "today" is a runtime
@@ -56,20 +56,25 @@ Import aliases: none currently used.
 
 ## Data loading & composition
 
-At build time, Astro imports one JSON file per school year, renders one of them, and passes it
-through one transform:
+At build time, Astro imports the shared file plus one JSON file per school year, merges and renders
+one of them, and passes it through one transform:
 
-- **`src/data/plans/<year>.json`** — everything displayed, one file per school year, named for the
-  September it starts. Root keys: `locale`, `labels` (every fixed string), `palette`
-  (`{ id, hex, legendTitle, inLegend }` — the only place a colour is written), `teachers`, `slots`,
-  `lessonTypes` (referencing a colour by `colorId`), `days`.
-- **`src/data/plans/index.ts`** — imports **every** year into `plans` and names the live one in
-  `ACTIVE_YEAR`. Only the active year reaches the page; the rest are imported purely so
+- **`src/data/plans/commons.json`** — what the school fixes and a year does not: `locale`, `labels`
+  (every fixed string), `palette` (`{ id, hex, legendTitle, inLegend }` — the only place a colour is
+  written), `slots` (the bell day), `days` (`name`, `short`, `weekday`).
+- **`src/data/plans/<year>.json`** — what one year decides, named for the September it starts. Root
+  keys: `teachers`, `lessonTypes` (referencing a colour by `colorId`), and `lessons` — the week,
+  keyed by day name, one entry per slot in `slots` order.
+- **`src/data/plans/index.ts`** — merges commons into **every** year to build `plans`, and names the
+  live one in `ACTIVE_YEAR`. Only the active year reaches the page; the rest are merged purely so
   `astro check` types them against `LessonsPlan` and a type change names every file it breaks.
   Publishing a new year is one line here — see [importing-a-plan.md](../importing-a-plan.md).
-- **`src/data/types.ts`** — the type of those files, and so the checklist of what may be rendered.
+- **`src/data/types.ts`** — `PlanCommons`, `SchoolYear`, and the `LessonsPlan` they merge into; the
+  checklist of what may be rendered, and where the line between the two files falls.
 
-Past years are never edited: a published year is a snapshot of what hung on the wall.
+Past years are never edited: a published year is a snapshot of the week that hung on the wall. The
+split is what makes that affordable — an edit to commons reaches back into published years, which is
+accepted for copy, colours and bell times and for nothing else.
 
 `src/pages/index.astro` reads the active year once and `src/utils/plan.ts` turns it into the render shape
 (shared row set, breaks, cells, legend). Components lay that out and compute nothing. A reference
@@ -90,7 +95,8 @@ Static site; the only runtime state is which day a phone is showing.
 
 | Data                                            | Owner                                               |
 | ----------------------------------------------- | --------------------------------------------------- |
-| Schedule, teachers, lesson types, palette, copy | `src/data/plans/<year>.json`                        |
+| Palette, copy, bell times, day names            | `src/data/plans/commons.json`                       |
+| Schedule, teachers, lesson types                | `src/data/plans/<year>.json`                        |
 | Derived render shape                            | `src/utils/plan.ts`                                 |
 | Render logic and HTML structure                 | `src/components/`                                   |
 | Theme — type scale, spacing, surfaces, text ink | `src/assets/tokens.css`                             |

@@ -1,9 +1,20 @@
 /**
- * The shape of `lessons.json` — the single source for everything the plan
+ * The shape of the plan data — the single source for everything the plan
  * displays: the schedule, the palette, and every fixed string on screen.
  *
- * Nothing user-visible is allowed to live outside that file, so this type is
+ * Nothing user-visible is allowed to live outside that data, so this type is
  * also the checklist for what a component may render.
+ *
+ * It is split in two files, along one line: **does a school year decide it?**
+ * `commons.json` holds what the school fixes — copy, colours, bell times, the
+ * days of the week; `<year>.json` holds what a year decides — its teachers,
+ * its subjects, its week. `plans/index.ts` merges them back into one
+ * `LessonsPlan`, which is what the transform and the components see.
+ *
+ * The split means an edit to commons reaches back into published years. That
+ * is accepted for chrome and bell times and nothing else: a year's teachers,
+ * lesson types and lessons stay in the year file, where they are never edited
+ * again.
  */
 
 /** Every fixed string on screen, so no component hardcodes copy. */
@@ -65,22 +76,37 @@ type Lesson = {
 };
 
 type Day = {
+  /** Also the key a year files its lessons under. */
   name: string;
   /** Two-letter label for the phone tabs. */
   short: string;
   /** ISO weekday, 1 = Monday. Matched against the browser clock at runtime. */
   weekday: number;
-  /** One entry per slot, in `slots` order; trailing slots may be omitted. */
-  lessons: Lesson[];
 };
 
-export type LessonsPlan = {
+/** `commons.json` — the school's fixtures, shared by every year. */
+export type PlanCommons = {
   /** BCP 47 tag for `<html lang>`. */
   locale: string;
   labels: Labels;
   palette: PaletteColor[];
-  teachers: Teacher[];
+  /** The bell day, in order. Every slot renders, used or not. */
   slots: Slot[];
-  lessonTypes: LessonType[];
+  /** The week, in order. */
   days: Day[];
 };
+
+/** `<year>.json` — what one school year decides. Never edited once published. */
+export type SchoolYear = {
+  teachers: Teacher[];
+  lessonTypes: LessonType[];
+  /**
+   * Keyed by `Day.name`, one entry per slot in `slots` order; trailing slots
+   * may be omitted. Every day needs a key and every key must name a day —
+   * `buildPlan` throws otherwise, so a renamed day can never silently blank a
+   * week.
+   */
+  lessons: Record<string, Lesson[]>;
+};
+
+export type LessonsPlan = PlanCommons & SchoolYear;

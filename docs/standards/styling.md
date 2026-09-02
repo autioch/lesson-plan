@@ -35,9 +35,9 @@ canvas for band A is 412 × 915.
 ## Visual conventions
 
 - **Lesson colours are data, not decoration.** Exact hex from the `palette` in
-  `src/data/lessons.json`, full strength, never tokenized, tinted or made transparent, and never
-  shown without the legend. A lesson type names a colour by `colorId`; a hex written anywhere else
-  is a bug.
+  `src/data/plans/commons.json`, full strength, never tokenized, tinted or made transparent, and
+  never shown without the legend. A lesson type names a colour by `colorId`; a hex written anywhere
+  else is a bug.
 - **Tile ink is fixed, not computed.** Every tile takes `--text-primary`, and the teacher line
   `--text-on-tile-weak`. There is no luminance switch and no light-ink variant — which makes the
   palette's contrast a **hard entry condition** rather than something code compensates for.
@@ -57,7 +57,7 @@ canvas for band A is 412 × 915.
 - **The legend names the colour, not its lessons.** Those are on screen beside it.
 - **Layout lives in `src/assets/plan.css`**, not in scoped component styles — the band rules cross
   component boundaries.
-- **Copy is never in CSS or markup.** Visible words come from `labels` in `lessons.json`; CSS may
+- **Copy is never in CSS or markup.** Visible words come from `labels` in `commons.json`; CSS may
   show and hide them, never supply them (no `content:` strings).
 - **Semantic HTML**: heading levels, real buttons, `aria-selected` on the day tabs.
 

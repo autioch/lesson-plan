@@ -9,10 +9,12 @@ Manual steps only the repo owner can do. Delete a line once it's done.
 - **Print the plan for real.** The print sheet was verified by applying the print stylesheet in a
   browser at A4-landscape pixel size, not by an actual print or PDF export. Open `/`, print to
   PDF in Chrome with "Background graphics" on, and confirm one page, colours intact, legend at the
-  bottom.
+  bottom. **Recheck since the grid went to the full 11-slot bell day:** a print row now gets ~43pt
+  where it used to get ~66pt, against ~33pt of content. That is a calculation, not an observed
+  print — the two-line cells (subject + teacher) are what to look at.
 - **Check the plan on a real phone.** The three bands were verified with browser viewport emulation.
   A physical phone confirms the touch targets, the swipe, and that the day fits without scrolling
-  under the browser's own chrome.
+  under the browser's own chrome — now 11 rows at ~78px rather than 7 at ~120px.
 - **Provide `GITHUB_PAT` for the GitHub MCP server.** [.mcp.json](../.mcp.json) points at
   `https://api.githubcopilot.com/mcp/` and reads the token from that environment variable. Without
   it the server fails to connect and PR work falls back to the `gh` CLI. Scope it to this

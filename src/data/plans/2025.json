@@ -1,60 +1,4 @@
 {
-  "locale": "pl",
-  "labels": {
-    "pageTitle": "Plan lekcji",
-    "today": "DZIŚ",
-    "todayAria": "dziś",
-    "freeSlot": "wolne",
-    "dayTabsLabel": "Dzień tygodnia",
-    "legendTitle": "Legenda kolorów",
-    "legendHint": "dotknij, aby zamknąć",
-    "breakMinutes": "+{value}min przerwy",
-    "breakHours": "+{value}h przerwy"
-  },
-  "palette": [
-    {
-      "id": "plain",
-      "hex": "#ffffff",
-      "legendTitle": "Zwykła lekcja",
-      "inLegend": false
-    },
-    {
-      "id": "lang",
-      "hex": "#4fb0f0",
-      "legendTitle": "Język obcy",
-      "inLegend": true
-    },
-    {
-      "id": "kit",
-      "hex": "#b6ee7a",
-      "legendTitle": "Spakuj strój",
-      "inLegend": true
-    },
-    {
-      "id": "pool",
-      "hex": "#7fe7d5",
-      "legendTitle": "Basen — kąpielówki i czepek",
-      "inLegend": true
-    },
-    {
-      "id": "creative",
-      "hex": "#ff8fb1",
-      "legendTitle": "Zajęcia twórcze",
-      "inLegend": true
-    },
-    {
-      "id": "individual",
-      "hex": "#dcc0ff",
-      "legendTitle": "Zajęcia indywidualne i rytmika",
-      "inLegend": true
-    },
-    {
-      "id": "extra",
-      "hex": "#ffcf4d",
-      "legendTitle": "Dodatkowe",
-      "inLegend": true
-    }
-  ],
   "teachers": [
     {
       "id": "t1",
@@ -93,52 +37,6 @@
       "id": "t9",
       "name": "<extra>",
       "anonymous": true
-    }
-  ],
-  "slots": [
-    {
-      "start": "07:30",
-      "duration": 45
-    },
-    {
-      "start": "08:15",
-      "duration": 45
-    },
-    {
-      "start": "09:05",
-      "duration": 45
-    },
-    {
-      "start": "10:00",
-      "duration": 45
-    },
-    {
-      "start": "11:00",
-      "duration": 45
-    },
-    {
-      "start": "11:55",
-      "duration": 45
-    },
-    {
-      "start": "13:00",
-      "duration": 45
-    },
-    {
-      "start": "14:05",
-      "duration": 45
-    },
-    {
-      "start": "14:55",
-      "duration": 45
-    },
-    {
-      "start": "15:45",
-      "duration": 45
-    },
-    {
-      "start": "16:45",
-      "duration": 60
     }
   ],
   "lessonTypes": [
@@ -254,191 +152,166 @@
       "colorId": "extra"
     }
   ],
-  "days": [
-    {
-      "name": "Poniedziałek",
-      "short": "Pn",
-      "weekday": 1,
-      "lessons": [
-        {},
-        {
-          "lessonId": "1_ep",
-          "teacherId": "t1"
-        },
-        {
-          "lessonId": "1_ep",
-          "teacherId": "t1"
-        },
-        {
-          "lessonId": "1_ep",
-          "teacherId": "t1"
-        },
-        {
-          "lessonId": "1_ep",
-          "teacherId": "t1"
-        },
-        {
-          "lessonId": "1_ep",
-          "teacherId": "t1"
-        },
-        {
-          "lessonId": "2_eng",
-          "teacherId": "t2"
-        },
-        {
-          "lessonId": "12_",
-          "teacherId": "t9"
-        }
-      ]
-    },
-    {
-      "name": "Wtorek",
-      "short": "Wt",
-      "weekday": 2,
-      "lessons": [
-        {},
-        {
-          "lessonId": "1_ep",
-          "teacherId": "t1"
-        },
-        {
-          "lessonId": "3_wfew",
-          "teacherId": "t1"
-        },
-        {
-          "lessonId": "1_ep",
-          "teacherId": "t1"
-        },
-        {
-          "lessonId": "1_ep",
-          "teacherId": "t1"
-        },
-        {
-          "lessonId": "2_eng",
-          "teacherId": "t2"
-        },
-        {
-          "lessonId": "8_gimkor",
-          "teacherId": "t3"
-        },
-        {
-          "lessonId": "13_",
-          "teacherId": "t9",
-          "ignored": true
-        }
-      ]
-    },
-    {
-      "name": "Środa",
-      "short": "Śr",
-      "weekday": 3,
-      "lessons": [
-        {},
-        {
-          "lessonId": "1_ep",
-          "teacherId": "t1"
-        },
-        {
-          "lessonId": "2_eng",
-          "teacherId": "t2"
-        },
-        {
-          "lessonId": "4_pool",
-          "teacherId": "t7"
-        },
-        {
-          "lessonId": "4_pool",
-          "teacherId": "t7"
-        },
-        {
-          "lessonId": "9_ethics",
-          "teacherId": "t6"
-        },
-        {
-          "lessonId": "10_rhytm",
-          "teacherId": "t4"
-        },
-        {},
-        {},
-        {},
-        {
-          "lessonId": "11_",
-          "teacherId": "t8"
-        }
-      ]
-    },
-    {
-      "name": "Czwartek",
-      "short": "Cz",
-      "weekday": 4,
-      "lessons": [
-        {},
-        {
-          "lessonId": "1_ep",
-          "teacherId": "t1"
-        },
-        {
-          "lessonId": "5_wf",
-          "teacherId": "t3"
-        },
-        {
-          "lessonId": "1_ep",
-          "teacherId": "t1"
-        },
-        {
-          "lessonId": "1_ep",
-          "teacherId": "t1"
-        },
-        {
-          "lessonId": "1_ep",
-          "teacherId": "t1"
-        },
-        {
-          "lessonId": "1_ep",
-          "teacherId": "t1"
-        },
-        {
-          "lessonId": "17_",
-          "teacherId": "t9"
-        },
-        {
-          "lessonId": "19_",
-          "teacherId": "t9"
-        }
-      ]
-    },
-    {
-      "name": "Piątek",
-      "short": "Pt",
-      "weekday": 5,
-      "lessons": [
-        {},
-        {
-          "lessonId": "1_ep",
-          "teacherId": "t1"
-        },
-        {
-          "lessonId": "6_art",
-          "teacherId": "t1"
-        },
-        {
-          "lessonId": "6_art",
-          "teacherId": "t1"
-        },
-        {
-          "lessonId": "5_wf",
-          "teacherId": "t3"
-        },
-        {
-          "lessonId": "7_extra",
-          "teacherId": "t1"
-        },
-        {},
-        {
-          "lessonId": "20_",
-          "teacherId": "t1"
-        }
-      ]
-    }
-  ]
+  "lessons": {
+    "Poniedziałek": [
+      {},
+      {
+        "lessonId": "1_ep",
+        "teacherId": "t1"
+      },
+      {
+        "lessonId": "1_ep",
+        "teacherId": "t1"
+      },
+      {
+        "lessonId": "1_ep",
+        "teacherId": "t1"
+      },
+      {
+        "lessonId": "1_ep",
+        "teacherId": "t1"
+      },
+      {
+        "lessonId": "1_ep",
+        "teacherId": "t1"
+      },
+      {
+        "lessonId": "2_eng",
+        "teacherId": "t2"
+      },
+      {
+        "lessonId": "12_",
+        "teacherId": "t9"
+      }
+    ],
+    "Wtorek": [
+      {},
+      {
+        "lessonId": "1_ep",
+        "teacherId": "t1"
+      },
+      {
+        "lessonId": "3_wfew",
+        "teacherId": "t1"
+      },
+      {
+        "lessonId": "1_ep",
+        "teacherId": "t1"
+      },
+      {
+        "lessonId": "1_ep",
+        "teacherId": "t1"
+      },
+      {
+        "lessonId": "2_eng",
+        "teacherId": "t2"
+      },
+      {
+        "lessonId": "8_gimkor",
+        "teacherId": "t3"
+      },
+      {
+        "lessonId": "13_",
+        "teacherId": "t9",
+        "ignored": true
+      }
+    ],
+    "Środa": [
+      {},
+      {
+        "lessonId": "1_ep",
+        "teacherId": "t1"
+      },
+      {
+        "lessonId": "2_eng",
+        "teacherId": "t2"
+      },
+      {
+        "lessonId": "4_pool",
+        "teacherId": "t7"
+      },
+      {
+        "lessonId": "4_pool",
+        "teacherId": "t7"
+      },
+      {
+        "lessonId": "9_ethics",
+        "teacherId": "t6"
+      },
+      {
+        "lessonId": "10_rhytm",
+        "teacherId": "t4"
+      },
+      {},
+      {},
+      {},
+      {
+        "lessonId": "11_",
+        "teacherId": "t8"
+      }
+    ],
+    "Czwartek": [
+      {},
+      {
+        "lessonId": "1_ep",
+        "teacherId": "t1"
+      },
+      {
+        "lessonId": "5_wf",
+        "teacherId": "t3"
+      },
+      {
+        "lessonId": "1_ep",
+        "teacherId": "t1"
+      },
+      {
+        "lessonId": "1_ep",
+        "teacherId": "t1"
+      },
+      {
+        "lessonId": "1_ep",
+        "teacherId": "t1"
+      },
+      {
+        "lessonId": "1_ep",
+        "teacherId": "t1"
+      },
+      {
+        "lessonId": "17_",
+        "teacherId": "t9"
+      },
+      {
+        "lessonId": "19_",
+        "teacherId": "t9"
+      }
+    ],
+    "Piątek": [
+      {},
+      {
+        "lessonId": "1_ep",
+        "teacherId": "t1"
+      },
+      {
+        "lessonId": "6_art",
+        "teacherId": "t1"
+      },
+      {
+        "lessonId": "6_art",
+        "teacherId": "t1"
+      },
+      {
+        "lessonId": "5_wf",
+        "teacherId": "t3"
+      },
+      {
+        "lessonId": "7_extra",
+        "teacherId": "t1"
+      },
+      {},
+      {
+        "lessonId": "20_",
+        "teacherId": "t1"
+      }
+    ]
+  }
 }

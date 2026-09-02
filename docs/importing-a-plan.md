@@ -5,8 +5,10 @@ class we care about into that year's plan file and publishes it. About half an h
 checking rather than typing.
 
 The rules the layout enforces: one file per school year in `src/data/plans/`, named for the
-September it starts (`2026.json`); a published year is **never edited again**; only `ACTIVE_YEAR` in
-[`src/data/plans/index.ts`](../src/data/plans/index.ts) says what the site renders.
+September it starts (`2026.json`), holding **only what that year decides** — `teachers`,
+`lessonTypes`, `lessons`; everything else lives once in
+[`commons.json`](../src/data/plans/commons.json). A published year is **never edited again**; only
+`ACTIVE_YEAR` in [`src/data/plans/index.ts`](../src/data/plans/index.ts) says what the site renders.
 
 ## Who does what
 
@@ -98,31 +100,36 @@ niem` in grade 8 is taught by KRadziłowska, so in 1b's `KRadziłowska / MWołej
 
 1. **Put the PDF at `src/data/plans/<year>.pdf`** — committed beside the JSON it produced, so a
    year's data can always be traced to its source.
-2. **Copy the newest year's JSON to `<year>.json`.** Start from last year, never from scratch: the
-   labels and the palette carry over, and retyping them invents drift.
-3. **Revise the reference tables first**, before any lesson: `slots` (paste the script's output),
-   `teachers`, `lessonTypes`, `palette`. Add and remove freely, but **never reuse an id whose
-   meaning changed** — an id quietly pointing at a different subject or colour repaints the legend
-   and nothing fails.
-4. **Then transcribe `days`.** One entry per slot in `slots` order; an unused slot is `{}`; trailing
-   empty slots may be omitted. A lesson that is scheduled but not attended is `ignored: true`, which
-   renders as free but records that the school put something there.
-5. **Register the year** in `src/data/plans/index.ts`: import it, add it to `plans`, move
+2. **Copy the newest year's JSON to `<year>.json`.** Start from last year, never from scratch — it
+   is already the right shape, and its `teachers` and `lessonTypes` are mostly still true.
+3. **Revise the reference tables first**, before any lesson: `teachers` and `lessonTypes`. Add and
+   remove freely, but **never reuse an id whose meaning changed** — an id quietly pointing at a
+   different subject or colour repaints the legend and nothing fails.
+4. **Then transcribe `lessons`.** One key per day, spelled exactly as `commons.json` spells it — a
+   key that doesn't match a day fails the build, in both directions. Under each key, one entry per
+   slot in `slots` order; an unused slot is `{}`; trailing empty slots may be omitted. A lesson that
+   is scheduled but not attended is `ignored: true`, which renders as free but records that the
+   school put something there.
+5. **Only if the school moved something**, edit `commons.json`: bell times in `slots`, a new colour
+   in `palette`, a copy fix in `labels`. It is shared, so that edit re-renders **every** published
+   year — which is right for a corrected label and wrong for anything this year alone decided.
+6. **Register the year** in `src/data/plans/index.ts`: import it, add it to `years`, move
    `ACTIVE_YEAR`.
-6. **Verify** — below. **Flag every guess** to the human, and file the unresolved ones in
+7. **Verify** — below. **Flag every guess** to the human, and file the unresolved ones in
    `owner-tasks.md`.
-7. **Commit** on a branch, PR, merge on green.
+8. **Commit** on a branch, PR, merge on green.
 
 ## Verifying
 
 `npm run verify` is necessary and **not sufficient**.
 
 What the build catches, by throwing in `src/utils/plan.ts`: an unknown `lessonId`, `colorId` or
-`teacherId`. Typos are a red build, never a blank tile.
+`teacherId`, a day with no `lessons` key, and a `lessons` key naming no day. Typos are a red build,
+never a blank tile.
 
 What nothing catches, and so has to be checked cell by cell against the script's grid: a lesson in
 the wrong slot or on the wrong day, the right subject with the wrong teacher, a slot left `{}` that
-should hold a lesson, bell times copied from last year when the PDF moved them.
+should hold a lesson, bell times left in `commons.json` when the PDF moved them.
 
 The cheap way to do that check: build, then read the cells out of `dist/index.html` and compare them
 to the grid the script printed. Then confirm the legend shows every colour the week uses and no
