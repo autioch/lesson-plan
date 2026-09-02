@@ -2,6 +2,10 @@
 
 Manual steps only the repo owner can do. Delete a line once it's done.
 
+- **Confirm the informatics group for 1b.** The 2026 plan splits the class: group 1 has `inf` on
+  Monday 14:05 and `ew` on Friday 08:15, group 2 has them the other way round. `2026.json` assumes
+  **group 1**. If it is group 2, swap those two cells — Monday 14:05 becomes empty (`{}`) and Friday
+  08:15 becomes `10_inf` with `t6`.
 - **Print the plan for real.** The print sheet was verified by applying the print stylesheet in a
   browser at A4-landscape pixel size, not by an actual print or PDF export. Open `/`, print to
   PDF in Chrome with "Background graphics" on, and confirm one page, colours intact, legend at the
