@@ -26,7 +26,7 @@ Core rules:
 - **Components are presentation-only.** They read prepared data and render HTML; no data fetching,
   no logic beyond layout and markup decisions, and no copy of their own — every visible string is a
   label from the data.
-- **Nothing user-visible lives outside `lessons.json`.** Colours, day names and abbreviations, page
+- **Nothing user-visible lives outside the year's plan file.** Colours, day names and abbreviations, page
   title, "DZIŚ", "wolne", the legend titles and the break templates are all data. Code holds
   structure; CSS holds theme.
 - **The build never reads the clock.** The site is generated once a term, so "today" is a runtime
@@ -37,7 +37,7 @@ Core rules:
 ```text
 src/
 ├─ components/       # Astro components (DayTabs, WeekGrid, Legend, PrintSheet)
-├─ data/             # lessons.json — the source of record — and its types
+├─ data/             # plans/ — one JSON per school year, the source of record — and its types
 ├─ layouts/          # Page wrapper (shared head, structure)
 ├─ pages/            # Astro pages (one per route) and the page script
 ├─ utils/            # Pure build-time transforms (no rendering, no I/O, no clock)
@@ -56,14 +56,22 @@ Import aliases: none currently used.
 
 ## Data loading & composition
 
-At build time, Astro imports one JSON file and passes it through one transform:
+At build time, Astro imports one JSON file per school year, renders one of them, and passes it
+through one transform:
 
-- **`src/data/lessons.json`** — everything displayed. Root keys: `locale`, `labels` (every fixed
-  string), `palette` (`{ id, hex, legendTitle, inLegend }` — the only place a colour is written),
-  `teachers`, `slots`, `lessonTypes` (referencing a colour by `colorId`), `days`.
-- **`src/data/types.ts`** — the type of that file, and so the checklist of what may be rendered.
+- **`src/data/plans/<year>.json`** — everything displayed, one file per school year, named for the
+  September it starts. Root keys: `locale`, `labels` (every fixed string), `palette`
+  (`{ id, hex, legendTitle, inLegend }` — the only place a colour is written), `teachers`, `slots`,
+  `lessonTypes` (referencing a colour by `colorId`), `days`.
+- **`src/data/plans/index.ts`** — imports **every** year into `plans` and names the live one in
+  `ACTIVE_YEAR`. Only the active year reaches the page; the rest are imported purely so
+  `astro check` types them against `LessonsPlan` and a type change names every file it breaks.
+  Publishing a new year is one line here — see [importing-a-plan.md](../importing-a-plan.md).
+- **`src/data/types.ts`** — the type of those files, and so the checklist of what may be rendered.
 
-`src/pages/index.astro` reads it once and `src/utils/plan.ts` turns it into the render shape
+Past years are never edited: a published year is a snapshot of what hung on the wall.
+
+`src/pages/index.astro` reads the active year once and `src/utils/plan.ts` turns it into the render shape
 (shared row set, breaks, cells, legend). Components lay that out and compute nothing. A reference
 that does not resolve — an unknown `lessonId`, `colorId` or `teacherId` — throws and fails the
 build rather than rendering a blank tile.
@@ -82,7 +90,7 @@ Static site; the only runtime state is which day a phone is showing.
 
 | Data                                            | Owner                                               |
 | ----------------------------------------------- | --------------------------------------------------- |
-| Schedule, teachers, lesson types, palette, copy | `src/data/lessons.json`                             |
+| Schedule, teachers, lesson types, palette, copy | `src/data/plans/<year>.json`                        |
 | Derived render shape                            | `src/utils/plan.ts`                                 |
 | Render logic and HTML structure                 | `src/components/`                                   |
 | Theme — type scale, spacing, surfaces, text ink | `src/assets/tokens.css`                             |

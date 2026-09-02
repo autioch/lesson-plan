@@ -15,7 +15,7 @@ system is built**; read this before writing code for **how to write it here**.
 - **Styling:** use scoped styles inside `.astro` files with `<style>` tags, or shared stylesheets
   in `src/assets/`. Rules that cross component boundaries — the responsive bands — belong in the
   shared stylesheet; scoped styles cannot express them.
-- **No copy in components.** Every user-visible string is a label from `lessons.json`, passed in as
+- **No copy in components.** Every user-visible string is a label from the year's plan, passed in as
   a prop. A hardcoded word in an `.astro` file is a bug, not a shortcut.
 - **No dates at build time.** Frontmatter and `src/utils/` must never call `new Date()`: the site is
   generated once a term. Anything that depends on the day belongs in the page script.
@@ -31,8 +31,9 @@ system is built**; read this before writing code for **how to write it here**.
 
 ## Adding a feature
 
-1. **Data layer** — extend `src/data/lessons.json` and its type in `src/data/types.ts`. New copy,
-   colours or day labels go there, never into a component.
+1. **Data layer** — extend the active year in `src/data/plans/` and its type in `src/data/types.ts`.
+   New copy, colours or day labels go there, never into a component. A type change must keep the
+   archived years compiling too — they are all imported by `src/data/plans/index.ts`.
 2. **Components** — add or extend components in `src/components/`.
 3. **Page** — mount the component in `src/pages/` where it belongs, or create a new page.
 4. **Build and verify** — run `npm run build` and check the output.
@@ -44,6 +45,7 @@ system is built**; read this before writing code for **how to write it here**.
 | -------------------------- | ---------------------------------------------------------------------- |
 | Page structure / layout    | [src/pages/index.astro](../../src/pages/index.astro)                   |
 | Data type definitions      | [src/data/types.ts](../../src/data/types.ts)                           |
+| A school year's data       | [src/data/plans/2025.json](../../src/data/plans/2025.json)             |
 | A component reading labels | [src/components/WeekGrid.astro](../../src/components/WeekGrid.astro)   |
 | Build-time transform       | [src/utils/plan.ts](../../src/utils/plan.ts)                           |
 | Band-aware layout CSS      | [src/assets/plan.css](../../src/assets/plan.css)                       |
@@ -72,7 +74,8 @@ Durable docs stay current two ways:
 | Change                             | Sync these durable docs                                             |
 | ---------------------------------- | ------------------------------------------------------------------- |
 | Data shape (JSON / types)          | `architecture.md`; this guide (Copy-from)                           |
-| User-visible copy or a colour      | `lessons.json` only — no doc change, but never a component          |
+| User-visible copy or a colour      | the active year's plan only — no doc change, but never a component  |
+| A new school year published        | `docs/importing-a-plan.md` if the procedure itself changed          |
 | New component or changed structure | this guide (Copy-from); `architecture.md` (layout)                  |
 | New page or route                  | this guide (Copy-from); README.md if user-facing                    |
 | Build config or command            | this guide (command reference); CLAUDE.md if the gate story changes |
@@ -97,6 +100,9 @@ when you add a new doc or code area.
 | `npm run ci`        | All four, in that order — read-only                   |
 | `npm run fix`       | `eslint --fix` then `prettier --write`                |
 | `npm run verify`    | `fix`, then `ci`, then `build` — **the gate**         |
+
+One tool sits outside npm: `node scripts/read-plan-pdf.mjs <pdf> [class]` prints a class's week out
+of the school's timetable PDF, once a year. See [importing-a-plan.md](../importing-a-plan.md).
 
 **The gate** is `npm run verify`. There are **no git hooks in this repo** — run it yourself before
 pushing. CI is the authority: [ci.yml](../../.github/workflows/ci.yml) runs `ci` + `build` on every
