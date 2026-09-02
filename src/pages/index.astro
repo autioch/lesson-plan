@@ -7,11 +7,10 @@ import Layout from "../layouts/Layout.astro";
 
 import "../assets/print.css";
 
-import lessonsData from "../data/lessons.json";
-import type { LessonsPlan } from "../data/types";
+import { ACTIVE_YEAR, plans } from "../data/plans";
 import { buildPlan } from "../utils/plan";
 
-const plan = buildPlan(lessonsData as LessonsPlan);
+const plan = buildPlan(plans[ACTIVE_YEAR]);
 const { labels } = plan;
 ---
 

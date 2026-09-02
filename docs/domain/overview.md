@@ -77,7 +77,8 @@ the week in under 10 seconds.
 
 - **Data is static.** The timetable is built and published once per week or term; teachers and
   students view it read-only. No live editing.
-- **One timetable at a time.** The site shows the current week's or term's schedule, not an archive
-  or a future term.
+- **One published timetable.** The site shows exactly one school year — the active one. Past years
+  are kept in the repo as unpublished snapshots for reference; there is no archive view, no year
+  picker, and no way to reach a past year from the page.
 - **Polish, not feature creep.** Focus on presenting the timetable clearly; say no to filters,
   export formats, or search until the core view is perfect.
