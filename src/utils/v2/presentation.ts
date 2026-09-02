@@ -45,15 +45,15 @@ export function shortName(name: string): string {
  */
 const LEGEND_TITLES: Record<string, string> = {
   "#ffffff": "Zwykła lekcja",
-  "#9bf093": "Ruch — spakuj strój",
-  "#7cd874": "Ruch — spakuj strój",
+  "#9bf093": "Spakuj strój",
+  "#7cd874": "Spakuj strój",
   "#57d14c": "Basen — kąpielówki i czepek",
   "#80d7f1": "Język obcy",
   "#92cbe2": "Religia / etyka",
   "#f7aec6": "Zajęcia twórcze",
   "#fcb8e7": "Zajęcia indywidualne i rytmika",
   "#ffb8bd": "Kółko szkolne",
-  "#08f": "Zajęcia dodatkowe (płatne, zewnętrzne)",
+  "#08f": "Dodatkowe",
 };
 
 export function legendTitle(color: string, fallback: string): string {

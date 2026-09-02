@@ -244,14 +244,15 @@ body {
   gap: 2px;
   min-width: 0;
   padding: 0 var(--space-12);
-  border-radius: var(--radius-sm);
   overflow: hidden;
   background: var(--cell-bg);
   color: var(--cell-ink);
 }
 
+/* Opaque, like every other cell: the rules are gaps in an otherwise solid
+ * grid, so anything that does not paint would leak the line colour. */
 .cell--empty {
-  background: transparent;
+  background: var(--surface-raised);
   color: var(--text-muted);
 }
 
@@ -336,23 +337,25 @@ body {
     padding: var(--space-8) var(--space-16);
   }
 
-  .rows {
-    gap: var(--space-4);
+  .grid {
     padding: var(--space-8) var(--space-16) var(--space-16);
   }
 
-  /* Hairlines to track a row or a column by. They sit in the gaps between the
-   * tiles, so a lesson colour is never overprinted. */
+  /* Rules to track a row or a column by: the grid shows through 1px gaps
+   * between the cells, so every line runs unbroken end to end and no lesson
+   * colour is overprinted. */
+  .rows {
+    gap: 1px;
+    background: var(--overlay-tint);
+  }
+
   .row {
-    border-bottom: var(--border-width-thin) solid var(--overlay-tint);
+    gap: 1px;
+    background: var(--overlay-tint);
   }
 
-  .row:last-child {
-    border-bottom: none;
-  }
-
-  .cell {
-    box-shadow: -1px 0 0 var(--overlay-tint);
+  .row__time {
+    background: var(--surface-raised);
   }
 
   /* Nothing here competes with the lesson colour: one weight below bold is
@@ -402,19 +405,9 @@ body {
     min-height: var(--control-min-size);
   }
 
-  /* Room to breathe: wider gaps between tiles and real padding inside them. */
-  .rows {
-    gap: var(--space-8);
+  /* Room to breathe: padding inside the cells, not gaps between them. */
+  .grid {
     padding: var(--space-12) var(--space-16) var(--space-16);
-  }
-
-  .row {
-    gap: var(--space-8);
-  }
-
-  .grid__head {
-    gap: var(--space-8);
-    padding: var(--space-8) var(--space-16);
   }
 
   /* Vertical breath inside the tile; horizontally the teacher names are long
