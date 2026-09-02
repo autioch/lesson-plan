@@ -1,0 +1,28 @@
+---
+/**
+ * The colour legend, one list used by both surfaces it appears on: the fixed
+ * sidebar from 1024px and the bottom sheet below it. A lesson colour never
+ * appears without it.
+ */
+import type { LegendGroup } from "../../utils/v2/plan.ts";
+
+interface Props {
+  groups: LegendGroup[];
+}
+
+const { groups } = Astro.props;
+---
+
+<ul class="legend">
+  {
+    groups.map((group) => (
+      <li class="legend__item">
+        <span class="legend__swatch" style={`background:${group.color}`} />
+        <span class="legend__text">
+          <span class="legend__title">{group.title}</span>
+          <span class="legend__items">{group.items}</span>
+        </span>
+      </li>
+    ))
+  }
+</ul>

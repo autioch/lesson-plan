@@ -1,242 +1,517 @@
-/* v2.css - Main stylesheet for lesson plan v2 */
+/* Plan lekcji — screen layout.
+ *
+ * Three bands, by width only (spec §3). Rotation needs no rule of its own: a
+ * 412×915 phone turned sideways is 915px wide and lands in band B.
+ *
+ *   ≤480px      one day, tabs, bottom-sheet legend
+ *   481–1023px  whole week, short names, bottom-sheet legend
+ *   ≥1024px     whole week, full names, fixed legend column
+ *
+ * Every band renders the same DOM. Nothing here is decided at build time.
+ */
 
 @import "./tokens.css";
 
-/* === Reset & Base === */
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
+html,
 body {
   margin: 0;
   padding: 0;
+}
+
+body {
   font-family: var(--font-sans);
   color: var(--text-primary);
-  background-color: var(--surface-bg);
+  background: var(--surface-raised);
   line-height: var(--lh-body);
+  -webkit-text-size-adjust: 100%;
 }
 
-html {
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* === Page shell ========================================================== */
+
+/* A day fits the screen: the shell is exactly one viewport tall and the rows
+ * divide what is left after the tabs and the header. Nothing scrolls. */
+.plan {
+  position: relative;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface-raised);
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.plan__main {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* === Day tabs — band A only ============================================== */
+
+.tabs {
+  display: flex;
+  border-bottom: var(--border-width-thin) solid var(--line-subtle);
+}
+
+.tab {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: var(--control-min-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-4);
+  border: none;
+  background: var(--surface-raised);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* Today is wider than the rest, and wider again when it is also the day being
+ * viewed — so the mark survives whichever day is selected. */
+.tab--today {
+  flex-grow: 1.7;
+}
+
+.tab[aria-selected="true"] {
+  flex-grow: 3;
+  color: var(--text-primary);
+  box-shadow: inset 0 -3px 0 var(--text-primary);
+}
+
+.tab--today[aria-selected="true"] {
+  flex-grow: 3.4;
+}
+
+.tab--today {
+  color: var(--text-primary);
+}
+
+.tab__today,
+.tab__full {
+  display: none;
+}
+
+.tab__today {
+  letter-spacing: var(--ls-caps);
+}
+
+.tab[aria-selected="true"] .tab__full {
+  display: inline;
+}
+
+.tab[aria-selected="true"] .tab__short {
+  display: none;
+}
+
+/* Today reads DZIŚ whether or not it is the day on screen. */
+.tab--today .tab__today {
+  display: inline;
+}
+
+.tab--today .tab__full,
+.tab--today .tab__short,
+.tab--today[aria-selected="true"] .tab__full {
+  display: none;
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+/* === Grid ================================================================ */
+
+.grid {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.grid__head {
+  display: none; /* band A has tabs instead */
+  grid-template-columns: var(--gutter) repeat(5, 1fr);
+  gap: var(--space-4);
+  padding-bottom: var(--space-8);
+}
+
+.dayhead {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--text-secondary);
+  box-shadow: inset 0 -1px 0 var(--line-subtle);
+}
+
+.dayhead--today {
+  color: var(--text-primary);
+  letter-spacing: var(--ls-caps);
+  box-shadow: inset 0 -3px 0 var(--text-primary);
+}
+
+.dayhead__today {
+  display: none;
+}
+
+.dayhead--today .dayhead__today {
+  display: inline;
+}
+
+.dayhead--today .dayhead__name {
+  display: none;
+}
+
+.rows {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  flex: 1 1 0;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: var(--gutter) repeat(5, 1fr);
+  gap: var(--space-4);
+}
+
+.row__time {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+  min-width: 0;
+  padding-right: var(--space-8);
+}
+
+.row__range {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--lh-body-min);
+  white-space: nowrap;
+}
+
+.row__break {
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+  line-height: var(--lh-body-min);
+  white-space: nowrap;
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  min-width: 0;
+  padding: 0 var(--space-12);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--cell-bg);
+  color: var(--cell-ink);
+}
+
+.cell--empty {
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.cell__name,
+.cell__short {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-body-min);
+  text-wrap: pretty;
+}
+
+.cell__short {
+  display: none;
+}
+
+.cell__teacher {
+  font-size: var(--fs-xs);
+  line-height: var(--lh-body-min);
+  overflow-wrap: anywhere;
+  color: var(--cell-sub);
+}
+
+.cell__free {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+/* === Band A — phone portrait, one day ==================================== */
+
+@media (max-width: 480px) {
+  .grid {
+    padding-bottom: var(--space-16);
+  }
+
+  .row {
+    grid-template-columns: var(--gutter) 1fr;
+    gap: 0;
+    border-bottom: var(--border-width-thin) solid var(--line-subtle);
+  }
+
+  .row__time {
+    padding: 0 var(--space-12);
+  }
+
+  /* Only the selected day's cell is in the row; the other four stay in the DOM
+   * so no layout decision has to be made at build time. */
+  .cell {
+    display: none;
+    padding: 0 var(--space-16);
+  }
+
+  .plan[data-day="0"] .cell[data-day-index="0"],
+  .plan[data-day="1"] .cell[data-day-index="1"],
+  .plan[data-day="2"] .cell[data-day-index="2"],
+  .plan[data-day="3"] .cell[data-day-index="3"],
+  .plan[data-day="4"] .cell[data-day-index="4"] {
+    display: flex;
+  }
+
+  .cell__name {
+    font-size: var(--fs-md);
+  }
+}
+
+/* === Bands B and C — the whole week ====================================== */
+
+@media (min-width: 481px) {
+  .tabs {
+    display: none;
+  }
+
+  .grid {
+    padding: var(--space-8) var(--space-16) var(--space-16);
+  }
+
+  .grid__head {
+    display: grid;
+  }
+
+  .rows {
+    gap: var(--space-4);
+  }
+}
+
+/* Band B only — a column fits one line, so names are shortened, the teacher
+ * drops to nothing and the break text moves beside the hours. */
+@media (min-width: 481px) and (max-width: 1023px) {
+  .row__time {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--space-8);
+  }
+
+  .cell__name,
+  .cell__teacher,
+  .cell--empty .cell__free {
+    display: none;
+  }
+
+  .cell__short {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .cell {
+    padding: 0 var(--space-8);
+  }
+}
+
+/* === Band C — laptop, week plus fixed legend ============================= */
+
+@media (min-width: 1024px) {
+  .plan {
+    flex-direction: row;
+  }
+
+  .dayhead {
+    min-height: var(--control-min-size);
+  }
+}
+
+/* === Legend ============================================================== */
+
+/* Band C only: below 1024px the legend lives in the bottom sheet instead. */
+.legend-side {
+  display: none;
+  flex-direction: column;
+  gap: var(--space-12);
+  width: 252px;
+  flex: none;
+  padding: var(--space-16);
+  overflow-y: auto;
+  border-left: var(--border-width-thin) solid var(--line-subtle);
+}
+
+@media (min-width: 1024px) {
+  .legend-side {
+    display: flex;
+  }
+}
+
+.legend-side__title {
+  margin: 0;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-caps);
+  line-height: var(--lh-body-min);
+}
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
   margin: 0;
   padding: 0;
+  list-style: none;
 }
 
-/* === Main Layout Container === */
-.v2-container {
+.legend__item {
+  display: flex;
+  gap: var(--space-8);
+  align-items: flex-start;
+}
+
+.legend__swatch {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  border-radius: var(--radius-sm);
+  border: var(--border-width-thin) solid var(--line-subtle);
+}
+
+.legend__text {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  width: 100%;
-  background-color: var(--surface-bg);
+  gap: 1px;
+  min-width: 0;
 }
 
-/* Landscape: still flex column */
-@media (orientation: landscape) and (max-width: 1023px) {
-  .v2-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  }
+.legend__title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-body-min);
 }
 
-/* Desktop: grid with sidebar */
-@media (min-width: 1024px) {
-  .v2-container {
-    display: grid;
-    grid-template-columns: 1fr 280px;
-    grid-template-rows: 1fr;
-    height: 100vh;
-    gap: 0;
-  }
+.legend__items {
+  font-size: var(--fs-xs);
+  color: var(--text-secondary);
+  line-height: var(--lh-body-min);
+  text-wrap: pretty;
 }
 
-/* === Main Content Area === */
-.v2-content {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
-}
+/* === Legend button and bottom sheet — bands A and B ====================== */
 
-@media (min-width: 1024px) {
-  .v2-content {
-    grid-column: 1 / 2;
-    border-right: var(--border-width-thin) solid var(--line-subtle);
-  }
-}
-
-/* === Legend Button (FAB) === */
-.v2-legend-btn {
-  position: fixed;
+.fab {
+  position: absolute;
   right: var(--space-16);
   bottom: var(--space-16);
   width: var(--control-size);
   height: var(--control-size);
-  border-radius: var(--radius-circle);
-  border: none;
-  background-color: var(--accent-primary);
-  color: var(--text-on-accent);
-  font-family: var(--font-sans);
-  font-size: var(--fs-lg);
-  font-weight: var(--fw-bold);
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: none;
+  border-radius: var(--radius-circle);
+  background: var(--accent);
+  color: var(--text-on-accent);
+  font-family: var(--font-sans);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  cursor: pointer;
   z-index: 30;
-  box-shadow: var(--shadow-lg);
-  transition:
-    background-color 0.2s,
-    transform 0.2s;
 }
 
-.v2-legend-btn:hover {
-  background-color: var(--accent-hover);
-  transform: scale(1.05);
+.sheet {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: var(--scrim-modal);
 }
 
-.v2-legend-btn:active {
-  transform: scale(0.95);
+.sheet[hidden] {
+  display: none;
 }
 
-/* Hide on landscape+ */
-@media (orientation: landscape) and (max-width: 1023px) {
-  .v2-legend-btn {
-    display: block;
-  }
+.sheet__panel {
+  max-height: calc(100% - var(--space-48));
+  overflow-y: auto;
+  padding: var(--space-16) var(--space-16) var(--space-48);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  background: var(--surface-raised);
+  border-top-left-radius: var(--radius-lg);
+  border-top-right-radius: var(--radius-lg);
+}
+
+.sheet__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-8);
+}
+
+.sheet__title {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-caps);
+}
+
+.sheet__hint {
+  font-size: var(--fs-xs);
+  color: var(--text-secondary);
 }
 
 @media (min-width: 1024px) {
-  .v2-legend-btn {
+  .fab,
+  .sheet {
     display: none;
-  }
-}
-
-/* === Typography === */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin: 0;
-  font-weight: var(--fw-bold);
-  line-height: var(--lh-tight);
-}
-
-p {
-  margin: 0;
-}
-
-/* === Buttons === */
-button {
-  font-family: var(--font-sans);
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* === Scrollbar Styling === */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--surface-raised);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--line-default);
-  border-radius: var(--radius-sm);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-secondary);
-}
-
-/* === Print Media === */
-@media print {
-  body {
-    margin: 0;
-    padding: 0.5cm;
-  }
-
-  .v2-container {
-    display: block;
-    height: auto;
-    width: 100%;
-  }
-
-  .v2-content {
-    flex: none;
-    height: auto;
-    overflow: visible;
-  }
-
-  /* Hide all interactive elements */
-  .v2-day-tabs,
-  .v2-legend-btn,
-  .v2-legend-modal,
-  .v2-legend-sidebar {
-    display: none !important;
-  }
-
-  /* Show all days in week view */
-  .v2-week-grid {
-    overflow: visible;
-    height: auto;
-  }
-
-  .v2-grid-header {
-    position: static;
-  }
-
-  .v2-time-row {
-    page-break-inside: avoid;
-  }
-
-  /* Reduce sizing for print */
-  .v2-time-cell {
-    padding: var(--space-8);
-    min-width: 60px;
-  }
-
-  .v2-time-cell__range {
-    font-size: var(--fs-xs);
-  }
-
-  .v2-time-cell__break {
-    font-size: 10px;
-  }
-
-  /* Lesson cell sizing for print */
-  :root {
-    --fs-md: 0.75rem;
-    --fs-xs: 0.65rem;
-  }
-
-  /* Preserve colors in print */
-  * {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  /* Force all 5 days visible */
-  .v2-time-row__cells {
-    grid-auto-flow: column;
-    grid-auto-columns: 1fr;
-  }
-
-  /* Page margins */
-  @page {
-    margin: 0.5cm;
-    size: A4 landscape;
   }
 }

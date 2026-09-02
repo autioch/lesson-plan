@@ -1,267 +1,118 @@
 ---
-import Layout from "../layouts/Layout.astro";
 import DayTabs from "../components/v2/DayTabs.astro";
+import Legend from "../components/v2/Legend.astro";
 import WeekGrid from "../components/v2/WeekGrid.astro";
-import LegendModal from "../components/v2/LegendModal.astro";
-import LegendSidebar from "../components/v2/LegendSidebar.astro";
+import V2Layout from "../layouts/V2Layout.astro";
 
-// Import data
-import allData from "../data/lessons.json";
+import lessonsData from "../data/lessons.json";
+import type { LessonsPlan } from "../data/lessonTypes";
+import { buildPlan } from "../utils/v2/plan.ts";
 
-// Import styles
-import "../assets/v2/tokens.css";
-import "../assets/v2/v2.css";
-
-// Type definitions
-interface TimeSlot {
-  start: string;
-  duration: number;
-}
-
-interface Lesson {
-  lessonId: string;
-  teacherId: string;
-  paused?: boolean;
-  ignored?: boolean;
-}
-
-interface Day {
-  name: string;
-  short: string;
-  lessons: Record<number, Lesson>;
-}
-
-interface LessonType {
-  id: string;
-  name: string;
-  color: string;
-}
-
-// Extract data from allData
-const {
-  slots,
-  lessonTypes: lessonTypesList,
-  teachers: teachersList,
-  days: daysList,
-} = allData as any;
-
-// Build lessonTypes map
-const lessonTypes: Record<string, LessonType> = {};
-lessonTypesList.forEach((type: any) => {
-  lessonTypes[type.id] = {
-    id: type.id,
-    name: type.name,
-    color: type.color,
-  };
-});
-
-// Build teachers map
-const teachers: Record<string, string> = {};
-teachersList.forEach((teacher: any) => {
-  teachers[teacher.id] = teacher.name;
-});
-
-// Transform days with short names
-const days: Day[] = daysList.map((day: any) => ({
-  name: day.name,
-  short: day.name.slice(0, 2).toUpperCase(),
-  lessons: day.lessons || {},
-}));
-
-// Calculate today's index
-const today = new Date();
-const dayOfWeek = today.getDay();
-const todayIndex = dayOfWeek > 0 && dayOfWeek < 6 ? dayOfWeek - 1 : 0;
+/* The JSON leaves empty slots as `{}`, which the Lesson type does not model;
+ * buildPlan treats a lesson without an id as an empty slot. */
+const plan = buildPlan(lessonsData as unknown as LessonsPlan);
 ---
 
-<Layout title="Plan lekcji - v2">
-  <div class="v2-container">
-    <div class="v2-content">
-      <!-- Day tabs (portrait only) -->
-      <DayTabs
-        days={days}
-        selectedDayIndex={todayIndex}
-        todayIndex={todayIndex}
-      />
-
-      <!-- Main week grid -->
-      <WeekGrid
-        days={days}
-        slots={slots}
-        selectedDayIndex={todayIndex}
-        todayIndex={todayIndex}
-        lessonTypes={lessonTypes}
-        teachers={teachers}
-        layout="portrait"
-      />
-
-      <!-- Legend button (mobile only) -->
-      <button
-        class="v2-legend-btn"
-        id="legendToggleBtn"
-        aria-label="Pokaż legendę"
-      >
-        ?
-      </button>
+<V2Layout title="Plan lekcji">
+  <div class="plan" data-day={plan.initialDayIndex}>
+    <div class="plan__main">
+      <DayTabs days={plan.days} initialDayIndex={plan.initialDayIndex} />
+      <WeekGrid days={plan.days} rows={plan.rows} />
     </div>
 
-    <!-- Legend modal (mobile only) -->
-    <LegendModal lessonTypes={Object.values(lessonTypes)} isOpen={false} />
+    <aside class="legend-side">
+      <h2 class="legend-side__title">Legenda kolorów</h2>
+      <Legend groups={plan.legend} />
+    </aside>
 
-    <!-- Legend sidebar (desktop only) -->
-    <LegendSidebar lessonTypes={Object.values(lessonTypes)} />
+    <button class="fab" type="button" id="legendButton" aria-expanded="false">
+      <span aria-hidden="true">?</span>
+      <span class="sr-only">Legenda kolorów</span>
+    </button>
+
+    <div class="sheet" id="legendSheet" hidden>
+      <div class="sheet__panel" role="dialog" aria-label="Legenda kolorów">
+        <div class="sheet__head">
+          <span class="sheet__title">Legenda kolorów</span>
+          <span class="sheet__hint">dotknij, aby zamknąć</span>
+        </div>
+        <Legend groups={plan.legend} />
+      </div>
+    </div>
   </div>
+</V2Layout>
 
-  <script>
-    // State management
-    let selectedDayIndex = 0;
-    let isLegendOpen = false;
+<script>
+  /* The page is built once a term, so "today" cannot be baked in: it is
+   * recomputed on load and the DZIŚ marks are moved to match. Everything else
+   * here is the one interaction the design allows — picking a day, which only
+   * exists on a phone in portrait. */
+  const plan = document.querySelector<HTMLElement>(".plan");
+  const tabs = Array.from(document.querySelectorAll<HTMLElement>(".tab"));
+  const dayHeads = Array.from(document.querySelectorAll<HTMLElement>(".dayhead"));
+  const grid = document.querySelector<HTMLElement>(".grid");
+  const legendButton = document.getElementById("legendButton");
+  const legendSheet = document.getElementById("legendSheet");
 
-    // DOM elements
-    const legendBtn = document.getElementById(
-      "legendToggleBtn",
-    ) as HTMLButtonElement | null;
-    const legendModal = document.querySelector(
-      ".v2-legend-modal",
-    ) as HTMLElement | null;
-    const dayTabs = document.querySelectorAll(
-      ".v2-tab",
-    ) as NodeListOf<HTMLElement>;
-    const weekGrid = document.querySelector(
-      ".v2-week-grid",
-    ) as HTMLElement | null;
+  const LAST_DAY = 4;
+  const SWIPE_MIN = 36;
 
-    /**
-     * Update the selected day and re-render visible grid
-     */
-    function selectDay(dayIndex: number) {
-      selectedDayIndex = dayIndex;
+  const weekday = new Date().getDay();
+  /* Saturday and Sunday have no column: the plan opens on Monday. */
+  const todayIndex = weekday >= 1 && weekday <= 5 ? weekday - 1 : -1;
 
-      // Update tab states
-      dayTabs.forEach((tab, idx) => {
-        if (idx === dayIndex) {
-          tab.classList.add("v2-tab--active");
-          tab.setAttribute("aria-pressed", "true");
-        } else {
-          tab.classList.remove("v2-tab--active");
-          tab.setAttribute("aria-pressed", "false");
-        }
-      });
+  function markToday() {
+    tabs.forEach((tab, index) =>
+      tab.classList.toggle("tab--today", index === todayIndex),
+    );
+    dayHeads.forEach((head, index) =>
+      head.classList.toggle("dayhead--today", index === todayIndex),
+    );
+  }
 
-      // Update grid view (hide/show rows based on selected day)
-      // For portrait: only show cells for selected day
-      updateGridDisplay();
-    }
+  function selectDay(index: number) {
+    if (!plan || index < 0 || index > LAST_DAY) return;
+    plan.dataset.day = String(index);
+    tabs.forEach((tab, i) =>
+      tab.setAttribute("aria-selected", String(i === index)),
+    );
+  }
 
-    /**
-     * Update grid display based on current layout and selected day
-     */
-    function updateGridDisplay() {
-      // Re-render grid cells (this is handled by CSS in portrait mode)
-      // The TimeSlotRow components already use data-day-index
-      const rows = document.querySelectorAll(
-        ".v2-time-row",
-      ) as NodeListOf<HTMLElement>;
-      rows.forEach((row) => {
-        // Update cell visibility based on selected day
-        // This is handled by the TimeSlotRow component via CSS grid
-      });
-    }
+  function currentDay(): number {
+    return Number(plan?.dataset.day ?? 0);
+  }
 
-    /**
-     * Toggle legend modal (mobile only)
-     */
-    function toggleLegend() {
-      isLegendOpen = !isLegendOpen;
-      if (legendModal) {
-        legendModal.setAttribute("data-legend-open", String(isLegendOpen));
-        legendModal.setAttribute("aria-hidden", String(!isLegendOpen));
-      }
-    }
+  function setLegendOpen(open: boolean) {
+    if (!legendSheet || !legendButton) return;
+    legendSheet.hidden = !open;
+    legendButton.setAttribute("aria-expanded", String(open));
+  }
 
-    /**
-     * Close legend modal on backdrop click
-     */
-    function closeLegend() {
-      isLegendOpen = false;
-      if (legendModal) {
-        legendModal.setAttribute("data-legend-open", "false");
-        legendModal.setAttribute("aria-hidden", "true");
-      }
-    }
+  markToday();
+  selectDay(todayIndex < 0 ? 0 : todayIndex);
 
-    /**
-     * Detect swipe gesture for day navigation (portrait only)
-     */
-    let touchStartX = 0;
-    let touchEndX = 0;
+  tabs.forEach((tab, index) =>
+    tab.addEventListener("click", () => selectDay(index)),
+  );
 
-    function handleSwipe() {
-      const swipeThreshold = 50;
-      const diff = touchStartX - touchEndX;
+  legendButton?.addEventListener("click", () =>
+    setLegendOpen(legendSheet?.hidden ?? true),
+  );
+  legendSheet?.addEventListener("click", () => setLegendOpen(false));
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setLegendOpen(false);
+  });
 
-      if (Math.abs(diff) > swipeThreshold) {
-        if (diff > 0 && selectedDayIndex < 4) {
-          // Swipe left: next day
-          selectDay(selectedDayIndex + 1);
-        } else if (diff < 0 && selectedDayIndex > 0) {
-          // Swipe right: previous day
-          selectDay(selectedDayIndex - 1);
-        }
-      }
-    }
-
-    // Event listeners
-    if (legendBtn) {
-      legendBtn.addEventListener("click", toggleLegend);
-    }
-
-    if (legendModal) {
-      legendModal.addEventListener("click", closeLegend);
-      // Prevent modal from closing when clicking inside the panel
-      const panel = legendModal.querySelector(
-        ".v2-legend-modal__panel",
-      ) as HTMLElement | null;
-      if (panel) {
-        panel.addEventListener("click", (e) => e.stopPropagation());
-      }
-    }
-
-    dayTabs.forEach((tab, idx) => {
-      tab.addEventListener("click", () => {
-        selectDay(idx);
-      });
-    });
-
-    // Swipe detection on grid
-    if (weekGrid) {
-      weekGrid.addEventListener("touchstart", (e) => {
-        touchStartX = e.changedTouches[0].screenX;
-      });
-
-      weekGrid.addEventListener("touchend", (e) => {
-        touchEndX = e.changedTouches[0].screenX;
-        handleSwipe();
-      });
-    }
-
-    // Set initial state
-    selectDay(0);
-
-    // Monitor viewport changes for responsive layout updates
-    const mediaQueryPortrait = window.matchMedia("(orientation: portrait)");
-    const mediaQueryDesktop = window.matchMedia("(min-width: 1024px)");
-
-    function handleMediaChange() {
-      // Re-calculate visible days and update grid
-      updateGridDisplay();
-    }
-
-    if (mediaQueryPortrait.addEventListener) {
-      mediaQueryPortrait.addEventListener("change", handleMediaChange);
-    }
-    if (mediaQueryDesktop.addEventListener) {
-      mediaQueryDesktop.addEventListener("change", handleMediaChange);
-    }
-  </script>
-</Layout>
+  /* Swipe changes the day by one and does not wrap from Friday to Monday. */
+  let swipeStartX: number | null = null;
+  grid?.addEventListener("pointerdown", (event) => {
+    swipeStartX = event.clientX;
+  });
+  grid?.addEventListener("pointerup", (event) => {
+    if (swipeStartX === null) return;
+    const dx = event.clientX - swipeStartX;
+    swipeStartX = null;
+    if (Math.abs(dx) < SWIPE_MIN) return;
+    selectDay(currentDay() + (dx < 0 ? 1 : -1));
+  });
+</script>

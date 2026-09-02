@@ -1,0 +1,484 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-sckkx6r4> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator" content="Astro v5.13.5"><title>Plan lekcji</title><style data-vite-dev-id="D:/repos/lesson-plan/src/components/A4Paper.astro?astro&#38;type=style&#38;index=0&#38;lang.css">.a4-paper {
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        height: auto;
+    }
+
+    @media (min-width: 297mm) and (min-height: 210mm) {
+        .a4-paper {
+            padding: 1cm;
+            height: 210mm;
+            width: 297mm;
+            box-shadow: 0 4px 24px #aaa;
+            margin: auto;
+        }
+    }
+
+    @media print {
+        .a4-paper {
+            /* margin: 0.25cm; */
+            box-shadow: none;
+            padding: 0px;
+            width: calc(100% - 1cm);
+            height: calc(100% - 1cm);
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+    }</style>
+<style data-vite-dev-id="D:/repos/lesson-plan/src/layouts/Layout.astro?astro&#38;type=style&#38;index=0&#38;lang.css">html,body{margin:0;border:0;box-sizing:border-box}@media (min-width: 297mm) and (min-height: 210mm){html,body{width:100%;height:100%;background:#fff}body{padding:1em}}</style>
+<style data-vite-dev-id="D:/repos/lesson-plan/src/components/v2/DayTabs.astro?astro&#38;type=style&#38;index=0&#38;lang.css">.v2-day-tabs[data-astro-cid-qn6t73il]{display:flex;border-bottom:var(--border-width-thin) solid var(--line-subtle);overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}.v2-tab[data-astro-cid-qn6t73il]{flex-shrink:0;padding:var(--space-12) var(--space-16);border:none;background:transparent;cursor:pointer;font-family:var(--font-sans);font-size:var(--fs-sm);font-weight:var(--fw-bold);color:var(--text-secondary);display:flex;flex-direction:column;align-items:center;gap:var(--space-4);position:relative;min-height:var(--control-min-size);justify-content:center}.v2-tab__label[data-astro-cid-qn6t73il]{letter-spacing:0.05em;text-transform:uppercase}.v2-tab__fullname[data-astro-cid-qn6t73il]{font-size:var(--fs-xs);font-weight:var(--fw-regular);display:none}.v2-tab[data-astro-cid-qn6t73il]::after{content:"";position:absolute;bottom:0;left:0;right:0;height:1px;background-color:transparent;transition:height 0.2s,background-color 0.2s}.v2-tab--active[data-astro-cid-qn6t73il]::after{height:3px;background-color:var(--accent-primary)}.v2-tab--today[data-astro-cid-qn6t73il]{flex-grow:1.5;flex-basis:auto}.v2-tab--today[data-astro-cid-qn6t73il]::after{height:3px;background-color:var(--accent-primary)}.v2-tab[data-astro-cid-qn6t73il]:hover:not(.v2-tab--active){color:var(--text-primary)}.v2-tab--active[data-astro-cid-qn6t73il]{color:var(--text-primary)}@media (orientation: landscape) and (max-width: 1023px){.v2-day-tabs[data-astro-cid-qn6t73il]{display:none}}@media (min-width: 1024px){.v2-day-tabs[data-astro-cid-qn6t73il]{display:none}}</style>
+<style data-vite-dev-id="D:/repos/lesson-plan/src/components/v2/LessonCell.astro?astro&#38;type=style&#38;index=0&#38;lang.css">.v2-cell[data-astro-cid-ulljjmsm]{padding:var(--space-12);border:var(--border-width-thin) solid var(--line-subtle);display:flex;flex-direction:column;justify-content:center;gap:var(--space-4);min-height:3rem;border-radius:var(--radius-sm)}.v2-cell__content[data-astro-cid-ulljjmsm]{display:flex;flex-direction:column;gap:var(--space-4);min-width:0}.v2-cell__name[data-astro-cid-ulljjmsm]{font-size:var(--fs-md);font-weight:var(--fw-bold);line-height:var(--lh-body-min);word-wrap:break-word;overflow-wrap:break-word}.v2-cell__teacher[data-astro-cid-ulljjmsm]{font-size:var(--fs-xs);line-height:var(--lh-body-min);opacity:0.85}.v2-cell__break[data-astro-cid-ulljjmsm]{font-size:var(--fs-xs);line-height:var(--lh-body-min);opacity:0.7}.v2-cell--paused[data-astro-cid-ulljjmsm] .v2-cell__name[data-astro-cid-ulljjmsm]{text-decoration:line-through;opacity:0.6}.v2-cell--paused[data-astro-cid-ulljjmsm] .v2-cell__teacher[data-astro-cid-ulljjmsm]{opacity:0.5}</style>
+<style data-vite-dev-id="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro?astro&#38;type=style&#38;index=0&#38;lang.css">.v2-time-row[data-astro-cid-jrtu7oup]{display:grid;grid-template-columns:auto 1fr;border-bottom:var(--border-width-thin) solid var(--line-subtle);min-height:4rem}.v2-time-cell[data-astro-cid-jrtu7oup]{background-color:var(--surface-raised);border-right:var(--border-width-thin) solid var(--line-subtle);padding:var(--space-12);display:flex;flex-direction:column;justify-content:center;gap:var(--space-4);min-width:80px;flex-shrink:0;position:sticky;left:0;z-index:10}.v2-time-cell__range[data-astro-cid-jrtu7oup]{font-size:var(--fs-sm);font-weight:var(--fw-bold);font-variant-numeric:tabular-nums;line-height:var(--lh-body-min);color:var(--text-primary)}.v2-time-cell__break[data-astro-cid-jrtu7oup]{font-size:var(--fs-xs);font-variant-numeric:tabular-nums;color:var(--text-secondary);line-height:var(--lh-body-min)}.v2-time-row__cells[data-astro-cid-jrtu7oup]{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:var(--space-4);padding:var(--space-12);align-items:center;overflow-x:auto;-webkit-overflow-scrolling:touch}.v2-slot-cell[data-astro-cid-jrtu7oup]{display:flex;align-items:center;justify-content:center;min-height:3rem;background-color:var(--surface-bg);border:var(--border-width-thin) dashed var(--line-subtle);border-radius:var(--radius-sm);padding:var(--space-12)}.v2-slot-cell--empty[data-astro-cid-jrtu7oup] .v2-slot-cell__text[data-astro-cid-jrtu7oup]{font-size:var(--fs-xs);color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.05em}@media (orientation: landscape) and (max-width: 1023px){.v2-time-row__cells[data-astro-cid-jrtu7oup]{gap:var(--space-8)}}@media (min-width: 1024px){.v2-time-row__cells[data-astro-cid-jrtu7oup]{gap:var(--space-8)}}</style>
+<style data-vite-dev-id="D:/repos/lesson-plan/src/components/v2/WeekGrid.astro?astro&#38;type=style&#38;index=0&#38;lang.css">.v2-week-grid[data-astro-cid-3rteixdj]{display:flex;flex-direction:column;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;background-color:var(--surface-bg)}.v2-grid-header[data-astro-cid-3rteixdj]{display:grid;grid-template-columns:auto 1fr;border-bottom:var(--border-width-thin) solid var(--line-subtle);background-color:var(--surface-raised);position:sticky;top:0;z-index:20}.v2-grid-header__corner[data-astro-cid-3rteixdj]{min-width:80px;flex-shrink:0;border-right:var(--border-width-thin) solid var(--line-subtle);background-color:var(--surface-raised)}.v2-grid-header__days[data-astro-cid-3rteixdj]{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:var(--space-4);padding:var(--space-12)}.v2-day-header[data-astro-cid-3rteixdj]{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--space-4);padding:var(--space-8);text-align:center;position:relative;border-radius:var(--radius-sm)}.v2-day-header__name[data-astro-cid-3rteixdj]{font-size:var(--fs-sm);font-weight:var(--fw-bold);line-height:var(--lh-body-min);color:var(--text-primary)}.v2-day-header__marker[data-astro-cid-3rteixdj]{font-size:var(--fs-xs);font-weight:var(--fw-bold);letter-spacing:0.05em;text-transform:uppercase;color:var(--accent-primary);padding-top:var(--space-4);border-top:3px solid var(--accent-primary);width:100%}.v2-day-header--today[data-astro-cid-3rteixdj]{background-color:var(--surface-hover)}.v2-grid-body[data-astro-cid-3rteixdj]{display:flex;flex-direction:column;flex:1}@media print{.v2-week-grid[data-astro-cid-3rteixdj]{overflow:visible;height:auto}.v2-grid-header[data-astro-cid-3rteixdj]{position:static}.v2-grid-body[data-astro-cid-3rteixdj]{flex:none}}</style>
+<style data-vite-dev-id="D:/repos/lesson-plan/src/components/v2/LegendModal.astro?astro&#38;type=style&#38;index=0&#38;lang.css">.v2-legend-modal[data-astro-cid-phorz6gn]{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;justify-content:flex-end;opacity:0;pointer-events:none;transition:opacity 0.3s ease-in-out}.v2-legend-modal[data-astro-cid-phorz6gn][data-legend-open=true]{opacity:1;pointer-events:auto}.v2-legend-modal__backdrop[data-astro-cid-phorz6gn]{position:absolute;inset:0;background-color:var(--scrim-modal)}.v2-legend-modal__panel[data-astro-cid-phorz6gn]{position:relative;z-index:41;background-color:var(--surface-raised);border-top-left-radius:var(--radius-lg);border-top-right-radius:var(--radius-lg);max-height:85vh;overflow-y:auto;padding:var(--space-16);animation:slideUp 0.3s ease-out}@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}.v2-legend-modal__header[data-astro-cid-phorz6gn]{display:flex;align-items:baseline;justify-content:space-between;gap:var(--space-8);margin-bottom:var(--space-16);padding-bottom:var(--space-16);border-bottom:var(--border-width-thin) solid var(--line-subtle)}.v2-legend-modal__title[data-astro-cid-phorz6gn]{margin:0;font-size:var(--fs-md);font-weight:var(--fw-bold);color:var(--text-primary)}.v2-legend-modal__hint[data-astro-cid-phorz6gn]{font-size:var(--fs-xs);color:var(--text-secondary);white-space:nowrap}.v2-legend-modal__list[data-astro-cid-phorz6gn]{display:flex;flex-direction:column;gap:var(--space-12)}.v2-legend-item[data-astro-cid-phorz6gn]{display:flex;gap:var(--space-12);align-items:flex-start}.v2-legend-item__color[data-astro-cid-phorz6gn]{width:28px;height:28px;flex-shrink:0;border-radius:var(--radius-sm);border:var(--border-width-thin) solid var(--line-subtle)}.v2-legend-item__content[data-astro-cid-phorz6gn]{display:flex;flex-direction:column;gap:var(--space-4);min-width:0}.v2-legend-item__name[data-astro-cid-phorz6gn]{font-size:var(--fs-sm);font-weight:var(--fw-bold);line-height:var(--lh-body-min);color:var(--text-primary)}@media (min-width: 1024px){.v2-legend-modal[data-astro-cid-phorz6gn]{display:none}}</style>
+<style data-vite-dev-id="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro?astro&#38;type=style&#38;index=0&#38;lang.css">.v2-legend-sidebar[data-astro-cid-p6h5f22h]{background-color:var(--surface-raised);border-left:var(--border-width-thin) solid var(--line-subtle);overflow-y:auto;-webkit-overflow-scrolling:touch;height:100%}.v2-legend-sidebar__content[data-astro-cid-p6h5f22h]{padding:var(--space-16);display:flex;flex-direction:column;gap:var(--space-16)}.v2-legend-sidebar__title[data-astro-cid-p6h5f22h]{margin:0;font-size:var(--fs-md);font-weight:var(--fw-bold);color:var(--text-primary);line-height:var(--lh-body-min)}.v2-legend-sidebar__list[data-astro-cid-p6h5f22h]{display:flex;flex-direction:column;gap:var(--space-12)}.v2-legend-item[data-astro-cid-p6h5f22h]{display:flex;gap:var(--space-12);align-items:flex-start}.v2-legend-item__color[data-astro-cid-p6h5f22h]{width:28px;height:28px;flex-shrink:0;border-radius:var(--radius-sm);border:var(--border-width-thin) solid var(--line-subtle)}.v2-legend-item__content[data-astro-cid-p6h5f22h]{display:flex;flex-direction:column;gap:var(--space-4);min-width:0}.v2-legend-item__name[data-astro-cid-p6h5f22h]{font-size:var(--fs-sm);font-weight:var(--fw-bold);line-height:var(--lh-body-min);color:var(--text-primary)}@media (max-width: 1023px){.v2-legend-sidebar[data-astro-cid-p6h5f22h]{display:none}}</style>
+<style data-vite-dev-id="D:/repos/lesson-plan/src/assets/v2/tokens.css">/* v2 Design Tokens — CSS Custom Properties */
+
+:root {
+  /* Spacing (4px base unit) */
+  --space-4: 0.25rem;
+  --space-8: 0.5rem;
+  --space-12: 0.75rem;
+  --space-16: 1rem;
+  --space-24: 1.5rem;
+  --space-32: 2rem;
+  --space-48: 3rem;
+
+  /* Typography - Font Sizes */
+  --fs-xs: 0.875rem; /* 14px */
+  --fs-sm: 0.9375rem; /* 15px */
+  --fs-md: 1rem; /* 16px */
+  --fs-lg: 1.0625rem; /* 17px */
+  --fs-xl: 1.25rem; /* 20px */
+  --fs-2xl: 1.5rem; /* 24px */
+
+  /* Typography - Font Families */
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  --font-mono: "Courier New", monospace;
+
+  /* Typography - Font Weights */
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-bold: 700;
+
+  /* Typography - Line Heights */
+  --lh-tight: 1.2;
+  --lh-body-min: 1.3;
+  --lh-body: 1.5;
+  --lh-relaxed: 1.75;
+
+  /* Colors - Surfaces */
+  --surface-bg: #ffffff;
+  --surface-raised: #f7f5f0;
+  --surface-hover: #ebe7df;
+
+  /* Colors - Text */
+  --text-primary: #17170f;
+  --text-secondary: #7a7466;
+  --text-tertiary: #a8a294;
+  --text-inverse: #ffffff;
+  --text-on-accent: #ffffff;
+
+  /* Colors - Semantic */
+  --accent-primary: #1f5f4b;
+  --accent-hover: #0e3a2c;
+  --success: #4ade80;
+  --warning: #facc15;
+  --error: #f87171;
+
+  /* Colors - Borders & Lines */
+  --line-subtle: #dbd5c8;
+  --line-default: #c9c3ba;
+  --border-width-thin: 1px;
+
+  /* Radius */
+  --radius-sm: 0.375rem; /* 6px */
+  --radius-md: 0.5rem; /* 8px */
+  --radius-lg: 0.75rem; /* 12px */
+  --radius-xl: 1rem; /* 16px */
+  --radius-circle: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
+
+  /* Controls */
+  --control-min-size: 44px; /* Touch target minimum */
+  --control-size: 56px; /* FAB size */
+
+  /* Scrim (modal backdrop) */
+  --scrim-modal: rgba(0, 0, 0, 0.5);
+}
+
+/* Print mode adjustments */
+@media print {
+  :root {
+    --space-16: 0.5rem;
+    --space-24: 0.75rem;
+    --fs-md: 0.75rem;
+    --fs-lg: 0.875rem;
+  }
+}
+</style>
+<style data-vite-dev-id="D:/repos/lesson-plan/src/assets/v2/v2.css">/* v2.css - Main stylesheet for lesson plan v2 */
+
+/* v2 Design Tokens — CSS Custom Properties */
+
+:root {
+  /* Spacing (4px base unit) */
+  --space-4: 0.25rem;
+  --space-8: 0.5rem;
+  --space-12: 0.75rem;
+  --space-16: 1rem;
+  --space-24: 1.5rem;
+  --space-32: 2rem;
+  --space-48: 3rem;
+
+  /* Typography - Font Sizes */
+  --fs-xs: 0.875rem; /* 14px */
+  --fs-sm: 0.9375rem; /* 15px */
+  --fs-md: 1rem; /* 16px */
+  --fs-lg: 1.0625rem; /* 17px */
+  --fs-xl: 1.25rem; /* 20px */
+  --fs-2xl: 1.5rem; /* 24px */
+
+  /* Typography - Font Families */
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  --font-mono: "Courier New", monospace;
+
+  /* Typography - Font Weights */
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-bold: 700;
+
+  /* Typography - Line Heights */
+  --lh-tight: 1.2;
+  --lh-body-min: 1.3;
+  --lh-body: 1.5;
+  --lh-relaxed: 1.75;
+
+  /* Colors - Surfaces */
+  --surface-bg: #ffffff;
+  --surface-raised: #f7f5f0;
+  --surface-hover: #ebe7df;
+
+  /* Colors - Text */
+  --text-primary: #17170f;
+  --text-secondary: #7a7466;
+  --text-tertiary: #a8a294;
+  --text-inverse: #ffffff;
+  --text-on-accent: #ffffff;
+
+  /* Colors - Semantic */
+  --accent-primary: #1f5f4b;
+  --accent-hover: #0e3a2c;
+  --success: #4ade80;
+  --warning: #facc15;
+  --error: #f87171;
+
+  /* Colors - Borders & Lines */
+  --line-subtle: #dbd5c8;
+  --line-default: #c9c3ba;
+  --border-width-thin: 1px;
+
+  /* Radius */
+  --radius-sm: 0.375rem; /* 6px */
+  --radius-md: 0.5rem; /* 8px */
+  --radius-lg: 0.75rem; /* 12px */
+  --radius-xl: 1rem; /* 16px */
+  --radius-circle: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
+
+  /* Controls */
+  --control-min-size: 44px; /* Touch target minimum */
+  --control-size: 56px; /* FAB size */
+
+  /* Scrim (modal backdrop) */
+  --scrim-modal: rgba(0, 0, 0, 0.5);
+}
+
+/* Print mode adjustments */
+
+@media print {
+  :root {
+    --space-16: 0.5rem;
+    --space-24: 0.75rem;
+    --fs-md: 0.75rem;
+    --fs-lg: 0.875rem;
+  }
+}
+
+/* === Reset & Base === */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  background-color: var(--surface-bg);
+  line-height: var(--lh-body);
+}
+
+html {
+  margin: 0;
+  padding: 0;
+}
+
+/* === Main Layout Container === */
+
+.v2-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  background-color: var(--surface-bg);
+}
+
+/* Landscape: still flex column */
+
+@media (orientation: landscape) and (max-width: 1023px) {
+  .v2-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+}
+
+/* Desktop: grid with sidebar */
+
+@media (min-width: 1024px) {
+  .v2-container {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    grid-template-rows: 1fr;
+    height: 100vh;
+    gap: 0;
+  }
+}
+
+/* === Main Content Area === */
+
+.v2-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .v2-content {
+    grid-column: 1 / 2;
+    border-right: var(--border-width-thin) solid var(--line-subtle);
+  }
+}
+
+/* === Legend Button (FAB) === */
+
+.v2-legend-btn {
+  position: fixed;
+  right: var(--space-16);
+  bottom: var(--space-16);
+  width: var(--control-size);
+  height: var(--control-size);
+  border-radius: var(--radius-circle);
+  border: none;
+  background-color: var(--accent-primary);
+  color: var(--text-on-accent);
+  font-family: var(--font-sans);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
+  box-shadow: var(--shadow-lg);
+  transition:
+    background-color 0.2s,
+    transform 0.2s;
+}
+
+.v2-legend-btn:hover {
+  background-color: var(--accent-hover);
+  transform: scale(1.05);
+}
+
+.v2-legend-btn:active {
+  transform: scale(0.95);
+}
+
+/* Hide on landscape+ */
+
+@media (orientation: landscape) and (max-width: 1023px) {
+  .v2-legend-btn {
+    display: block;
+  }
+}
+
+@media (min-width: 1024px) {
+  .v2-legend-btn {
+    display: none;
+  }
+}
+
+/* === Typography === */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+}
+
+p {
+  margin: 0;
+}
+
+/* === Buttons === */
+
+button {
+  font-family: var(--font-sans);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* === Scrollbar Styling === */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-raised);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--line-default);
+  border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* === Print Media === */
+
+@media print {
+  body {
+    margin: 0;
+    padding: 0.5cm;
+  }
+
+  .v2-container {
+    display: block;
+    height: auto;
+    width: 100%;
+  }
+
+  .v2-content {
+    flex: none;
+    height: auto;
+    overflow: visible;
+  }
+
+  /* Hide all interactive elements */
+  .v2-day-tabs,
+  .v2-legend-btn,
+  .v2-legend-modal,
+  .v2-legend-sidebar {
+    display: none !important;
+  }
+
+  /* Show all days in week view */
+  .v2-week-grid {
+    overflow: visible;
+    height: auto;
+  }
+
+  .v2-grid-header {
+    position: static;
+  }
+
+  .v2-time-row {
+    page-break-inside: avoid;
+  }
+
+  /* Reduce sizing for print */
+  .v2-time-cell {
+    padding: var(--space-8);
+    min-width: 60px;
+  }
+
+  .v2-time-cell__range {
+    font-size: var(--fs-xs);
+  }
+
+  .v2-time-cell__break {
+    font-size: 10px;
+  }
+
+  /* Lesson cell sizing for print */
+  :root {
+    --fs-md: 0.75rem;
+    --fs-xs: 0.65rem;
+  }
+
+  /* Preserve colors in print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Force all 5 days visible */
+  .v2-time-row__cells {
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+  }
+
+  /* Page margins */
+  @page {
+    margin: 0.5cm;
+    size: A4 landscape;
+  }
+}
+</style><script type="module" src="/@vite/client"></script>
+<script type="module" src="/@fs/D:/repos/lesson-plan/node_modules/astro/dist/runtime/client/dev-toolbar/entrypoint.js?v=087b96dc"></script>
+<script>window.__astro_dev_toolbar__ = {"root":"D:\\repos\\lesson-plan\\","version":"5.13.5","latestAstroVersion":"7.2.10","debugInfo":"Astro                    v5.13.5\nNode                     v24.11.1\nSystem                   Windows (x64)\nPackage Manager          npm\nOutput                   static\nAdapter                  none\nIntegrations             none"}</script>
+<script type="module" src="/src/components/A4Paper.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/src/layouts/Layout.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/src/components/v2/DayTabs.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/src/components/v2/LessonCell.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/src/components/v2/TimeSlotRow.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/src/components/v2/WeekGrid.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/src/components/v2/LegendModal.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/src/components/v2/LegendSidebar.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/src/assets/v2/tokens.css"></script>
+<script type="module" src="/src/assets/v2/v2.css"></script></head> <body data-astro-cid-sckkx6r4 data-astro-source-file="D:/repos/lesson-plan/src/layouts/Layout.astro" data-astro-source-loc="14:11"> <div class="a4-paper" data-astro-source-file="D:/repos/lesson-plan/src/components/A4Paper.astro" data-astro-source-loc="5:23">   <div class="v2-container" data-astro-source-file="D:/repos/lesson-plan/src/pages/v2.astro" data-astro-source-loc="78:29"> <div class="v2-content" data-astro-source-file="D:/repos/lesson-plan/src/pages/v2.astro" data-astro-source-loc="79:29"> <!-- Day tabs (portrait only) --> <div class="v2-day-tabs" data-astro-cid-qn6t73il data-astro-source-file="D:/repos/lesson-plan/src/components/v2/DayTabs.astro" data-astro-source-loc="11:26"> <button class="v2-tab  " data-day-index="0" aria-label="Poniedziałek" aria-pressed="false" data-astro-cid-qn6t73il data-astro-source-file="D:/repos/lesson-plan/src/components/v2/DayTabs.astro" data-astro-source-loc="26:10"> <span class="v2-tab__label" data-astro-cid-qn6t73il data-astro-source-file="D:/repos/lesson-plan/src/components/v2/DayTabs.astro" data-astro-source-loc="27:39">PO</span> <span class="v2-tab__fullname" data-astro-cid-qn6t73il data-astro-source-file="D:/repos/lesson-plan/src/components/v2/DayTabs.astro" data-astro-source-loc="28:42">Poniedziałek</span> </button><button class="v2-tab  " data-day-index="1" aria-label="Wtorek" aria-pressed="false" data-astro-cid-qn6t73il data-astro-source-file="D:/repos/lesson-plan/src/components/v2/DayTabs.astro" data-astro-source-loc="26:10"> <span class="v2-tab__label" data-astro-cid-qn6t73il data-astro-source-file="D:/repos/lesson-plan/src/components/v2/DayTabs.astro" data-astro-source-loc="27:39">WT</span> <span class="v2-tab__fullname" data-astro-cid-qn6t73il data-astro-source-file="D:/repos/lesson-plan/src/components/v2/DayTabs.astro" data-astro-source-loc="28:42">Wtorek</span> </button><button class="v2-tab v2-tab--active v2-tab--today" data-day-index="2" aria-label="Środa (dziś)" aria-pressed="true" data-astro-cid-qn6t73il data-astro-source-file="D:/repos/lesson-plan/src/components/v2/DayTabs.astro" data-astro-source-loc="26:10"> <span class="v2-tab__label" data-astro-cid-qn6t73il data-astro-source-file="D:/repos/lesson-plan/src/components/v2/DayTabs.astro" data-astro-source-loc="27:39">DZIŚ</span> <span class="v2-tab__fullname" data-astro-cid-qn6t73il data-astro-source-file="D:/repos/lesson-plan/src/components/v2/DayTabs.astro" data-astro-source-loc="28:42">Środa</span> </button><button class="v2-tab  " data-day-index="3" aria-label="Czwartek" aria-pressed="false" data-astro-cid-qn6t73il data-astro-source-file="D:/repos/lesson-plan/src/components/v2/DayTabs.astro" data-astro-source-loc="26:10"> <span class="v2-tab__label" data-astro-cid-qn6t73il data-astro-source-file="D:/repos/lesson-plan/src/components/v2/DayTabs.astro" data-astro-source-loc="27:39">CZ</span> <span class="v2-tab__fullname" data-astro-cid-qn6t73il data-astro-source-file="D:/repos/lesson-plan/src/components/v2/DayTabs.astro" data-astro-source-loc="28:42">Czwartek</span> </button><button class="v2-tab  " data-day-index="4" aria-label="Piątek" aria-pressed="false" data-astro-cid-qn6t73il data-astro-source-file="D:/repos/lesson-plan/src/components/v2/DayTabs.astro" data-astro-source-loc="26:10"> <span class="v2-tab__label" data-astro-cid-qn6t73il data-astro-source-file="D:/repos/lesson-plan/src/components/v2/DayTabs.astro" data-astro-source-loc="27:39">PI</span> <span class="v2-tab__fullname" data-astro-cid-qn6t73il data-astro-source-file="D:/repos/lesson-plan/src/components/v2/DayTabs.astro" data-astro-source-loc="28:42">Piątek</span> </button> </div>  <!-- Main week grid --> <div class="v2-week-grid" data-astro-cid-3rteixdj data-astro-source-file="D:/repos/lesson-plan/src/components/v2/WeekGrid.astro" data-astro-source-loc="54:27"> <div class="v2-grid-header" data-astro-cid-3rteixdj data-astro-source-file="D:/repos/lesson-plan/src/components/v2/WeekGrid.astro" data-astro-source-loc="55:31"> <div class="v2-grid-header__corner" data-astro-cid-3rteixdj data-astro-source-file="D:/repos/lesson-plan/src/components/v2/WeekGrid.astro" data-astro-source-loc="56:6"></div> <div class="v2-grid-header__days" data-astro-cid-3rteixdj data-astro-source-file="D:/repos/lesson-plan/src/components/v2/WeekGrid.astro" data-astro-source-loc="58:39"> <div class="v2-day-header v2-day-header--today" data-astro-cid-3rteixdj data-astro-source-file="D:/repos/lesson-plan/src/components/v2/WeekGrid.astro" data-astro-source-loc="66:34"> <div class="v2-day-header__name" data-astro-cid-3rteixdj data-astro-source-file="D:/repos/lesson-plan/src/components/v2/WeekGrid.astro" data-astro-source-loc="67:48">Środa</div> <div class="v2-day-header__marker" data-astro-cid-3rteixdj data-astro-source-file="D:/repos/lesson-plan/src/components/v2/WeekGrid.astro" data-astro-source-loc="68:62">DZIŚ</div> </div> </div> </div> <div class="v2-grid-body" data-astro-cid-3rteixdj data-astro-source-file="D:/repos/lesson-plan/src/components/v2/WeekGrid.astro" data-astro-source-loc="76:29"> <div class="v2-time-row" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="65:26"> <div class="v2-time-cell" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="66:29"> <div class="v2-time-cell__range" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="67:38">07:30–08:15</div>  </div> <div class="v2-time-row__cells" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="71:35"> <div class="v2-cell " style="background-color: #e8e8e8; color: var(--text-primary);" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="27:2"> <div class="v2-cell__content" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="28:33">    </div> </div>  </div> </div> <div class="v2-time-row" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="65:26"> <div class="v2-time-cell" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="66:29"> <div class="v2-time-cell__range" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="67:38">08:15–09:00</div> <div class="v2-time-cell__break" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="68:52">5 min</div> </div> <div class="v2-time-row__cells" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="71:35"> <div class="v2-cell " style="background-color: #ffffff; color: var(--text-primary);" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="27:2"> <div class="v2-cell__content" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="28:33"> <span class="v2-cell__name" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="29:48">Edukacja</span> <span class="v2-cell__teacher" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="30:52">MSkrzypczak</span> <span class="v2-cell__break" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="31:48">5 min</span> </div> </div>  </div> </div> <div class="v2-time-row" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="65:26"> <div class="v2-time-cell" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="66:29"> <div class="v2-time-cell__range" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="67:38">09:05–09:50</div> <div class="v2-time-cell__break" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="68:52">10 min</div> </div> <div class="v2-time-row__cells" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="71:35"> <div class="v2-cell " style="background-color: #80d7f1; color: var(--text-primary);" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="27:2"> <div class="v2-cell__content" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="28:33"> <span class="v2-cell__name" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="29:48">Angielski</span> <span class="v2-cell__teacher" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="30:52">APiskorska/IGłowacka</span> <span class="v2-cell__break" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="31:48">10 min</span> </div> </div>  </div> </div> <div class="v2-time-row" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="65:26"> <div class="v2-time-cell" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="66:29"> <div class="v2-time-cell__range" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="67:38">10:00–10:45</div> <div class="v2-time-cell__break" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="68:52">15 min</div> </div> <div class="v2-time-row__cells" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="71:35"> <div class="v2-cell " style="background-color: #57d14c; color: var(--text-inverse);" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="27:2"> <div class="v2-cell__content" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="28:33"> <span class="v2-cell__name" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="29:48">Basen</span> <span class="v2-cell__teacher" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="30:52">multiple</span> <span class="v2-cell__break" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="31:48">15 min</span> </div> </div>  </div> </div> <div class="v2-time-row" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="65:26"> <div class="v2-time-cell" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="66:29"> <div class="v2-time-cell__range" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="67:38">11:00–11:45</div> <div class="v2-time-cell__break" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="68:52">10 min</div> </div> <div class="v2-time-row__cells" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="71:35"> <div class="v2-cell " style="background-color: #57d14c; color: var(--text-inverse);" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="27:2"> <div class="v2-cell__content" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="28:33"> <span class="v2-cell__name" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="29:48">Basen</span> <span class="v2-cell__teacher" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="30:52">multiple</span> <span class="v2-cell__break" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="31:48">10 min</span> </div> </div>  </div> </div> <div class="v2-time-row" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="65:26"> <div class="v2-time-cell" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="66:29"> <div class="v2-time-cell__range" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="67:38">11:55–12:40</div> <div class="v2-time-cell__break" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="68:52">20 min</div> </div> <div class="v2-time-row__cells" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="71:35"> <div class="v2-cell " style="background-color: #92cbe2; color: var(--text-inverse);" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="27:2"> <div class="v2-cell__content" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="28:33"> <span class="v2-cell__name" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="29:48">Religia/Etyka</span> <span class="v2-cell__teacher" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="30:52">ABartkowski</span> <span class="v2-cell__break" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="31:48">20 min</span> </div> </div>  </div> </div> <div class="v2-time-row" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="65:26"> <div class="v2-time-cell" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="66:29"> <div class="v2-time-cell__range" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="67:38">13:00–13:45</div> <div class="v2-time-cell__break" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="68:52">20 min</div> </div> <div class="v2-time-row__cells" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="71:35"> <div class="v2-cell " style="background-color: #fcb8e7; color: var(--text-primary);" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="27:2"> <div class="v2-cell__content" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="28:33"> <span class="v2-cell__name" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="29:48">Rytmika</span> <span class="v2-cell__teacher" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="30:52">ESzymańska</span> <span class="v2-cell__break" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="31:48">20 min</span> </div> </div>  </div> </div> <div class="v2-time-row" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="65:26"> <div class="v2-time-cell" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="66:29"> <div class="v2-time-cell__range" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="67:38">14:05–14:50</div> <div class="v2-time-cell__break" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="68:52">5 min</div> </div> <div class="v2-time-row__cells" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="71:35"> <div class="v2-cell " style="background-color: #e8e8e8; color: var(--text-primary);" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="27:2"> <div class="v2-cell__content" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="28:33">   <span class="v2-cell__break" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="31:48">5 min</span> </div> </div>  </div> </div> <div class="v2-time-row" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="65:26"> <div class="v2-time-cell" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="66:29"> <div class="v2-time-cell__range" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="67:38">14:55–15:40</div> <div class="v2-time-cell__break" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="68:52">5 min</div> </div> <div class="v2-time-row__cells" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="71:35"> <div class="v2-cell " style="background-color: #e8e8e8; color: var(--text-primary);" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="27:2"> <div class="v2-cell__content" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="28:33">   <span class="v2-cell__break" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="31:48">5 min</span> </div> </div>  </div> </div> <div class="v2-time-row" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="65:26"> <div class="v2-time-cell" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="66:29"> <div class="v2-time-cell__range" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="67:38">15:45–16:30</div> <div class="v2-time-cell__break" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="68:52">15 min</div> </div> <div class="v2-time-row__cells" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="71:35"> <div class="v2-cell " style="background-color: #e8e8e8; color: var(--text-primary);" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="27:2"> <div class="v2-cell__content" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="28:33">   <span class="v2-cell__break" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="31:48">15 min</span> </div> </div>  </div> </div> <div class="v2-time-row" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="65:26"> <div class="v2-time-cell" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="66:29"> <div class="v2-time-cell__range" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="67:38">16:45–17:45</div>  </div> <div class="v2-time-row__cells" data-astro-cid-jrtu7oup data-astro-source-file="D:/repos/lesson-plan/src/components/v2/TimeSlotRow.astro" data-astro-source-loc="71:35"> <div class="v2-cell " style="background-color: #fcb8e7; color: var(--text-primary);" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="27:2"> <div class="v2-cell__content" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="28:33"> <span class="v2-cell__name" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="29:48">Logopedia</span> <span class="v2-cell__teacher" data-astro-cid-ulljjmsm data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LessonCell.astro" data-astro-source-loc="30:52">Joanna Nikuła-Szymaniak</span>  </div> </div>  </div> </div>  </div> </div>  <!-- Legend button (mobile only) --> <button class="v2-legend-btn" id="legendToggleBtn" aria-label="Pokaż legendę" data-astro-source-file="D:/repos/lesson-plan/src/pages/v2.astro" data-astro-source-loc="103:8">
+?
+</button> </div> <!-- Legend modal (mobile only) --> <div class="v2-legend-modal" data-legend-open="false" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="16:56"> <div class="v2-legend-modal__backdrop" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="17:4"></div> <div class="v2-legend-modal__panel" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="18:39"> <div class="v2-legend-modal__header" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="19:42"> <h2 class="v2-legend-modal__title" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="20:42">Legenda kolorów</h2> <span class="v2-legend-modal__hint" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="21:43">dotknij, aby zamknąć</span> </div> <div class="v2-legend-modal__list" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="24:40"> <div class="v2-legend-item" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="27:39"> <span class="v2-legend-item__color" style="background-color: #ffffff" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="28:14"></span> <div class="v2-legend-item__content" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="32:50"> <span class="v2-legend-item__name" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="33:50">Edukacja</span> </div> </div><div class="v2-legend-item" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="27:39"> <span class="v2-legend-item__color" style="background-color: #80d7f1" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="28:14"></span> <div class="v2-legend-item__content" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="32:50"> <span class="v2-legend-item__name" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="33:50">Angielski</span> </div> </div><div class="v2-legend-item" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="27:39"> <span class="v2-legend-item__color" style="background-color: #9bf093" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="28:14"></span> <div class="v2-legend-item__content" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="32:50"> <span class="v2-legend-item__name" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="33:50">W/F ew</span> </div> </div><div class="v2-legend-item" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="27:39"> <span class="v2-legend-item__color" style="background-color: #57d14c" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="28:14"></span> <div class="v2-legend-item__content" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="32:50"> <span class="v2-legend-item__name" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="33:50">Basen</span> </div> </div><div class="v2-legend-item" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="27:39"> <span class="v2-legend-item__color" style="background-color: #9bf093" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="28:14"></span> <div class="v2-legend-item__content" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="32:50"> <span class="v2-legend-item__name" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="33:50">W/F</span> </div> </div><div class="v2-legend-item" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="27:39"> <span class="v2-legend-item__color" style="background-color: #f7aec6" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="28:14"></span> <div class="v2-legend-item__content" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="32:50"> <span class="v2-legend-item__name" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="33:50">Zajęcia Twórcze</span> </div> </div><div class="v2-legend-item" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="27:39"> <span class="v2-legend-item__color" style="background-color: #ffb8bd" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="28:14"></span> <div class="v2-legend-item__content" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="32:50"> <span class="v2-legend-item__name" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="33:50">Kółko</span> </div> </div><div class="v2-legend-item" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="27:39"> <span class="v2-legend-item__color" style="background-color: #7cd874" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="28:14"></span> <div class="v2-legend-item__content" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="32:50"> <span class="v2-legend-item__name" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="33:50">Gimnastyka korekcyjna</span> </div> </div><div class="v2-legend-item" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="27:39"> <span class="v2-legend-item__color" style="background-color: #92cbe2" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="28:14"></span> <div class="v2-legend-item__content" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="32:50"> <span class="v2-legend-item__name" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="33:50">Religia/Etyka</span> </div> </div><div class="v2-legend-item" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="27:39"> <span class="v2-legend-item__color" style="background-color: #fcb8e7" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="28:14"></span> <div class="v2-legend-item__content" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="32:50"> <span class="v2-legend-item__name" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="33:50">Rytmika</span> </div> </div><div class="v2-legend-item" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="27:39"> <span class="v2-legend-item__color" style="background-color: #fcb8e7" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="28:14"></span> <div class="v2-legend-item__content" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="32:50"> <span class="v2-legend-item__name" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="33:50">Logopedia</span> </div> </div><div class="v2-legend-item" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="27:39"> <span class="v2-legend-item__color" style="background-color: #08f" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="28:14"></span> <div class="v2-legend-item__content" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="32:50"> <span class="v2-legend-item__name" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="33:50">Akrobatyka</span> </div> </div><div class="v2-legend-item" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="27:39"> <span class="v2-legend-item__color" style="background-color: #08f" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="28:14"></span> <div class="v2-legend-item__content" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="32:50"> <span class="v2-legend-item__name" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="33:50">Trening Umiejętności Społecznych</span> </div> </div><div class="v2-legend-item" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="27:39"> <span class="v2-legend-item__color" style="background-color: #ff8" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="28:14"></span> <div class="v2-legend-item__content" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="32:50"> <span class="v2-legend-item__name" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="33:50">Kółko etyczno-filozoficzne</span> </div> </div><div class="v2-legend-item" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="27:39"> <span class="v2-legend-item__color" style="background-color: #ff8" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="28:14"></span> <div class="v2-legend-item__content" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="32:50"> <span class="v2-legend-item__name" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="33:50">Arteterapia</span> </div> </div><div class="v2-legend-item" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="27:39"> <span class="v2-legend-item__color" style="background-color: #08f" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="28:14"></span> <div class="v2-legend-item__content" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="32:50"> <span class="v2-legend-item__name" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="33:50">Aikido</span> </div> </div><div class="v2-legend-item" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="27:39"> <span class="v2-legend-item__color" style="background-color: #08f" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="28:14"></span> <div class="v2-legend-item__content" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="32:50"> <span class="v2-legend-item__name" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="33:50">Robotyka</span> </div> </div><div class="v2-legend-item" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="27:39"> <span class="v2-legend-item__color" style="background-color: #ff8" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="28:14"></span> <div class="v2-legend-item__content" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="32:50"> <span class="v2-legend-item__name" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="33:50">Kółko muzyczne &quot;Chórek&quot;</span> </div> </div><div class="v2-legend-item" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="27:39"> <span class="v2-legend-item__color" style="background-color: #08f" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="28:14"></span> <div class="v2-legend-item__content" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="32:50"> <span class="v2-legend-item__name" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="33:50">Dance 4 Friends</span> </div> </div><div class="v2-legend-item" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="27:39"> <span class="v2-legend-item__color" style="background-color: #08f" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="28:14"></span> <div class="v2-legend-item__content" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="32:50"> <span class="v2-legend-item__name" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="33:50">Akademia Gier CUBE</span> </div> </div><div class="v2-legend-item" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="27:39"> <span class="v2-legend-item__color" style="background-color: #08f" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="28:14"></span> <div class="v2-legend-item__content" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="32:50"> <span class="v2-legend-item__name" data-astro-cid-phorz6gn data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendModal.astro" data-astro-source-loc="33:50">Szachy</span> </div> </div> </div> </div> </div>  <!-- Legend sidebar (desktop only) --> <aside class="v2-legend-sidebar" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="15:34"> <div class="v2-legend-sidebar__content" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="16:43"> <h2 class="v2-legend-sidebar__title" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="17:42">Legenda kolorów</h2> <div class="v2-legend-sidebar__list" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="19:42"> <div class="v2-legend-item" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="22:39"> <span class="v2-legend-item__color" style="background-color: #ffffff" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="23:14"></span> <div class="v2-legend-item__content" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="27:50"> <span class="v2-legend-item__name" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="28:50">Edukacja</span> </div> </div><div class="v2-legend-item" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="22:39"> <span class="v2-legend-item__color" style="background-color: #80d7f1" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="23:14"></span> <div class="v2-legend-item__content" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="27:50"> <span class="v2-legend-item__name" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="28:50">Angielski</span> </div> </div><div class="v2-legend-item" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="22:39"> <span class="v2-legend-item__color" style="background-color: #9bf093" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="23:14"></span> <div class="v2-legend-item__content" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="27:50"> <span class="v2-legend-item__name" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="28:50">W/F ew</span> </div> </div><div class="v2-legend-item" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="22:39"> <span class="v2-legend-item__color" style="background-color: #57d14c" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="23:14"></span> <div class="v2-legend-item__content" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="27:50"> <span class="v2-legend-item__name" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="28:50">Basen</span> </div> </div><div class="v2-legend-item" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="22:39"> <span class="v2-legend-item__color" style="background-color: #9bf093" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="23:14"></span> <div class="v2-legend-item__content" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="27:50"> <span class="v2-legend-item__name" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="28:50">W/F</span> </div> </div><div class="v2-legend-item" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="22:39"> <span class="v2-legend-item__color" style="background-color: #f7aec6" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="23:14"></span> <div class="v2-legend-item__content" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="27:50"> <span class="v2-legend-item__name" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="28:50">Zajęcia Twórcze</span> </div> </div><div class="v2-legend-item" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="22:39"> <span class="v2-legend-item__color" style="background-color: #ffb8bd" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="23:14"></span> <div class="v2-legend-item__content" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="27:50"> <span class="v2-legend-item__name" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="28:50">Kółko</span> </div> </div><div class="v2-legend-item" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="22:39"> <span class="v2-legend-item__color" style="background-color: #7cd874" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="23:14"></span> <div class="v2-legend-item__content" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="27:50"> <span class="v2-legend-item__name" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="28:50">Gimnastyka korekcyjna</span> </div> </div><div class="v2-legend-item" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="22:39"> <span class="v2-legend-item__color" style="background-color: #92cbe2" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="23:14"></span> <div class="v2-legend-item__content" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="27:50"> <span class="v2-legend-item__name" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="28:50">Religia/Etyka</span> </div> </div><div class="v2-legend-item" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="22:39"> <span class="v2-legend-item__color" style="background-color: #fcb8e7" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="23:14"></span> <div class="v2-legend-item__content" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="27:50"> <span class="v2-legend-item__name" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="28:50">Rytmika</span> </div> </div><div class="v2-legend-item" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="22:39"> <span class="v2-legend-item__color" style="background-color: #fcb8e7" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="23:14"></span> <div class="v2-legend-item__content" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="27:50"> <span class="v2-legend-item__name" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="28:50">Logopedia</span> </div> </div><div class="v2-legend-item" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="22:39"> <span class="v2-legend-item__color" style="background-color: #08f" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="23:14"></span> <div class="v2-legend-item__content" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="27:50"> <span class="v2-legend-item__name" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="28:50">Akrobatyka</span> </div> </div><div class="v2-legend-item" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="22:39"> <span class="v2-legend-item__color" style="background-color: #08f" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="23:14"></span> <div class="v2-legend-item__content" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="27:50"> <span class="v2-legend-item__name" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="28:50">Trening Umiejętności Społecznych</span> </div> </div><div class="v2-legend-item" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="22:39"> <span class="v2-legend-item__color" style="background-color: #ff8" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="23:14"></span> <div class="v2-legend-item__content" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="27:50"> <span class="v2-legend-item__name" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="28:50">Kółko etyczno-filozoficzne</span> </div> </div><div class="v2-legend-item" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="22:39"> <span class="v2-legend-item__color" style="background-color: #ff8" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="23:14"></span> <div class="v2-legend-item__content" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="27:50"> <span class="v2-legend-item__name" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="28:50">Arteterapia</span> </div> </div><div class="v2-legend-item" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="22:39"> <span class="v2-legend-item__color" style="background-color: #08f" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="23:14"></span> <div class="v2-legend-item__content" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="27:50"> <span class="v2-legend-item__name" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="28:50">Aikido</span> </div> </div><div class="v2-legend-item" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="22:39"> <span class="v2-legend-item__color" style="background-color: #08f" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="23:14"></span> <div class="v2-legend-item__content" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="27:50"> <span class="v2-legend-item__name" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="28:50">Robotyka</span> </div> </div><div class="v2-legend-item" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="22:39"> <span class="v2-legend-item__color" style="background-color: #ff8" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="23:14"></span> <div class="v2-legend-item__content" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="27:50"> <span class="v2-legend-item__name" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="28:50">Kółko muzyczne &quot;Chórek&quot;</span> </div> </div><div class="v2-legend-item" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="22:39"> <span class="v2-legend-item__color" style="background-color: #08f" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="23:14"></span> <div class="v2-legend-item__content" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="27:50"> <span class="v2-legend-item__name" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="28:50">Dance 4 Friends</span> </div> </div><div class="v2-legend-item" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="22:39"> <span class="v2-legend-item__color" style="background-color: #08f" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="23:14"></span> <div class="v2-legend-item__content" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="27:50"> <span class="v2-legend-item__name" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="28:50">Akademia Gier CUBE</span> </div> </div><div class="v2-legend-item" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="22:39"> <span class="v2-legend-item__color" style="background-color: #08f" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="23:14"></span> <div class="v2-legend-item__content" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="27:50"> <span class="v2-legend-item__name" data-astro-cid-p6h5f22h data-astro-source-file="D:/repos/lesson-plan/src/components/v2/LegendSidebar.astro" data-astro-source-loc="28:50">Szachy</span> </div> </div> </div> </div> </aside>  </div> <script type="module" src="/src/pages/v2.astro?astro&type=script&index=0&lang.ts"></script>   </div>  </body></html>
