@@ -246,7 +246,6 @@ body {
   padding: 0 var(--space-12);
   overflow: hidden;
   background: var(--cell-bg);
-  color: var(--cell-ink);
 }
 
 /* Opaque, like every other cell: the rules are gaps in an otherwise solid
@@ -272,7 +271,7 @@ body {
   font-size: var(--fs-xs);
   line-height: var(--lh-body-min);
   overflow-wrap: anywhere;
-  color: var(--cell-sub);
+  color: var(--text-on-tile-weak);
 }
 
 .cell__free {

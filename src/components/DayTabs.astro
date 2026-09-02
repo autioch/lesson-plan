@@ -1,0 +1,48 @@
+---
+/**
+ * Day selection — phone portrait only (≤480px). Hidden by CSS everywhere else,
+ * because every wider band shows the whole week and has nothing to switch.
+ *
+ * The build marks no day: today is a runtime fact, so the page script adds
+ * `tab--today` and the aria suffix once it has read the clock. Until then Monday
+ * is selected, which is also what a page without JavaScript shows.
+ *
+ * Today always reads the today label and takes a wider tab, even when another
+ * day is viewed. The viewed day takes the full name and a 3px bar; the rest take
+ * the two-letter short.
+ */
+import type { Labels } from "../data/types";
+import type { PlanDay } from "../utils/plan";
+
+interface Props {
+  days: PlanDay[];
+  labels: Labels;
+}
+
+const { days, labels } = Astro.props;
+---
+
+<div
+  class="tabs"
+  role="tablist"
+  aria-label={labels.dayTabsLabel}
+  data-today-aria={labels.todayAria}
+>
+  {
+    days.map((day, index) => (
+      <button
+        class="tab"
+        type="button"
+        role="tab"
+        data-day-index={index}
+        data-weekday={day.weekday}
+        aria-selected={index === 0 ? "true" : "false"}
+        aria-label={day.name}
+      >
+        <span class="tab__today">{labels.today}</span>
+        <span class="tab__full">{day.name}</span>
+        <span class="tab__short">{day.short}</span>
+      </button>
+    ))
+  }
+</div>

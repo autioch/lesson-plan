@@ -7,15 +7,19 @@
  *   other cells are hidden by the `data-day` attribute on the page root.
  * - 481–1023px: gutter plus five columns, shortened names, no teacher.
  * - ≥1024px: the same five columns with full names and teachers.
+ *
+ * No day header is marked today at build time — the page script does it.
  */
-import type { PlanDay, PlanRow } from "../../utils/v2/plan.ts";
+import type { Labels } from "../data/types";
+import type { PlanDay, PlanRow } from "../utils/plan";
 
 interface Props {
   days: PlanDay[];
   rows: PlanRow[];
+  labels: Labels;
 }
 
-const { days, rows } = Astro.props;
+const { days, rows, labels } = Astro.props;
 ---
 
 <div class="grid">
@@ -23,12 +27,9 @@ const { days, rows } = Astro.props;
     <span class="grid__corner"></span>
     {
       days.map((day) => (
-        <span
-          class:list={["dayhead", { "dayhead--today": day.isToday }]}
-          title={day.name}
-        >
+        <span class="dayhead" data-weekday={day.weekday} title={day.name}>
           <span class="dayhead__name">{day.name}</span>
-          <span class="dayhead__today">DZIŚ</span>
+          <span class="dayhead__today">{labels.today}</span>
         </span>
       ))
     }
@@ -46,13 +47,13 @@ const { days, rows } = Astro.props;
           {row.cells.map((cell, dayIndex) =>
             cell.empty ? (
               <div class="cell cell--empty" data-day-index={dayIndex}>
-                <span class="cell__free">wolne</span>
+                <span class="cell__free">{labels.freeSlot}</span>
               </div>
             ) : (
               <div
                 class="cell"
                 data-day-index={dayIndex}
-                style={`--cell-bg:${cell.color};--cell-ink:${cell.ink};--cell-sub:${cell.sub}`}
+                style={`--cell-bg:${cell.color}`}
               >
                 <span class="cell__name">{cell.name}</span>
                 <span class="cell__short">{cell.short}</span>

@@ -1,4 +1,4 @@
-/* v2 design tokens.
+/* Design tokens.
  *
  * Values come from `designs/launchpad-styles.css` and the token table in
  * `designs/Przekazanie deweloperom.dc.html` §5. Units are px, never rem: the
@@ -48,6 +48,9 @@
   --text-primary: #1c1b17;
   --text-secondary: #5b584f;
   --text-muted: #706d64;
+  /* The teacher line on a lesson tile. Dark enough to clear 4.5:1 at 14px on
+   * every colour in the palette — `--text-secondary` does not, on the blue. */
+  --text-on-tile-weak: #3d3a33;
   --text-on-accent: #ffffff;
   --accent: #4a86b8;
   --line-subtle: rgba(0, 0, 0, 0.09);

@@ -1,10 +1,140 @@
 ---
-import Table from "../components/Table2.astro";
+import DayTabs from "../components/DayTabs.astro";
+import Legend from "../components/Legend.astro";
+import PrintSheet from "../components/PrintSheet.astro";
+import WeekGrid from "../components/WeekGrid.astro";
 import Layout from "../layouts/Layout.astro";
-import lessonsData from "../data/lessons.json";
 
+import "../assets/print.css";
+
+import lessonsData from "../data/lessons.json";
+import type { LessonsPlan } from "../data/types";
+import { buildPlan } from "../utils/plan";
+
+const plan = buildPlan(lessonsData as LessonsPlan);
+const { labels } = plan;
 ---
 
-<Layout>
-	<Table lessonsData={lessonsData} />
+<Layout title={labels.pageTitle} locale={plan.locale}>
+  <div class="plan" data-day="0">
+    <div class="plan__main">
+      <DayTabs days={plan.days} labels={labels} />
+      <WeekGrid days={plan.days} rows={plan.rows} labels={labels} />
+    </div>
+
+    <aside class="legend-side">
+      <h2 class="legend-side__title">{labels.legendTitle}</h2>
+      <Legend groups={plan.legend} />
+    </aside>
+
+    <button class="fab" type="button" id="legendButton" aria-expanded="false">
+      <span aria-hidden="true">?</span>
+      <span class="sr-only">{labels.legendTitle}</span>
+    </button>
+
+    <div class="sheet" id="legendSheet" hidden>
+      <div class="sheet__panel" role="dialog" aria-label={labels.legendTitle}>
+        <div class="sheet__head">
+          <span class="sheet__title">{labels.legendTitle}</span>
+          <span class="sheet__hint">{labels.legendHint}</span>
+        </div>
+        <Legend groups={plan.legend} />
+      </div>
+    </div>
+  </div>
+
+  <PrintSheet
+    days={plan.days}
+    rows={plan.rows}
+    legend={plan.legend}
+    labels={labels}
+  />
 </Layout>
+
+<script>
+  /* Today is never baked in. The page is built once a term, so the weekday is
+   * read from the browser clock on load and matched against the `data-weekday`
+   * the data carries — the marks are applied here or not at all. Everything
+   * else is the one interaction the design allows: picking a day, which only
+   * exists on a phone in portrait.
+   */
+  const plan = document.querySelector<HTMLElement>(".plan");
+  const tabList = document.querySelector<HTMLElement>(".tabs");
+  const tabs = Array.from(document.querySelectorAll<HTMLElement>(".tab"));
+  const dayHeads = Array.from(document.querySelectorAll<HTMLElement>(".dayhead"));
+  const grid = document.querySelector<HTMLElement>(".grid");
+  const legendButton = document.getElementById("legendButton");
+  const legendSheet = document.getElementById("legendSheet");
+
+  const SWIPE_MIN = 36;
+  const lastDayIndex = tabs.length - 1;
+
+  /* getDay() is 0 for Sunday; the data uses ISO weekdays, 1 = Monday. */
+  const isoWeekday = new Date().getDay() || 7;
+  /* Saturday and Sunday have no column: the plan stays on Monday, unmarked. */
+  const todayIndex = tabs.findIndex(
+    (tab) => Number(tab.dataset.weekday) === isoWeekday,
+  );
+
+  function markToday() {
+    if (todayIndex < 0) return;
+    const todayAria = tabList?.dataset.todayAria;
+
+    const tab = tabs[todayIndex];
+    tab.classList.add("tab--today");
+    if (todayAria) {
+      tab.setAttribute("aria-label", `${tab.getAttribute("aria-label")} (${todayAria})`);
+    }
+
+    dayHeads[todayIndex]?.classList.add("dayhead--today");
+  }
+
+  function selectDay(index: number) {
+    if (!plan || index < 0 || index > lastDayIndex) return;
+    plan.dataset.day = String(index);
+    tabs.forEach((tab, i) =>
+      tab.setAttribute("aria-selected", String(i === index)),
+    );
+  }
+
+  function currentDay(): number {
+    return Number(plan?.dataset.day ?? 0);
+  }
+
+  function setLegendOpen(open: boolean) {
+    if (!legendSheet || !legendButton) return;
+    legendSheet.hidden = !open;
+    legendButton.setAttribute("aria-expanded", String(open));
+  }
+
+  markToday();
+  selectDay(todayIndex < 0 ? 0 : todayIndex);
+
+  tabs.forEach((tab, index) =>
+    tab.addEventListener("click", () => selectDay(index)),
+  );
+
+  legendButton?.addEventListener("click", () =>
+    setLegendOpen(legendSheet?.hidden ?? true),
+  );
+  legendSheet?.addEventListener("click", () => setLegendOpen(false));
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setLegendOpen(false);
+  });
+
+  /* Swipe changes the day by one and does not wrap from Friday to Monday. It
+   * exists only where a day is selectable at all — the phone in portrait. */
+  const phonePortrait = window.matchMedia("(max-width: 480px)");
+  let swipeStartX: number | null = null;
+
+  grid?.addEventListener("pointerdown", (event) => {
+    swipeStartX = phonePortrait.matches ? event.clientX : null;
+  });
+  grid?.addEventListener("pointerup", (event) => {
+    if (swipeStartX === null || !phonePortrait.matches) return;
+    const dx = event.clientX - swipeStartX;
+    swipeStartX = null;
+    if (Math.abs(dx) < SWIPE_MIN) return;
+    selectDay(currentDay() + (dx < 0 ? 1 : -1));
+  });
+</script>

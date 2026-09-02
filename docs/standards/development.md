@@ -13,8 +13,12 @@ system is built**; read this before writing code for **how to write it here**.
   pass them to components.
 - **One folder per component**, holding its implementation and any component-local styles.
 - **Styling:** use scoped styles inside `.astro` files with `<style>` tags, or shared stylesheets
-  in `src/assets/`. Rules that cross component boundaries — the v2 responsive bands — belong in the
+  in `src/assets/`. Rules that cross component boundaries — the responsive bands — belong in the
   shared stylesheet; scoped styles cannot express them.
+- **No copy in components.** Every user-visible string is a label from `lessons.json`, passed in as
+  a prop. A hardcoded word in an `.astro` file is a bug, not a shortcut.
+- **No dates at build time.** Frontmatter and `src/utils/` must never call `new Date()`: the site is
+  generated once a term. Anything that depends on the day belongs in the page script.
 - **Layout is never a build-time prop.** This is a static site: frontmatter cannot know the
   viewport, so anything that varies by width is decided in CSS. See
   [styling.md](styling.md#surfaces).
@@ -27,8 +31,8 @@ system is built**; read this before writing code for **how to write it here**.
 
 ## Adding a feature
 
-1. **Data layer** — if the feature reads new data, add or extend `src/data/lessons.json` or a new
-   JSON file. Pair it with a TypeScript type in `src/data/`.
+1. **Data layer** — extend `src/data/lessons.json` and its type in `src/data/types.ts`. New copy,
+   colours or day labels go there, never into a component.
 2. **Components** — add or extend components in `src/components/`.
 3. **Page** — mount the component in `src/pages/` where it belongs, or create a new page.
 4. **Build and verify** — run `npm run build` and check the output.
@@ -36,15 +40,14 @@ system is built**; read this before writing code for **how to write it here**.
 
 **Copy from** — canonical examples for building blocks:
 
-| Building…               | Copy the pattern from                                            |
-| ----------------------- | ---------------------------------------------------------------- |
-| Page structure / layout | [src/pages/index.astro](../../src/pages/index.astro)             |
-| Table rendering         | [src/components/Table2.astro](../../src/components/Table2.astro) |
-| Data type definitions   | [src/data/lessonTypes.ts](../../src/data/lessonTypes.ts)         |
-| Styled component        | [src/components/Cell.astro](../../src/components/Cell.astro)     |
-| Responsive page         | [src/pages/v2.astro](../../src/pages/v2.astro)                   |
-| Build-time transform    | [src/utils/v2/plan.ts](../../src/utils/v2/plan.ts)               |
-| Band-aware layout CSS   | [src/assets/v2/v2.css](../../src/assets/v2/v2.css)               |
+| Building…                  | Copy the pattern from                                        |
+| -------------------------- | ------------------------------------------------------------ |
+| Page structure / layout    | [src/pages/index.astro](../../src/pages/index.astro)         |
+| Data type definitions      | [src/data/types.ts](../../src/data/types.ts)                 |
+| A component reading labels | [src/components/WeekGrid.astro](../../src/components/WeekGrid.astro) |
+| Build-time transform       | [src/utils/plan.ts](../../src/utils/plan.ts)                 |
+| Band-aware layout CSS      | [src/assets/plan.css](../../src/assets/plan.css)             |
+| Runtime (clock, day pick)  | the `<script>` in [src/pages/index.astro](../../src/pages/index.astro) |
 
 ## Keeping docs in sync
 
@@ -69,6 +72,7 @@ Durable docs stay current two ways:
 | Change                             | Sync these durable docs                                             |
 | ---------------------------------- | ------------------------------------------------------------------- |
 | Data shape (JSON / types)          | `architecture.md`; this guide (Copy-from)                           |
+| User-visible copy or a colour      | `lessons.json` only — no doc change, but never a component          |
 | New component or changed structure | this guide (Copy-from); `architecture.md` (layout)                  |
 | New page or route                  | this guide (Copy-from); README.md if user-facing                    |
 | Build config or command            | this guide (command reference); CLAUDE.md if the gate story changes |
@@ -87,4 +91,12 @@ when you add a new doc or code area.
 | `npm run build`   | Production static build. Confirms compile. |
 | `npm run preview` | Preview the production build locally       |
 
-**The gate** is `npm run build` — types, lint, and the build confirm. It runs at pre-push and in CI.
+**The gate** is `npm run build`. It runs at pre-push and in CI.
+
+**What the gate does not do:** it does not typecheck. `astro build` transpiles; `@astrojs/check` is
+not installed, so a type error in `.astro` frontmatter compiles and ships. Until that is fixed
+(`docs/owner-tasks.md`), typecheck a changed `.ts` module by hand:
+
+```bash
+npx tsc --noEmit --strict --resolveJsonModule --module esnext --moduleResolution bundler --target es2022 --skipLibCheck src/utils/plan.ts
+```

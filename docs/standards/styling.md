@@ -1,8 +1,8 @@
 # Styling & UI
 
-The rules for visual consistency and the surfaces the site targets. The v2 plan
-(`src/pages/v2.astro`) is built to `designs/Przekazanie deweloperom.dc.html`; that spec is the
-authority where this doc is silent.
+The rules for visual consistency and the surfaces the site targets. The plan (`src/pages/index.astro`)
+is built to `designs/Przekazanie deweloperom.dc.html`; that spec is the authority where this doc is
+silent.
 
 ## Surfaces
 
@@ -34,17 +34,20 @@ canvas for band A is 412 × 915.
 
 ## Visual conventions
 
-- **Lesson colours are data, not decoration.** Exact hex from `src/data/lessons.json`, full strength,
-  never tokenized, tinted or made transparent, and never shown without the legend. Tile ink comes
-  from luminance (see `src/utils/v2/plan.ts`); the teacher line is the weaker variant of it.
+- **Lesson colours are data, not decoration.** Exact hex from the `palette` in
+  `src/data/lessons.json`, full strength, never tokenized, tinted or made transparent, and never
+  shown without the legend. A lesson type names a colour by `colorId`; a hex written anywhere else
+  is a bug.
+- **Tile ink is fixed, not computed.** Every tile takes `--text-primary`, and the teacher line
+  `--text-on-tile-weak`. There is no luminance switch and no light-ink variant — which makes the
+  palette's contrast a **hard entry condition** rather than something code compensates for.
 - **The palette is six colours plus plain white**, and adding a seventh is a decision, not an edit.
-  Each one must clear 4.5:1 against both the tile ink and the teacher line, sit above the 0.55
-  luminance switch so no tile ever flips to white text, and stay separable from the other five under
-  red-green colour blindness. A lesson that asks nothing of the family (Kółko, Religia/Etyka) is
-  plain white.
-- **Everything else is a token** from `src/assets/v2/tokens.css` — type scale, spacing ramp, radii,
-  lines, surfaces, accent. No values from outside the ramp, no inline styles beyond the per-cell
-  colour custom properties.
+  Each one must clear 4.5:1 at 14px against **both** ink tokens — check the new colour by hand,
+  nothing enforces it — and stay separable from the other five under red-green colour blindness. A
+  lesson that asks nothing of the family (Kółko, Religia/Etyka) is plain white.
+- **Everything else is a token** from `src/assets/tokens.css` — type scale, spacing ramp, radii,
+  lines, surfaces, text ink, accent. No values from outside the ramp, and the only inline style on a
+  cell is `--cell-bg`.
 - **Type scale** switches once, at 1024px: phone `17/20/24`, desk `20/24/30`.
 - **Weight is a signal, not a default.** Bold is reserved for the hours, the day being viewed and
   today; lesson names in the week grid are medium, so the colour does the work.
@@ -52,8 +55,10 @@ canvas for band A is 412 × 915.
   Rules that let you track a row or column are `--overlay-tint`, drawn in the gaps so a lesson
   colour is never overprinted.
 - **The legend names the colour, not its lessons.** Those are on screen beside it.
-- **Layout lives in `src/assets/v2/v2.css`**, not in scoped component styles — the band rules cross
+- **Layout lives in `src/assets/plan.css`**, not in scoped component styles — the band rules cross
   component boundaries.
+- **Copy is never in CSS or markup.** Visible words come from `labels` in `lessons.json`; CSS may
+  show and hide them, never supply them (no `content:` strings).
 - **Semantic HTML**: heading levels, real buttons, `aria-selected` on the day tabs.
 
 ## Building new UI
