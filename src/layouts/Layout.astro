@@ -1,5 +1,6 @@
 ---
 import A4Paper from "../components/A4Paper.astro";
+import { asset } from "../site.mjs";
 ---
 
 <!doctype html>
@@ -7,7 +8,7 @@ import A4Paper from "../components/A4Paper.astro";
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/svg+xml" href={asset("favicon.svg")} />
         <meta name="generator" content={Astro.generator} />
         <title>Plan lekcji</title>
     </head>

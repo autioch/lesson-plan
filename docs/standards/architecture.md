@@ -40,6 +40,11 @@ src/
 Two routes today: `/` is the original A4-style table, `/v2` the responsive plan built to
 `designs/`. They share the data and nothing else.
 
+The site is published to GitHub Pages under the project subpath `/lesson-plan/`. That subpath is
+defined once in `src/site.mjs`: `astro.config.mjs` feeds it to the build as `base`, and layouts
+prefix hand-written asset URLs with `asset()`. Anything referencing an absolute `/…` URL without it
+404s in production while working fine locally.
+
 Import aliases: none currently used.
 
 ## Data loading & composition
