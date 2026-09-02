@@ -44,12 +44,14 @@
 
   /* Surfaces, text, lines */
   --surface-raised: #ffffff;
+  --surface-base: #faf8f2; /* header bands — a section, not a row */
   --text-primary: #1c1b17;
   --text-secondary: #5b584f;
   --text-muted: #706d64;
   --text-on-accent: #ffffff;
   --accent: #4a86b8;
   --line-subtle: rgba(0, 0, 0, 0.09);
+  --overlay-tint: rgba(0, 0, 0, 0.06); /* rules you track a row or column by */
   --scrim-modal: rgba(18, 17, 13, 0.55);
   --border-width-thin: 1px;
 

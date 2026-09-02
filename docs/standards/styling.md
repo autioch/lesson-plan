@@ -41,6 +41,12 @@ canvas for band A is 412 × 915.
   lines, surfaces, accent. No values from outside the ramp, no inline styles beyond the per-cell
   colour custom properties.
 - **Type scale** switches once, at 1024px: phone `17/20/24`, desk `20/24/30`.
+- **Weight is a signal, not a default.** Bold is reserved for the hours, the day being viewed and
+  today; lesson names in the week grid are medium, so the colour does the work.
+- **Headers sit on `--surface-base`** (day tabs, day names) — a band, not a first row of content.
+  Rules that let you track a row or column are `--overlay-tint`, drawn in the gaps so a lesson
+  colour is never overprinted.
+- **The legend names the colour, not its lessons.** Those are on screen beside it.
 - **Layout lives in `src/assets/v2/v2.css`**, not in scoped component styles — the band rules cross
   component boundaries.
 - **Semantic HTML**: heading levels, real buttons, `aria-selected` on the day tabs.

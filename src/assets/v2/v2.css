@@ -66,8 +66,12 @@ body {
 
 /* === Day tabs — band A only ============================================== */
 
+/* The tabs are the table's header, so they sit on the header band rather than
+ * on the plan's own white — otherwise five day names in the same weight as the
+ * lessons read as a first row of content. */
 .tabs {
   display: flex;
+  background: var(--surface-base);
   border-bottom: var(--border-width-thin) solid var(--line-subtle);
 }
 
@@ -80,11 +84,11 @@ body {
   justify-content: center;
   padding: var(--space-8) var(--space-4);
   border: none;
-  background: var(--surface-raised);
+  background: transparent;
   color: var(--text-secondary);
   font-family: var(--font-sans);
   font-size: var(--fs-sm);
-  font-weight: var(--fw-bold);
+  font-weight: var(--fw-medium);
   line-height: var(--lh-tight);
   white-space: nowrap;
   overflow: hidden;
@@ -97,9 +101,11 @@ body {
   flex-grow: 1.7;
 }
 
+/* Only the day you are looking at carries the weight. */
 .tab[aria-selected="true"] {
   flex-grow: 3;
   color: var(--text-primary);
+  font-weight: var(--fw-bold);
   box-shadow: inset 0 -3px 0 var(--text-primary);
 }
 
@@ -153,11 +159,13 @@ body {
   flex-direction: column;
 }
 
+/* Same idea as the tabs: the day names are a header band, not a row. */
 .grid__head {
   display: none; /* band A has tabs instead */
   grid-template-columns: var(--gutter) repeat(5, 1fr);
   gap: var(--space-4);
-  padding-bottom: var(--space-8);
+  background: var(--surface-base);
+  border-bottom: var(--border-width-thin) solid var(--line-subtle);
 }
 
 .dayhead {
@@ -165,15 +173,14 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 30px;
-  border-radius: var(--radius-sm);
   font-size: var(--fs-sm);
-  font-weight: var(--fw-bold);
+  font-weight: var(--fw-medium);
   color: var(--text-secondary);
-  box-shadow: inset 0 -1px 0 var(--line-subtle);
 }
 
 .dayhead--today {
   color: var(--text-primary);
+  font-weight: var(--fw-bold);
   letter-spacing: var(--ls-caps);
   box-shadow: inset 0 -3px 0 var(--text-primary);
 }
@@ -322,16 +329,37 @@ body {
     display: none;
   }
 
-  .grid {
-    padding: var(--space-8) var(--space-16) var(--space-16);
-  }
-
+  /* The header band runs edge to edge, so the padding lives on its contents
+   * and on the rows — both keep the same gutter, so the columns still line up. */
   .grid__head {
     display: grid;
+    padding: var(--space-8) var(--space-16);
   }
 
   .rows {
     gap: var(--space-4);
+    padding: var(--space-8) var(--space-16) var(--space-16);
+  }
+
+  /* Hairlines to track a row or a column by. They sit in the gaps between the
+   * tiles, so a lesson colour is never overprinted. */
+  .row {
+    border-bottom: var(--border-width-thin) solid var(--overlay-tint);
+  }
+
+  .row:last-child {
+    border-bottom: none;
+  }
+
+  .cell {
+    box-shadow: -1px 0 0 var(--overlay-tint);
+  }
+
+  /* Nothing here competes with the lesson colour: one weight below bold is
+   * enough to read a name at a glance. */
+  .cell__name,
+  .cell__short {
+    font-weight: var(--fw-medium);
   }
 }
 
@@ -372,6 +400,32 @@ body {
 
   .dayhead {
     min-height: var(--control-min-size);
+  }
+
+  /* Room to breathe: wider gaps between tiles and real padding inside them. */
+  .rows {
+    gap: var(--space-8);
+    padding: var(--space-12) var(--space-16) var(--space-16);
+  }
+
+  .row {
+    gap: var(--space-8);
+  }
+
+  .grid__head {
+    gap: var(--space-8);
+    padding: var(--space-8) var(--space-16);
+  }
+
+  /* Vertical breath inside the tile; horizontally the teacher names are long
+   * enough that more padding just forces mid-word breaks. */
+  .cell {
+    padding: var(--space-8) var(--space-12);
+    gap: var(--space-4);
+  }
+
+  .row__time {
+    padding-right: var(--space-12);
   }
 }
 
@@ -415,7 +469,7 @@ body {
 .legend__item {
   display: flex;
   gap: var(--space-8);
-  align-items: flex-start;
+  align-items: center;
 }
 
 .legend__swatch {
@@ -426,22 +480,11 @@ body {
   border: var(--border-width-thin) solid var(--line-subtle);
 }
 
-.legend__text {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  min-width: 0;
-}
-
+/* The title carries the instruction; the lessons that use the colour are
+ * already on screen beside it, so the legend does not list them. */
 .legend__title {
   font-size: var(--fs-sm);
-  font-weight: var(--fw-bold);
-  line-height: var(--lh-body-min);
-}
-
-.legend__items {
-  font-size: var(--fs-xs);
-  color: var(--text-secondary);
+  font-weight: var(--fw-medium);
   line-height: var(--lh-body-min);
   text-wrap: pretty;
 }

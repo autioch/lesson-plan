@@ -57,9 +57,8 @@ export interface PlanDay {
 
 export interface LegendGroup {
   color: string;
+  /** What the color means. The lessons carrying it are on screen already. */
   title: string;
-  /** The lesson names that carry this color, comma-separated. */
-  items: string;
 }
 
 export interface Plan {
@@ -190,15 +189,9 @@ export function buildPlan(data: LessonsPlan, now = new Date()): Plan {
     .forEach((type) => {
       const title = legendTitle(type.color, type.name);
       if (title === OMITTED_LEGEND_TITLE) return;
+      if (legend.some((group) => group.title === title)) return;
 
-      const group = legend.find((g) => g.title === title);
-      if (!group) {
-        legend.push({ color: type.color, title, items: type.name });
-        return;
-      }
-      if (!group.items.split(", ").includes(type.name)) {
-        group.items += `, ${type.name}`;
-      }
+      legend.push({ color: type.color, title });
     });
 
   const weekday = now.getDay();

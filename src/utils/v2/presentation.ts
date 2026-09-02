@@ -39,9 +39,9 @@ export function shortName(name: string): string {
 
 /**
  * Legend groups, keyed by the lesson color. Several lesson types share a color
- * and one legend entry — the entry says what the color means, and lists the
- * lessons that carry it. A color with no title here falls back to the lesson
- * name itself.
+ * and one legend entry, which says what the color means — not which lessons
+ * carry it, since those are on screen beside it. A color with no title here
+ * falls back to the lesson name itself.
  */
 const LEGEND_TITLES: Record<string, string> = {
   "#ffffff": "Zwykła lekcja",
