@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #EFEBE3; }
+  a { color: #1F5F4B; text-decoration: underline; text-underline-offset: 2px; }
+  a:hover { color: #0E3A2C; }
+  doc-page:not(:defined) { visibility: hidden; }
+</style>
+<script src="./doc-page.js"></script>
+</helmet>
+
+<x-import component-from-global-scope="doc-page" from="./doc-page.js" hint-size="816px,1056px">
+  <div slot="header" style="display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 8pt; border-bottom: 0.75pt solid #c9c4b6; font-family: 'IBM Plex Mono', monospace; font-size: 8pt; letter-spacing: 0.1em; text-transform: uppercase; color: #6d685c">
+    <span>Plan lekcji · specyfikacja wykonawcza</span>
+    <span>autioch/lesson-plan</span>
+  </div>
+
+  <div style="font-family: 'IBM Plex Sans', system-ui, sans-serif; color: #1c1b17; font-size: 10.5pt; line-height: 1.5">
+
+    <h1 style="margin: 18pt 0 6pt; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 26pt; line-height: 1.08; letter-spacing: -0.02em">Plan lekcji — co zbudować</h1>
+    <p style="margin: 0 0 14pt; font-size: 11pt; line-height: 1.5; max-width: 460pt; text-wrap: pretty">Jedna statyczna strona z planem lekcji jednego ucznia, plus wersja do druku. Plan powstaje raz na semestr: rodzic drukuje kartkę i wiesza ją na lodówce, a przez resztę semestru zagląda na stronę z telefonu albo laptopa. Strona niczego nie zapisuje, nie loguje i nie odpytuje serwera.</p>
+
+    <h2 style="margin: 0 0 6pt; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 15pt; letter-spacing: -0.01em">1. Zakres</h2>
+    <div style="display: grid; grid-template-columns: 92pt 1fr; gap: 5pt 12pt; margin-bottom: 8pt">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 8pt; letter-spacing: 0.08em; text-transform: uppercase; color: #6d685c; padding-top: 2pt">W zakresie</span>
+      <span>Jedna responsywna strona (trzy układy: telefon pion, telefon poziomo, laptop), arkusz druku A4 poziomo, legenda kolorów, wybór dnia na wąskim ekranie.</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 8pt; letter-spacing: 0.08em; text-transform: uppercase; color: #6d685c; padding-top: 2pt">Poza zakresem</span>
+      <span>Edycja planu, logowanie, powiadomienia, synchronizacja, wiele uczniów, odwołane lekcje i zastępstwa, stan „trwa teraz”, tryb offline ponad zwykły cache przeglądarki.</span>
+    </div>
+    <p style="margin: 0 0 16pt; padding: 8pt 10pt; background: #F5F2EA; border-left: 2.5pt solid #1c1b17; font-size: 10pt; line-height: 1.45">Plan jest statyczny, więc nie ma stanów pustych, błędów ani ładowania. Jedyne dane wejściowe to plik z planem, wbudowany w build. Jeśli plan się zmienia, zmienia się plik i strona wychodzi na nowo.</p>
+
+    <h2 style="margin: 0 0 6pt; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 15pt; letter-spacing: -0.01em">2. Dane</h2>
+    <p style="margin: 0 0 8pt; max-width: 460pt; text-wrap: pretty">Wszystkie godziny, nazwy zajęć, nazwiska i kolory pochodzą z <code style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5pt; background: #F5F2EA; padding: 1pt 3pt; border-radius: 2pt">plan-data.js</code>, którego kształt jest kopią <code style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5pt; background: #F5F2EA; padding: 1pt 3pt; border-radius: 2pt">src/data</code> z repo. Makieta nie przepisuje danych — czyta ten plik. Cztery eksporty:</p>
+    <div style="display: grid; grid-template-columns: 78pt 1fr; gap: 5pt 12pt; margin-bottom: 8pt; font-size: 10pt">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5pt; font-weight: 600">SLOTS</span>
+      <span>Tablica. Indeks = numer slotu. <code style="font-family: 'IBM Plex Mono', monospace; font-size: 9pt">{ start: "HH:MM", duration: minuty }</code>. Sloty 0–10, ostatni trwa 60 min, reszta 45.</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5pt; font-weight: 600">TYPES</span>
+      <span>Obiekt id → <code style="font-family: 'IBM Plex Mono', monospace; font-size: 9pt">{ name, color }</code>. Kolor to hex wprost z danych.</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5pt; font-weight: 600">TEACHERS</span>
+      <span>Obiekt id → nazwisko. Wartości <code style="font-family: 'IBM Plex Mono', monospace; font-size: 9pt">"multiple"</code> i <code style="font-family: 'IBM Plex Mono', monospace; font-size: 9pt">"&lt;extra&gt;"</code> znaczą „brak jednego nazwiska” i nie trafiają na ekran ani na wydruk.</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5pt; font-weight: 600">DAYS</span>
+      <span>Pięć dni w kolejności tygodnia: <code style="font-family: 'IBM Plex Mono', monospace; font-size: 9pt">{ name, short, lessons }</code>, gdzie <code style="font-family: 'IBM Plex Mono', monospace; font-size: 9pt">lessons</code> to mapa indeks slotu → <code style="font-family: 'IBM Plex Mono', monospace; font-size: 9pt">[idTypu, idNauczyciela]</code>.</span>
+    </div>
+    <p style="margin: 0 0 16pt; max-width: 460pt; text-wrap: pretty">Trzy rzeczy, które łatwo przeoczyć: dni nie mają tej samej liczby lekcji (wtorek i piątek kończą się wcześniej); sloty nie są ciągłe (środa ma lukę między slotem 6 a 10); slot 0 nie jest używany przez żaden dzień. Siatkę godzin liczy się jako sumę slotów użytych w całym tygodniu, wspólną dla wszystkich dni — dzięki temu wiersze nie skaczą przy zmianie dnia.</p>
+
+    <h2 style="margin: 0 0 6pt; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 15pt; letter-spacing: -0.01em">3. Układy i punkty łamania</h2>
+    <div style="display: grid; grid-template-columns: 74pt 62pt 1fr; gap: 0; margin-bottom: 16pt; font-size: 10pt; border-top: 0.75pt solid #c9c4b6">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 8pt; letter-spacing: 0.08em; text-transform: uppercase; color: #6d685c; padding: 5pt 8pt 5pt 0; border-bottom: 0.5pt solid #ddd8ca">Układ</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 8pt; letter-spacing: 0.08em; text-transform: uppercase; color: #6d685c; padding: 5pt 8pt 5pt 0; border-bottom: 0.5pt solid #ddd8ca">Szerokość</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 8pt; letter-spacing: 0.08em; text-transform: uppercase; color: #6d685c; padding: 5pt 0; border-bottom: 0.5pt solid #ddd8ca">Co widać</span>
+
+      <span style="font-weight: 600; padding: 6pt 8pt 6pt 0; border-bottom: 0.5pt solid #ddd8ca">Telefon pion</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9pt; padding: 6pt 8pt 6pt 0; border-bottom: 0.5pt solid #ddd8ca">≤ 480px</span>
+      <span style="padding: 6pt 0; border-bottom: 0.5pt solid #ddd8ca; line-height: 1.4">Jeden dzień: tabki dni u góry, pod nimi wiersze <code style="font-family: 'IBM Plex Mono', monospace; font-size: 9pt">152px</code> (godziny) + reszta (zajęcia + nauczyciel). Przycisk „?” otwiera legendę jako panel od dołu.</span>
+
+      <span style="font-weight: 600; padding: 6pt 8pt 6pt 0; border-bottom: 0.5pt solid #ddd8ca">Telefon poziomo</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9pt; padding: 6pt 8pt 6pt 0; border-bottom: 0.5pt solid #ddd8ca">481–1023px</span>
+      <span style="padding: 6pt 0; border-bottom: 0.5pt solid #ddd8ca; line-height: 1.4">Cały tydzień: <code style="font-family: 'IBM Plex Mono', monospace; font-size: 9pt">244px</code> rynny godzin + pięć równych kolumn. Tabki i gest znikają. W komórce tylko nazwa zajęć, skracana wg tabeli skrótów.</span>
+
+      <span style="font-weight: 600; padding: 6pt 8pt 6pt 0; border-bottom: 0.5pt solid #ddd8ca">Laptop</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9pt; padding: 6pt 8pt 6pt 0; border-bottom: 0.5pt solid #ddd8ca">≥ 1024px</span>
+      <span style="padding: 6pt 0; border-bottom: 0.5pt solid #ddd8ca; line-height: 1.4">Tydzień + stała legenda w kolumnie <code style="font-family: 'IBM Plex Mono', monospace; font-size: 9pt">252px</code> po prawej. Rynna godzin <code style="font-family: 'IBM Plex Mono', monospace; font-size: 9pt">156px</code>. Pełne nazwy zajęć z nazwiskiem, nic nie jest skracane.</span>
+
+      <span style="font-weight: 600; padding: 6pt 8pt 6pt 0; border-bottom: 0.75pt solid #c9c4b6">Druk</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9pt; padding: 6pt 8pt 6pt 0; border-bottom: 0.75pt solid #c9c4b6">A4 poziomo</span>
+      <span style="padding: 6pt 0; border-bottom: 0.75pt solid #c9c4b6; line-height: 1.4">Jedna kartka: siatka jak na laptopie (rynna <code style="font-family: 'IBM Plex Mono', monospace; font-size: 9pt">112pt</code>), legenda w pięciu kolumnach na dole. Bez oznaczenia „dziś”.</span>
+    </div>
+
+    <h2 style="margin: 0 0 6pt; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 15pt; letter-spacing: -0.01em">4. Kolory lekcji</h2>
+    <p style="margin: 0 0 8pt; max-width: 460pt; text-wrap: pretty">Kolor jest kodem, nie dekoracją: zawsze w pełnej sile, dokładnie tym hexem z danych, i zawsze w parze z nazwą zajęć oraz legendą. Nie zamieniaj go na token systemu, nie rozjaśniaj, nie dodawaj przezroczystości.</p>
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 4pt 18pt; margin-bottom: 8pt; font-size: 9.5pt">
+      <sc-for list="{{ swatches }}" as="s" hint-placeholder-count="10">
+        <div style="display: flex; align-items: center; gap: 6pt">
+          <span style="width: 13pt; height: 13pt; flex: none; border: 0.5pt solid #b8b3a6; border-radius: 2pt; background: {{ s.color }}"></span>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5pt; width: 44pt; flex: none">{{ s.hex }}</span>
+          <span style="line-height: 1.3">{{ s.label }}</span>
+        </div>
+      </sc-for>
+    </div>
+    <p style="margin: 0 0 16pt; max-width: 460pt; text-wrap: pretty">Kolor tekstu na kafelku liczy się z luminancji tła: poniżej 0.55 tekst biały, powyżej ciemny <code style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5pt">#17170F</code>. W obecnych danych jedyny kolor z białym tekstem to <code style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5pt">#08f</code>. Nazwisko nauczyciela to ten sam tekst w słabszym wariancie: <code style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5pt">#5A5648</code> na jasnym, <code style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5pt">rgba(255,255,255,.85)</code> na ciemnym.</p>
+
+    <h2 style="margin: 0 0 6pt; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 15pt; letter-spacing: -0.01em">5. Typografia i tokeny</h2>
+    <p style="margin: 0 0 8pt; max-width: 460pt; text-wrap: pretty">Cała reszta stylu to tokeny z <code style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5pt">launchpad-styles.css</code>. Korzeń ekranu telefonu i tabletu dostaje <code style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5pt">data-surface="phone"</code>, laptopa <code style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5pt">data-surface="desk"</code> — to jeden atrybut, który przestawia całą skalę.</p>
+    <div style="display: grid; grid-template-columns: 108pt 60pt 60pt 1fr; gap: 0; margin-bottom: 16pt; font-size: 10pt; border-top: 0.75pt solid #c9c4b6">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 8pt; letter-spacing: 0.08em; text-transform: uppercase; color: #6d685c; padding: 5pt 8pt 5pt 0; border-bottom: 0.5pt solid #ddd8ca">Token</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 8pt; letter-spacing: 0.08em; text-transform: uppercase; color: #6d685c; padding: 5pt 8pt 5pt 0; border-bottom: 0.5pt solid #ddd8ca">phone</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 8pt; letter-spacing: 0.08em; text-transform: uppercase; color: #6d685c; padding: 5pt 8pt 5pt 0; border-bottom: 0.5pt solid #ddd8ca">desk</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 8pt; letter-spacing: 0.08em; text-transform: uppercase; color: #6d685c; padding: 5pt 0; border-bottom: 0.5pt solid #ddd8ca">Gdzie</span>
+      <sc-for list="{{ tokens }}" as="t" hint-placeholder-count="9">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9pt; padding: 5pt 8pt 5pt 0; border-bottom: 0.5pt solid #ddd8ca">{{ t.name }}</span>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9pt; padding: 5pt 8pt 5pt 0; border-bottom: 0.5pt solid #ddd8ca">{{ t.phone }}</span>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9pt; color: #6d685c; padding: 5pt 8pt 5pt 0; border-bottom: 0.5pt solid #ddd8ca">{{ t.desk }}</span>
+        <span style="padding: 5pt 0; border-bottom: 0.5pt solid #ddd8ca; line-height: 1.35">{{ t.use }}</span>
+      </sc-for>
+    </div>
+
+    <h2 style="margin: 0 0 6pt; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 15pt; letter-spacing: -0.01em">6. Jedyna interakcja: wybór dnia</h2>
+    <p style="margin: 0 0 8pt; max-width: 460pt; text-wrap: pretty">Istnieje wyłącznie w układzie pionowym telefonu i wyłącznie dlatego, że pięć kolumn tam nie wchodzi. Nie jest funkcją produktu i nie ma jej nigdzie indziej.</p>
+    <div style="display: flex; flex-direction: column; gap: 4pt; margin-bottom: 8pt; font-size: 10pt">
+      <div style="display: grid; grid-template-columns: 9pt 1fr; gap: 6pt; line-height: 1.4"><span style="color: #9a9486">—</span><span>Dzień zmienia dotknięcie tabki albo przesunięcie palcem po planie o co najmniej 36px w lewo lub w prawo. Przesunięcie nie zawija się z piątku na poniedziałek.</span></div>
+      <div style="display: grid; grid-template-columns: 9pt 1fr; gap: 6pt; line-height: 1.4"><span style="color: #9a9486">—</span><span>Po wejściu pokazuje się dzisiejszy dzień. W sobotę i niedzielę — poniedziałek.</span></div>
+      <div style="display: grid; grid-template-columns: 9pt 1fr; gap: 6pt; line-height: 1.4"><span style="color: #9a9486">—</span><span>Wybór nie jest zapamiętywany między wejściami. Nie ma czego przywracać: strona zawsze powinna otwierać się na dziś.</span></div>
+      <div style="display: grid; grid-template-columns: 9pt 1fr; gap: 6pt; line-height: 1.4"><span style="color: #9a9486">—</span><span>Oglądany dzień: pełna nazwa, szersza tabka, belka 3px pod spodem. Pozostałe: skrót dwuliterowy, węższa tabka, bez belki.</span></div>
+      <div style="display: grid; grid-template-columns: 9pt 1fr; gap: 6pt; line-height: 1.4"><span style="color: #9a9486">—</span><span>Dzisiejszy dzień: napis <strong>DZIŚ</strong> kapitalikami i tabka szersza o połowę, także gdy oglądasz inny dzień. To jedyne oznaczenie „dziś” na telefonie i laptopie; na wydruku go nie ma.</span></div>
+      <div style="display: grid; grid-template-columns: 9pt 1fr; gap: 6pt; line-height: 1.4"><span style="color: #9a9486">—</span><span>Legenda na telefonie: przycisk „?” w prawym dolnym rogu, panel od dołu, dotknięcie w dowolnym miejscu zamyka. Na laptopie legenda stoi na stałe i przycisku nie ma.</span></div>
+    </div>
+    <p style="margin: 0 0 16pt; max-width: 460pt; text-wrap: pretty">Kafelek lekcji nie jest klikalny — nie ma widoku szczegółów. Cała treść, jaka istnieje, jest już na ekranie.</p>
+
+    <h2 style="margin: 0 0 6pt; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 15pt; letter-spacing: -0.01em">7. Podłogi dostępności</h2>
+    <p style="margin: 0 0 8pt; max-width: 460pt; text-wrap: pretty">Nienegocjowalne, sprawdzane przy odbiorze:</p>
+    <div style="display: flex; flex-direction: column; gap: 4pt; margin-bottom: 8pt; font-size: 10pt">
+      <div style="display: grid; grid-template-columns: 9pt 1fr; gap: 6pt; line-height: 1.4"><span style="color: #9a9486">—</span><span>Tekst czytelny od 17px. 14px tylko dla meta: godzina końca, opis przerwy, nazwisko. Nic mniejszego.</span></div>
+      <div style="display: grid; grid-template-columns: 9pt 1fr; gap: 6pt; line-height: 1.4"><span style="color: #9a9486">—</span><span>Cele dotykowe od 44 × 44px — tabki dni i przycisk legendy.</span></div>
+      <div style="display: grid; grid-template-columns: 9pt 1fr; gap: 6pt; line-height: 1.4"><span style="color: #9a9486">—</span><span>Kontrast WCAG AA: 4.5:1 dla tekstu, 3:1 dla dużego tekstu i elementów UI.</span></div>
+      <div style="display: grid; grid-template-columns: 9pt 1fr; gap: 6pt; line-height: 1.4"><span style="color: #9a9486">—</span><span>Interlinia tekstu wielowierszowego od 1.3.</span></div>
+      <div style="display: grid; grid-template-columns: 9pt 1fr; gap: 6pt; line-height: 1.4"><span style="color: #9a9486">—</span><span>Żaden stan nie zależy od samego koloru. Wybrany dzień ma belkę i pełną nazwę, „dziś” ma napis i szerokość, wolny slot ma podpis „wolne”.</span></div>
+      <div style="display: grid; grid-template-columns: 9pt 1fr; gap: 6pt; line-height: 1.4"><span style="color: #9a9486">—</span><span>Jednostki w px, nie rem. Ruch opcjonalny i nigdy nie niesie znaczenia.</span></div>
+      <div style="display: grid; grid-template-columns: 9pt 1fr; gap: 6pt; line-height: 1.4"><span style="color: #9a9486">—</span><span>Cały dzień mieści się na ekranie telefonu bez przewijania — przy 915px wysokości wiersze dzielą dostępną wysokość po równo.</span></div>
+    </div>
+
+    <h2 style="margin: 12pt 0 6pt; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 15pt; letter-spacing: -0.01em">8. Wydruk</h2>
+    <p style="margin: 0 0 6pt; max-width: 460pt; text-wrap: pretty">Wydruk to osobny widok, nie przeskalowany ekran. Jedna strona A4 poziomo, marginesy 24pt × 28pt, minimalny rozmiar tekstu 12pt, tła kolorów muszą wyjść na papier (<code style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5pt">print-color-adjust: exact</code>). Nie ma „dziś”, nie ma legendy w panelu — legenda jest wydrukowana na dole. Nazwiska <code style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5pt">multiple</code> i <code style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5pt">&lt;extra&gt;</code> są pomijane.</p>
+
+    <h2 style="margin: 12pt 0 6pt; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 15pt; letter-spacing: -0.01em">9. Co dostajecie</h2>
+    <div style="display: grid; grid-template-columns: 118pt 1fr; gap: 5pt 12pt; font-size: 10pt">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9pt">Plan lekcji - mobile.dc.html</span>
+      <span>Cztery makiety w jednym pliku, w skali 1:1, z opisem zachowań pod każdą.</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9pt">plan-data.js</span>
+      <span>Dane w kształcie repo. Jedyne źródło treści dla makiet i dla implementacji.</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9pt">launchpad-styles.css</span>
+      <span>Tokeny i skale. Makiety nie definiują własnych wartości poza kolorami lekcji.</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9pt">github.md</span>
+      <span>Powiązanie z repo i mapa ekranów na pliki źródłowe.</span>
+    </div>
+
+  </div>
+
+  <div slot="footer" style="display: flex; justify-content: space-between; padding-top: 6pt; border-top: 0.5pt solid #ddd8ca; font-family: 'IBM Plex Mono', monospace; font-size: 8pt; color: #6d685c">
+    <span>Wrzesień 2026</span>
+    <span>Dane: autioch/lesson-plan · src/data</span>
+  </div>
+</x-import>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const SWATCHES = [
+  ["#ffffff", "Zwykła lekcja (Edukacja)"],
+  ["#80d7f1", "Angielski"],
+  ["#92cbe2", "Religia/Etyka"],
+  ["#9bf093", "W/F, W/F ew — strój"],
+  ["#7cd874", "Gimnastyka korekcyjna — strój"],
+  ["#57d14c", "Basen — kąpielówki i czepek"],
+  ["#f7aec6", "Zajęcia Twórcze"],
+  ["#fcb8e7", "Rytmika, Logopedia"],
+  ["#ffb8bd", "Kółko szkolne"],
+  ["#08f", "Zajęcia dodatkowe, płatne i zewnętrzne"]
+];
+
+const TOKENS = [
+  ["--fs-md", "20px", "24px", "nazwa zajęć w wierszu dnia"],
+  ["--fs-sm", "17px", "20px", "godziny, nazwy dni, nazwa zajęć w siatce tygodnia"],
+  ["--fs-xs", "14px", "17px", "meta: przerwa, nazwisko — podłoga skali"],
+  ["--control-min-size", "44px", "44px", "tabka dnia, przycisk legendy"],
+  ["--space-4 / 8 / 12 / 16", "4–16px", "4–16px", "rytm odstępów, bez wartości spoza rampy"],
+  ["--radius-sm", "4px", "4px", "kafelek lekcji, plamka legendy"],
+  ["--radius-lg", "16px", "16px", "panel legendy od dołu"],
+  ["--line-subtle", "rgba(0,0,0,.09)", "—", "linie między wierszami i pod tabkami"],
+  ["--surface-raised", "#ffffff", "—", "tło ekranu i rynny godzin"],
+  ["--text-primary", "#1c1b17", "—", "godziny, nazwy zajęć"],
+  ["--text-secondary", "#5b584f", "—", "opis przerwy, nieaktywna nazwa dnia"],
+  ["--text-muted", "#706d64", "—", "podpis „wolne”"],
+  ["--accent", "#4a86b8", "—", "przycisk legendy „?”"],
+  ["--lh-body-min", "1.3", "1.3", "podłoga interlinii tekstu wielowierszowego"]
+];
+
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      swatches: SWATCHES.map(([color, label]) => ({ color, hex: color, label })),
+      tokens: TOKENS.map(([name, phone, desk, use]) => ({ name, phone, desk, use }))
+    };
+  }
+}
+
+</script>
+</body>
+</html>

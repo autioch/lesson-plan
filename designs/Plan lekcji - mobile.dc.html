@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="./launchpad-styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #EFEBE3; font-family: "IBM Plex Sans", system-ui, sans-serif; color: #17170F; }
+  a { color: #1F5F4B; text-decoration: underline; text-underline-offset: 2px; }
+  a:hover { color: #0E3A2C; }
+  doc-page:not(:defined) { visibility: hidden; }
+  @media print {
+    body > x-dc > section:not(#druk) { display: none !important; }
+    #druk { padding: 0 !important; }
+    #drukLabel { display: none !important; }
+  }
+</style>
+<script src="./doc-page.js"></script>
+</helmet>
+
+<section style="padding: 48px 56px 24px; display: flex; flex-direction: column; gap: 32px">
+  <div style="display: flex; flex-direction: column; gap: 14px; max-width: 1000px">
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #7A7466">Plan lekcji · baza LaunchPad</div>
+    <h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 40px; line-height: 1.05; letter-spacing: -0.02em">Jedna strona, trzy szerokości i wydruk</h1>
+    <p style="margin: 0; max-width: 760px; font-size: 15px; line-height: 1.55; color: #4A4638; text-wrap: pretty">3a, 3b i 3c to nie warianty do wyboru, tylko ta sama strona na telefonie w pionie, telefonie w poziomie i na laptopie — układ zmienia się razem z szerokością okna. 3d to ta sama treść zrzucona na kartkę. Plan jest statyczny: raz opublikowany i wydrukowany, potem tylko oglądany. Godziny, nazwy zajęć, nauczyciele i kolory idą wprost z <a href="./plan-data.js">plan-data.js</a>, czyli kopii danych z repo <a href="https://github.com/autioch/lesson-plan">autioch/lesson-plan</a>.</p>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 420px)); gap: 8px 40px; padding-top: 4px; border-top: 1px solid #DBD5C8">
+      <div style="display: grid; grid-template-columns: 128px 1fr; gap: 10px; font-size: 13px; line-height: 1.5; color: #4A4638">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #7A7466; padding-top: 2px">Kanwa</span>
+        <span>Telefon 412 × 915, portret. Cały dzień mieści się bez przewijania.</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 128px 1fr; gap: 10px; font-size: 13px; line-height: 1.5; color: #4A4638">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #7A7466; padding-top: 2px">Typografia</span>
+        <span>Tekst czytelny od 17px, 14px tylko dla meta (godzina końca, przerwa, nazwisko). Interlinia od 1.3.</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 128px 1fr; gap: 10px; font-size: 13px; line-height: 1.5; color: #4A4638">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #7A7466; padding-top: 2px">Dotyk</span>
+        <span>Cele dotykowe od 44 × 44px. Kontrast WCAG AA: 4.5:1 dla tekstu, 3:1 dla dużego tekstu i elementów UI.</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 128px 1fr; gap: 10px; font-size: 13px; line-height: 1.5; color: #4A4638">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #7A7466; padding-top: 2px">Stany</span>
+        <span>Żaden stan nie zależy od samego koloru — zawsze dochodzi napis, szerokość, pozycja albo tło.</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 128px 1fr; gap: 10px; font-size: 13px; line-height: 1.5; color: #4A4638">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #7A7466; padding-top: 2px">Kolory lekcji</span>
+        <span>To kod z danych, nie dekoracja: pełna siła, zawsze w parze z nazwą zajęć i legendą.</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 128px 1fr; gap: 10px; font-size: 13px; line-height: 1.5; color: #4A4638">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #7A7466; padding-top: 2px">Czytelność</span>
+        <span>Tekst ciemny na jasnym tle, biały na nasyconym. „Dziś” oznaczane napisem i szerokością tabki, nie kolorem.</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-start">
+
+    <div id="3a" style="display: flex; flex-direction: column; gap: 14px; width: 436px">
+      <div style="display: flex; align-items: baseline; gap: 10px">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; background: #17170F; color: #F7F4EE; padding: 3px 7px; border-radius: 5px">3a</span>
+        <span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 20px">Telefon, pionowo — do 480px</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 7px">
+        <div style="display: grid; grid-template-columns: 12px 1fr; gap: 8px; font-size: 13px; line-height: 1.5; color: #4A4638; text-wrap: pretty"><span style="color: #A8A294">—</span><span>Wybór dnia to jedyna interakcja w całym projekcie i istnieje wyłącznie tutaj: pięć kolumn nie mieści się w pionie. Zmienia go dotknięcie tabki albo przesunięcie palcem w lewo lub w prawo po planie.</span></div>
+        <div style="display: grid; grid-template-columns: 12px 1fr; gap: 8px; font-size: 13px; line-height: 1.5; color: #4A4638; text-wrap: pretty"><span style="color: #A8A294">—</span><span>Oglądany dzień ma pod tabką 3px belkę i pełną nazwę, pozostałe skrót dwuliterowy i węższą tabkę bez belki.</span></div>
+        <div style="display: grid; grid-template-columns: 12px 1fr; gap: 8px; font-size: 13px; line-height: 1.5; color: #4A4638; text-wrap: pretty"><span style="color: #A8A294">—</span><span>Dzisiejszy dzień pokazuje <strong>DZIŚ</strong> kapitalikami i tabkę szerszą o połowę — także wtedy, gdy oglądasz inny dzień.</span></div>
+        <div style="display: grid; grid-template-columns: 12px 1fr; gap: 8px; font-size: 13px; line-height: 1.5; color: #4A4638; text-wrap: pretty"><span style="color: #A8A294">—</span><span>Siatka godzin jest wspólna dla tygodnia: puste sloty są podpisane „wolne”, więc wiersze nie skaczą przy zmianie dnia.</span></div>
+        <div style="display: grid; grid-template-columns: 12px 1fr; gap: 8px; font-size: 13px; line-height: 1.5; color: #4A4638; text-wrap: pretty"><span style="color: #A8A294">—</span><span>Przycisk „?” otwiera legendę kolorów jako panel od dołu; dotknięcie w dowolnym miejscu zamyka ją.</span></div>
+      </div>
+      <div style="background: #17170F; border-radius: 46px; padding: 12px; width: 436px; box-sizing: border-box">
+        <div style="width: 412px; height: 915px; border-radius: 34px; overflow: hidden">
+        <div data-surface="phone" onPointerDown="{{ down3a }}" onPointerUp="{{ up3a }}" style="height: 100%; position: relative; display: flex; flex-direction: column; background: var(--surface-raised); color: var(--text-primary); font-family: var(--font-sans); padding: var(--space-16) 0 var(--space-16); box-sizing: border-box; touch-action: pan-y; user-select: none">
+          <div style="display: flex; border-bottom: var(--border-width-thin) solid var(--line-subtle)">
+            <sc-for list="{{ tabs3a }}" as="t" hint-placeholder-count="5">
+              <button onClick="{{ t.pick }}" style="flex-grow: {{ t.grow }}; flex-shrink: 1; flex-basis: 0; min-width: 0; min-height: var(--control-min-size); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; border: none; padding: var(--space-8) var(--space-4); font-family: var(--font-sans); font-size: var(--fs-sm); font-weight: var(--fw-bold); cursor: pointer; overflow: hidden; white-space: nowrap; background: {{ t.bg }}; color: {{ t.fg }}; box-shadow: {{ t.bar }}">
+                <span style="letter-spacing: {{ t.caps }}">{{ t.label }}</span>
+                <sc-if value="{{ t.showSub }}" hint-placeholder-val="{{ false }}">
+                  <span style="font-size: var(--fs-xs); font-weight: var(--fw-regular); letter-spacing: 0; opacity: 0.75">{{ t.sub }}</span>
+                </sc-if>
+              </button>
+            </sc-for>
+          </div>
+          <div style="flex: 1 1 0; display: flex; flex-direction: column; min-height: 0">
+            <sc-for list="{{ rows3a }}" as="row" hint-placeholder-count="7">
+              <div style="flex: 1 1 0; min-height: 0; display: grid; grid-template-columns: 152px 1fr; border-bottom: var(--border-width-thin) solid var(--line-subtle); background: {{ row.bg }}">
+                <div style="display: flex; flex-direction: column; justify-content: center; gap: 1px; padding: 0 var(--space-12); background: var(--surface-raised)">
+                  <span style="font-size: var(--fs-sm); font-weight: var(--fw-bold); font-variant-numeric: tabular-nums; line-height: var(--lh-body-min); white-space: nowrap">{{ row.range }}</span>
+                  <sc-if value="{{ row.hasBreak }}" hint-placeholder-val="{{ true }}">
+                    <span style="font-size: var(--fs-xs); font-variant-numeric: tabular-nums; color: var(--text-secondary); line-height: var(--lh-body-min); white-space: nowrap">{{ row.brk }}</span>
+                  </sc-if>
+                </div>
+                <div style="display: flex; flex-direction: column; justify-content: center; gap: 2px; padding: 0 var(--space-16); min-width: 0">
+                  <span style="font-size: var(--fs-md); font-weight: var(--fw-bold); line-height: var(--lh-body-min); text-wrap: pretty; color: {{ row.ink }}">{{ row.name }}</span>
+                  <span style="font-size: var(--fs-xs); line-height: var(--lh-body-min); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: {{ row.sub }}">{{ row.teacher }}</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <button onClick="{{ toggle3a }}" style="position: absolute; right: var(--space-16); bottom: var(--space-48); width: var(--control-size); height: var(--control-size); border-radius: var(--radius-circle); border: none; cursor: pointer; background: var(--accent); color: var(--text-on-accent); font-family: var(--font-sans); font-size: var(--fs-md); font-weight: var(--fw-bold); line-height: var(--lh-tight); display: flex; align-items: center; justify-content: center; z-index: 30">?</button>
+          <sc-if value="{{ legend3a }}" hint-placeholder-val="{{ false }}">
+            <div onClick="{{ toggle3a }}" style="position: absolute; inset: 0; z-index: 40; background: var(--scrim-modal); display: flex; flex-direction: column; justify-content: flex-end">
+              <div style="width: 100%; box-sizing: border-box; max-height: calc(100% - var(--space-48)); overflow: auto; background: var(--surface-raised); border-top-left-radius: var(--radius-lg); border-top-right-radius: var(--radius-lg); padding: var(--space-16) var(--space-16) var(--space-48); display: flex; flex-direction: column; gap: var(--space-16)">
+                <div style="display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-8)">
+                  <span style="font-size: var(--fs-md); font-weight: var(--fw-bold); letter-spacing: var(--ls-display)">Legenda kolorów</span>
+                  <span style="font-size: var(--fs-xs); color: var(--text-secondary)">dotknij, aby zamknąć</span>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: var(--space-12)">
+                  <sc-for list="{{ legend }}" as="g" hint-placeholder-count="5">
+                    <div style="display: flex; gap: var(--space-12); align-items: flex-start">
+                      <span style="width: 28px; height: 28px; flex: none; border-radius: var(--radius-sm); border: var(--border-width-thin) solid var(--line-subtle); background: {{ g.color }}"></span>
+                      <div style="display: flex; flex-direction: column; gap: 1px; min-width: 0">
+                        <span style="font-size: var(--fs-sm); font-weight: var(--fw-bold); line-height: var(--lh-body-min)">{{ g.title }}</span>
+                        <span style="font-size: var(--fs-xs); color: var(--text-secondary); line-height: var(--lh-body); text-wrap: pretty">{{ g.items }}</span>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="3b" style="display: flex; flex-direction: column; gap: 14px; width: 965px">
+      <div style="display: flex; align-items: baseline; gap: 10px">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; background: #17170F; color: #F7F4EE; padding: 3px 7px; border-radius: 5px">3b</span>
+        <span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 20px">Telefon, poziomo — od 481px</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 7px; max-width: 860px">
+        <div style="display: grid; grid-template-columns: 12px 1fr; gap: 8px; font-size: 13px; line-height: 1.5; color: #4A4638; text-wrap: pretty"><span style="color: #A8A294">—</span><span>Obrót telefonu zamienia jeden dzień na pięć — te same dane, ta sama siatka godzin, nadal bez przewijania.</span></div>
+        <div style="display: grid; grid-template-columns: 12px 1fr; gap: 8px; font-size: 13px; line-height: 1.5; color: #4A4638; text-wrap: pretty"><span style="color: #A8A294">—</span><span>Tabki i gest przełączania dnia znikają: skoro widać cały tydzień, nie ma czego przełączać.</span></div>
+        <div style="display: grid; grid-template-columns: 12px 1fr; gap: 8px; font-size: 13px; line-height: 1.5; color: #4A4638; text-wrap: pretty"><span style="color: #A8A294">—</span><span>Kolumna dzisiejszego dnia ma nagłówek <strong>DZIŚ</strong> podkreślony 3px belką; puste sloty zostają bez wypełnienia, więc widać, że wtorek i piątek kończą się wcześniej.</span></div>
+        <div style="display: grid; grid-template-columns: 12px 1fr; gap: 8px; font-size: 13px; line-height: 1.5; color: #4A4638; text-wrap: pretty"><span style="color: #A8A294">—</span><span>Nazwiska i opisy przerw schodzą do rynny po lewej — w wąskiej kolumnie mieści się tylko nazwa zajęć.</span></div>
+      </div>
+      <div style="background: #17170F; border-radius: 46px; padding: 12px; width: 941px; box-sizing: border-box">
+        <div data-surface="phone" style="height: 412px; border-radius: 34px; overflow: hidden; background: var(--surface-raised); color: var(--text-primary); font-family: var(--font-sans); display: flex; flex-direction: column; padding: 10px 22px 12px; box-sizing: border-box">
+          <div style="display: grid; grid-template-columns: 244px repeat(5, 1fr); gap: 3px; padding-bottom: 6px">
+            <span></span>
+            <sc-for list="{{ weekHeads }}" as="h" hint-placeholder-count="5">
+              <span style="display: flex; align-items: center; justify-content: center; min-height: 30px; border-radius: var(--radius-sm); font-size: var(--fs-sm); font-weight: var(--fw-bold); letter-spacing: {{ h.caps }}; background: {{ h.bg }}; color: {{ h.fg }}; box-shadow: {{ h.bar }}">{{ h.label }}</span>
+            </sc-for>
+          </div>
+          <div style="flex: 1 1 0; display: flex; flex-direction: column; gap: 2px; min-height: 0">
+            <sc-for list="{{ weekGrid }}" as="r" hint-placeholder-count="9">
+              <div style="flex: 1 1 0; min-height: 0; display: grid; grid-template-columns: 244px repeat(5, 1fr); gap: 3px">
+                <div style="display: flex; align-items: center; gap: 8px; padding-right: 8px">
+                  <span style="font-size: var(--fs-sm); font-weight: var(--fw-bold); font-variant-numeric: tabular-nums; white-space: nowrap">{{ r.range }}</span>
+                  <sc-if value="{{ r.hasBreak }}" hint-placeholder-val="{{ true }}">
+                    <span style="font-size: var(--fs-xs); color: var(--text-secondary); font-variant-numeric: tabular-nums; white-space: nowrap">{{ r.brk }}</span>
+                  </sc-if>
+                </div>
+                <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="5">
+                  <div style="display: flex; align-items: center; padding: 0 10px; border-radius: var(--radius-sm); overflow: hidden; background: {{ c.bg }}">
+                    <span style="font-size: var(--fs-sm); font-weight: var(--fw-bold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: {{ c.ink }}">{{ c.name }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="3c" style="display: flex; flex-direction: column; gap: 14px; width: 1280px">
+      <div style="display: flex; align-items: baseline; gap: 10px">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; background: #17170F; color: #F7F4EE; padding: 3px 7px; border-radius: 5px">3c</span>
+        <span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 20px">Laptop — od 1024px</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 7px; max-width: 860px">
+        <div style="display: grid; grid-template-columns: 12px 1fr; gap: 8px; font-size: 13px; line-height: 1.5; color: #4A4638; text-wrap: pretty"><span style="color: #A8A294">—</span><span>Cały tydzień naraz, bez przełączania dni: szerokość ekranu wystarcza na pięć kolumn.</span></div>
+        <div style="display: grid; grid-template-columns: 12px 1fr; gap: 8px; font-size: 13px; line-height: 1.5; color: #4A4638; text-wrap: pretty"><span style="color: #A8A294">—</span><span>W komórce mieści się pełna nazwa zajęć i nazwisko nauczyciela — nic nie jest skracane.</span></div>
+        <div style="display: grid; grid-template-columns: 12px 1fr; gap: 8px; font-size: 13px; line-height: 1.5; color: #4A4638; text-wrap: pretty"><span style="color: #A8A294">—</span><span>Legenda stoi na stałe po prawej, więc przycisk „?” z telefonu jest niepotrzebny.</span></div>
+        <div style="display: grid; grid-template-columns: 12px 1fr; gap: 8px; font-size: 13px; line-height: 1.5; color: #4A4638; text-wrap: pretty"><span style="color: #A8A294">—</span><span>Kolumna dzisiejszego dnia ma nagłówek <strong>DZIŚ</strong> podkreślony 3px belką; puste sloty zostają bez wypełnienia, podpisane „wolne”.</span></div>
+      </div>
+      <x-import component-from-global-scope="ChromeWindow" from="./browser-window.jsx" width="{{ 1280 }}" height="{{ 940 }}" url="autioch.github.io/lesson-plan" hint-size="1280px,940px">
+        <div data-surface="desk" style="height: 100%; box-sizing: border-box; display: grid; grid-template-columns: minmax(0, 1fr) 252px; gap: var(--space-16); background: var(--surface-raised); color: var(--text-primary); font-family: var(--font-sans); padding: var(--space-16) var(--space-16) var(--space-16)">
+          <div style="display: flex; flex-direction: column; min-width: 0">
+            <div style="display: grid; grid-template-columns: 156px repeat(5, 1fr); gap: var(--space-4); padding-bottom: var(--space-8)">
+              <span></span>
+              <sc-for list="{{ weekHeads }}" as="h" hint-placeholder-count="5">
+                <span style="display: flex; align-items: center; justify-content: center; min-height: var(--control-min-size); border-radius: var(--radius-sm); font-size: var(--fs-sm); font-weight: var(--fw-bold); letter-spacing: {{ h.caps }}; background: {{ h.bg }}; color: {{ h.fg }}; box-shadow: {{ h.bar }}">{{ h.label }}</span>
+              </sc-for>
+            </div>
+            <div style="flex: 1 1 0; display: flex; flex-direction: column; gap: var(--space-4); min-height: 0">
+              <sc-for list="{{ weekGrid }}" as="r" hint-placeholder-count="9">
+                <div style="flex: 1 1 0; min-height: 0; display: grid; grid-template-columns: 156px repeat(5, 1fr); gap: var(--space-4)">
+                  <div style="display: flex; flex-direction: column; justify-content: center; gap: 1px; padding-right: var(--space-8)">
+                    <span style="font-size: var(--fs-sm); font-weight: var(--fw-bold); font-variant-numeric: tabular-nums; white-space: nowrap">{{ r.range }}</span>
+                    <sc-if value="{{ r.hasBreak }}" hint-placeholder-val="{{ true }}">
+                      <span style="font-size: var(--fs-xs); color: var(--text-secondary); font-variant-numeric: tabular-nums; white-space: nowrap">{{ r.brk }}</span>
+                    </sc-if>
+                  </div>
+                  <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="5">
+                    <div style="display: flex; flex-direction: column; justify-content: center; gap: 2px; padding: 0 var(--space-12); border-radius: var(--radius-sm); overflow: hidden; background: {{ c.bg }}">
+                      <span style="font-size: var(--fs-sm); font-weight: var(--fw-bold); line-height: 1.3; text-wrap: pretty; color: {{ c.ink }}">{{ c.full }}</span>
+                      <sc-if value="{{ c.showTeacher }}" hint-placeholder-val="{{ true }}">
+                        <span style="font-size: var(--fs-xs); line-height: 1.3; overflow-wrap: anywhere; color: {{ c.sub }}">{{ c.teacher }}</span>
+                      </sc-if>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: var(--space-12); padding-left: var(--space-16); border-left: var(--border-width-thin) solid var(--line-subtle)">
+            <span style="font-size: var(--fs-sm); font-weight: var(--fw-bold); letter-spacing: var(--ls-display)">Legenda kolorów</span>
+            <div style="display: flex; flex-direction: column; gap: var(--space-8)">
+              <sc-for list="{{ legend }}" as="g" hint-placeholder-count="10">
+                <div style="display: flex; gap: var(--space-8); align-items: flex-start">
+                  <span style="width: 26px; height: 26px; flex: none; border-radius: var(--radius-sm); border: var(--border-width-thin) solid var(--line-subtle); background: {{ g.color }}"></span>
+                  <div style="display: flex; flex-direction: column; gap: 1px; min-width: 0">
+                    <span style="font-size: var(--fs-sm); font-weight: var(--fw-bold); line-height: 1.3">{{ g.title }}</span>
+                    <span style="font-size: var(--fs-xs); color: var(--text-secondary); line-height: 1.35; text-wrap: pretty">{{ g.items }}</span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </x-import>
+    </div>
+
+
+    </div>
+</section>
+
+<section id="druk" style="padding: 24px 56px 72px; display: flex; flex-direction: column; gap: 20px">
+  <div id="drukLabel" style="display: flex; flex-direction: column; gap: 14px; max-width: 860px">
+    <div style="display: flex; align-items: baseline; gap: 10px">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; background: #17170F; color: #F7F4EE; padding: 3px 7px; border-radius: 5px">3d</span>
+      <span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 20px">Druk, jedna kartka poziomo</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 7px">
+      <div style="display: grid; grid-template-columns: 12px 1fr; gap: 8px; font-size: 13px; line-height: 1.5; color: #4A4638; text-wrap: pretty"><span style="color: #A8A294">—</span><span>Cały tydzień na jednej stronie z legendą na dole, do powieszenia na lodówce.</span></div>
+      <div style="display: grid; grid-template-columns: 12px 1fr; gap: 8px; font-size: 13px; line-height: 1.5; color: #4A4638; text-wrap: pretty"><span style="color: #A8A294">—</span><span>Układ jest ten sam co na laptopie: pełne nazwy zajęć z nazwiskami i godziny z przerwą w rynnie po lewej.</span></div>
+      <div style="display: grid; grid-template-columns: 12px 1fr; gap: 8px; font-size: 13px; line-height: 1.5; color: #4A4638; text-wrap: pretty"><span style="color: #A8A294">—</span><span>Nic nie zależy od dnia: kartka nie oznacza „dziś”, bo wisi cały tydzień.</span></div>
+      <div style="display: grid; grid-template-columns: 12px 1fr; gap: 8px; font-size: 13px; line-height: 1.5; color: #4A4638; text-wrap: pretty"><span style="color: #A8A294">—</span><span>Eksport do PDF drukuje tylko tę kartkę, bez pozostałych ekranów.</span></div>
+    </div>
+  </div>
+  <x-import component-from-global-scope="doc-page" from="./doc-page.js" orientation="landscape" hint-size="1056px,816px">
+    <section class="page" style="display: flex; flex-direction: column; gap: 8pt; padding: 24pt 28pt; box-sizing: border-box; background: #FFFFFF; color: #1c1b17; font-family: Inter, system-ui, sans-serif">
+      <div style="display: grid; grid-template-columns: 112pt repeat(5, 1fr); gap: 3pt">
+        <span></span>
+        <sc-for list="{{ origHeads }}" as="h" hint-placeholder-count="5">
+          <span style="display: flex; align-items: center; justify-content: center; font-size: 13pt; font-weight: 700; padding: 4pt 6pt">{{ h }}</span>
+        </sc-for>
+      </div>
+      <div style="flex: 1 1 auto; display: flex; flex-direction: column; gap: 3pt">
+        <sc-for list="{{ printRows }}" as="r" hint-placeholder-count="9">
+          <div style="flex: 1 1 0; display: grid; grid-template-columns: 112pt repeat(5, 1fr); gap: 3pt">
+            <div style="display: flex; flex-direction: column; justify-content: center; gap: 1pt; padding-right: 6pt">
+              <span style="font-size: 12pt; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap">{{ r.range }}</span>
+              <sc-if value="{{ r.hasBreak }}" hint-placeholder-val="{{ true }}">
+                <span style="font-size: 12pt; color: #4a4740; font-variant-numeric: tabular-nums; white-space: nowrap">{{ r.brk }}</span>
+              </sc-if>
+            </div>
+            <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="5">
+              <div style="display: flex; flex-direction: column; justify-content: center; gap: 1pt; padding: 2pt 6pt; border-radius: 3pt; overflow: hidden; background: {{ c.bg }}">
+                <span style="font-size: 12pt; font-weight: 700; line-height: 1.15; color: {{ c.ink }}">{{ c.full }}</span>
+                <sc-if value="{{ c.showTeacher }}" hint-placeholder-val="{{ true }}">
+                  <span style="font-size: 12pt; line-height: 1.15; overflow-wrap: anywhere; color: {{ c.sub }}">{{ c.teacher }}</span>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 4pt 12pt; border-top: 1pt solid #d8d4c8; padding-top: 6pt">
+        <sc-for list="{{ legend }}" as="g" hint-placeholder-count="10">
+          <div style="display: flex; gap: 5pt; align-items: center">
+            <span style="width: 12pt; height: 12pt; flex: none; border: 0.5pt solid #b8b3a6; border-radius: 2pt; background: {{ g.color }}"></span>
+            <span style="font-size: 12pt; line-height: 1.2">{{ g.title }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </x-import>
+</section>
+
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+/* Dane pochodzą wyłącznie z ./plan-data.js (kopia kształtu z repo
+ * autioch/lesson-plan, src/data). Komponent ich nie przepisuje. */
+let SLOTS = [];
+let TYPES = {};
+let TEACHERS = {};
+let DAYS = [];
+let dataLoaded = false;
+
+const DATA_READY = import("./plan-data.js").then((m) => {
+  SLOTS = m.SLOTS; TYPES = m.TYPES; TEACHERS = m.TEACHERS; DAYS = m.DAYS;
+  dataLoaded = true;
+});
+
+/* Warstwa prezentacji — decyzje projektowe, nie dane z repo. */
+const LEGEND_TITLES = {
+  "#ffffff": "Zwykła lekcja",
+  "#9bf093": "Ruch — spakuj strój",
+  "#7cd874": "Ruch — spakuj strój",
+  "#57d14c": "Basen — kąpielówki i czepek",
+  "#80d7f1": "Język obcy",
+  "#92cbe2": "Religia / etyka",
+  "#f7aec6": "Zajęcia twórcze",
+  "#fcb8e7": "Zajęcia indywidualne i rytmika",
+  "#ffb8bd": "Kółko szkolne",
+  "#08f": "Zajęcia dodatkowe (płatne, zewnętrzne)"
+};
+
+const SHORT = {
+  "Gimnastyka korekcyjna": "Gimn. kor.",
+  "Trening Umiejętności Społecznych": "TUS",
+  "Zajęcia Twórcze": "Twórcze",
+  "Akademia Gier CUBE": "Gry CUBE",
+  "Dance 4 Friends": "Dance 4 F.",
+  "Religia/Etyka": "Religia"
+};
+
+const mins = (s) => { const p = s.split(":"); return +p[0] * 60 + +p[1]; };
+const fmt = (m) => String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0");
+const isWhite = (c) => c.toLowerCase() === "#ffffff" || c.toLowerCase() === "#fff";
+
+function lum(hex) {
+  let h = hex.replace("#", "");
+  if (h.length === 3) h = h.split("").map((x) => x + x).join("");
+  const r = parseInt(h.slice(0, 2), 16) / 255, g = parseInt(h.slice(2, 4), 16) / 255, b = parseInt(h.slice(4, 6), 16) / 255;
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+const todayIdx = (() => {
+  const d = new Date().getDay();
+  return d >= 1 && d <= 5 ? d - 1 : -1;
+})();
+
+class Component extends DCLogic {
+  state = { d3a: todayIdx < 0 ? 0 : todayIdx, l3a: false };
+
+  componentDidMount() {
+    if (!dataLoaded) DATA_READY.then(() => this.forceUpdate());
+  }
+
+  dayTabs(key) {
+    return DAYS.map((d, i) => ({
+      short: d.short, full: d.name, on: this.state[key] === i, isToday: i === todayIdx,
+      pick: () => this.setState({ [key]: i })
+    }));
+  }
+
+  entries(dayIdx) {
+    const day = DAYS[dayIdx];
+    return Object.keys(day.lessons).map(Number).sort((p, q) => p - q).map((i) => {
+      const [typeId, teacherId] = day.lessons[i];
+      const startM = mins(SLOTS[i].start);
+      return {
+        i, type: TYPES[typeId], teacher: TEACHERS[teacherId],
+        startM, endM: startM + SLOTS[i].duration,
+        t1: SLOTS[i].start, t2: fmt(startM + SLOTS[i].duration)
+      };
+    });
+  }
+
+  weekGrid() {
+    const grid = this.gridSlots();
+    return grid.map((i, k) => {
+      const startM = mins(SLOTS[i].start);
+      const endM = startM + SLOTS[i].duration;
+      const nextI = grid[k + 1];
+      const gap = nextI === undefined ? 0 : mins(SLOTS[nextI].start) - endM;
+      return {
+        range: SLOTS[i].start + " - " + fmt(endM),
+        hasBreak: nextI !== undefined && gap > 0,
+        brk: nextI === undefined || gap <= 0 ? "" : gap > 60 ? "+" + Math.floor(gap / 60) + "h przerwy" : "+" + gap + "min przerwy",
+        cells: DAYS.map((d) => {
+          const l = d.lessons[i];
+          if (!l) return { name: "", full: "wolne", teacher: "", showTeacher: false, bg: "transparent", ink: "var(--text-muted)" };
+          const type = TYPES[l[0]];
+          const dark = lum(type.color) < 0.55;
+          return {
+            name: SHORT[type.name] || type.name, full: type.name,
+            teacher: TEACHERS[l[1]], showTeacher: true,
+            bg: isWhite(type.color) ? "#FFFFFF" : type.color,
+            ink: dark ? "#FFFFFF" : "#17170F",
+            sub: dark ? "rgba(255,255,255,0.85)" : "#5A5648"
+          };
+        })
+      };
+    });
+  }
+
+  weekDayHeads() {
+    return DAYS.map((d, i) => ({
+      label: i === todayIdx ? "DZIŚ" : d.name,
+      caps: i === todayIdx ? "var(--ls-caps)" : "0",
+      bg: "transparent",
+      fg: i === todayIdx ? "var(--text-primary)" : "var(--text-secondary)",
+      bar: i === todayIdx ? "inset 0 -3px 0 var(--text-primary)" : "inset 0 -1px 0 var(--line-subtle)"
+    }));
+  }
+
+  gridSlots() {
+    const used = [];
+    SLOTS.forEach((s, i) => { if (DAYS.some((d) => d.lessons[i])) used.push(i); });
+    return used;
+  }
+
+  rows(dayIdx) {
+    const grid = this.gridSlots();
+    const day = DAYS[dayIdx];
+    return grid.map((i, k) => {
+      const startM = mins(SLOTS[i].start);
+      const endM = startM + SLOTS[i].duration;
+      const nextI = grid[k + 1];
+      const gap = nextI === undefined ? 0 : mins(SLOTS[nextI].start) - endM;
+      const base = {
+        range: SLOTS[i].start + " - " + fmt(endM),
+        hasBreak: nextI !== undefined && gap > 0,
+        brk: nextI === undefined || gap <= 0 ? "" : gap > 60 ? "+" + Math.floor(gap / 60) + "h przerwy" : "+" + gap + "min przerwy"
+      };
+      const l = day.lessons[i];
+      if (!l) return Object.assign(base, {
+        name: "wolne", teacher: "", empty: true,
+        bg: "transparent", ink: "var(--text-muted)", sub: "var(--text-muted)"
+      });
+      const type = TYPES[l[0]];
+      const dark = lum(type.color) < 0.55;
+      return Object.assign(base, {
+        name: type.name, teacher: TEACHERS[l[1]], empty: false,
+        bg: isWhite(type.color) ? "#FFFFFF" : type.color,
+        ink: dark ? "#FFFFFF" : "#17170F",
+        sub: dark ? "rgba(255,255,255,0.85)" : "#5A5648"
+      });
+    });
+  }
+
+  legend() {
+    const groups = [];
+    Object.keys(TYPES).forEach((id) => {
+      const t = TYPES[id];
+      const title = LEGEND_TITLES[t.color.toLowerCase()] || t.name;
+      if (title === "Zwykła lekcja") return;
+      const found = groups.find((g) => g.title === title);
+      if (found) { if (!found.names.includes(t.name)) found.names.push(t.name); return; }
+      groups.push({ color: t.color, title, names: [t.name] });
+    });
+    return groups.map((g) => ({ color: g.color, title: g.title, items: g.names.join(", ") }));
+  }
+
+  swipe(key) {
+    let x0 = 0;
+    return {
+      down: (ev) => { x0 = ev.clientX; },
+      up: (ev) => {
+        const dx = ev.clientX - x0;
+        if (Math.abs(dx) < 36) return;
+        this.setState((s) => ({ [key]: Math.min(4, Math.max(0, s[key] + (dx < 0 ? 1 : -1))) }));
+      }
+    };
+  }
+
+  renderVals() {
+    if (!dataLoaded) return {};
+    const s3a = this.swipe("d3a");
+    return {
+      legend: this.legend(),
+      weekGrid: this.weekGrid(),
+      printRows: this.weekGrid().map((r) => ({
+        range: r.range, hasBreak: r.hasBreak, brk: r.brk,
+        cells: r.cells.map((c) => ({
+          full: c.full, teacher: c.teacher,
+          showTeacher: c.showTeacher && c.teacher !== "<extra>" && c.teacher !== "multiple",
+          bg: c.name === "" ? "#ffffff" : c.bg,
+          ink: c.name === "" ? "#4a4740" : c.ink,
+          sub: c.name === "" ? "#4a4740" : c.sub
+        }))
+      })),
+      origHeads: DAYS.map((d) => d.name),
+      weekHeads: this.weekDayHeads(),
+      rows3a: this.rows(this.state.d3a),
+      tabs3a: this.dayTabs("d3a").map((t) => ({
+        pick: t.pick,
+        label: t.isToday ? "DZIŚ" : (t.on ? t.full : t.short),
+        sub: t.full,
+        showSub: false,
+        grow: t.isToday ? (t.on ? 3.4 : 1.7) : (t.on ? 3 : 1),
+        caps: t.isToday ? "var(--ls-caps)" : "0",
+        bg: "var(--surface-raised)",
+        fg: t.on || t.isToday ? "var(--text-primary)" : "var(--text-secondary)",
+        bar: t.on ? "inset 0 -3px 0 var(--text-primary)" : "none"
+      })),
+      legend3a: this.state.l3a,
+      toggle3a: () => this.setState((s) => ({ l3a: !s.l3a })),
+      down3a: s3a.down, up3a: s3a.up
+    };
+  }
+}
+</script>
+</body>
+</html>

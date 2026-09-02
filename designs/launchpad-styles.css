@@ -1,0 +1,636 @@
+/* ============================================================
+   LaunchPad Design System — production entry point.
+   Production only: webfont, design tokens (light = :root),
+   shipping theme scopes, surface scopes, component geometry.
+   Canvas --chrome tokens and the diagnostic debug themes live in
+   styles-debug.css, which never ships.
+   ============================================================ */
+
+/* ==================== fonts ==================== */
+/* Dev handoff: vendor the .woff2 binaries (400 + 700, latin and latin-ext for
+   Polish) as local @font-face — a CDN @import is a mock-only convenience. */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
+
+/* ==================== tokens (light = default theme) ==================== */
+:root {
+  /* ========== COLOR ========== */
+
+  /* ===== Surfaces ===== */
+  --surface-backdrop:      #eeece5;
+  --surface-base:          #faf8f2;
+  --surface-raised:        #ffffff;
+  --surface-well:          #efece4;
+  --surface-accent:        #eaf1f7;
+  --surface-danger:        #241512;
+  --surface-danger-raised: #3a1c17;
+
+  /* ===== Line ===== */
+  --line-subtle:  rgba(0,0,0,.09);
+
+  /* ===== Scrims & overlays — own tokens; Chrome 87 can't derive alpha ===== */
+  --scrim-modal:  rgba(18,17,13,.55);
+  --scrim-video:  rgba(0,0,0,.34);
+  --scrim-paused: rgba(255,255,255,.62);
+  --overlay-tint: rgba(0,0,0,.06);
+
+  /* ===== Text ===== */
+  --text-primary:   #1c1b17;
+  --text-secondary: #5b584f;
+  --text-muted:     #706d64;  /* 4.87:1 on --surface-base — clears AA at any size, phone scale included */
+  --text-on-accent: #ffffff;
+  --text-on-video:  #ffffff;
+
+  /* ===== Accent (LaunchPad blue) — large text (>=24px) + fills, never body text ===== */
+  --accent:         #4a86b8;
+
+  /* ===== Focus (directional remote / D-pad) ===== */
+  --focus-ring:     #4a86b8;
+  --focus-surface:  #e7e2d8;
+
+  /* ===== Progress ===== */
+  --progress-fill:  #4a86b8;
+  --progress-track: #e3ded2;
+
+  /* ===== Status ===== */
+  --status-success:      #2f8f6b;
+  --status-success-tint: #e7f0e9;
+  --status-best:         #c9a227;
+  --status-danger:       #a3402f;
+  --status-danger-tint:  #fbeee9;
+  --status-overtime:     #c56a3a;
+
+  /* ===== Media (embedded video) ===== */
+  --video-surface:  #243029;
+
+  /* ===== Objective palette — theme-paired for contrast; colours the label text ===== */
+  --obj-clay:   #9e2e18;
+  --obj-fern:   #2b7d4c;
+  --obj-cobalt: #12558f;
+  --obj-amber:  #87630c;
+  --obj-plum:   #9c4a82;
+  --obj-teal:   #2a757b;
+  --obj-neutral: #1c1b17;   /* the "None" option — equals primary ink */
+
+  /* ========== TYPOGRAPHY ========== */
+
+  /* ===== Family — one family everywhere; declared once per document at body level ===== */
+  --font-sans: "Inter", system-ui, sans-serif;
+
+  /* ===== Weights — two only; mid weights are indistinguishable at 3–5 m ===== */
+  --fw-regular: 400;
+  --fw-bold:    700;
+
+  /* ===== Type scale — TV board / family-facing (px @ 1920x1080) ===== */
+  --fs-2xl:     112px;   /* hero clock / celebration headline / large numerals */
+  --fs-xl:       68px;
+  --fs-lg:       52px;   /* group headings */
+  --fs-md:       40px;
+  --fs-sm:       32px;   /* objective rows — board reading floor */
+  --fs-xs:       28px;   /* smallest size — family-facing floor */
+
+  /* ===== Line height ===== */
+  --lh-tight:     1;     /* single-line numerals & type specimens — no leading */
+  --lh-body-min:  1.3;   /* multi-line body floor */
+  --lh-body:      1.5;
+
+  /* ===== Letter spacing ===== */
+  --ls-display: -0.02em;
+  --ls-caps:     0.09em; /* uppercase objective-group labels */
+
+  /* ========== SPACING — base-4/8 ramp, used at face value (no ×multiplier) ========== */
+  --space-4:   4px;
+  --space-8:   8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-40: 40px;
+  --space-48: 48px;
+
+  /* ========== RADII & BORDERS ========== */
+  --radius-sm:     4px;    /* dots, bars, chips, checkboxes */
+  --radius-md:     10px;   /* default — buttons, fields, tiles */
+  --radius-lg:     16px;   /* cards, panels, modals */
+  --radius-pill:   999px;  /* badges, status capsules */
+  --radius-circle: 50%;    /* rings, dots, avatars */
+
+  --border-width-thin:   1px; /* default — every divider and control outline */
+  --border-width-medium: 2px; /* emphasis only, where 1px reads as absent at 3–5 m */
+  --focus-ring-width:    3px;
+
+  /* ========== MOTION ========== */
+  --motion-dur-pop:   0.6s;   /* completion / celebration pop */
+  --motion-ease-out:  cubic-bezier(0.16, 1, 0.3, 1);
+  /* Continuous indicator loops (spinner, waiting pulse, celebration burst) share
+     one period + easing; state-carrying motion only, so no reduce-motion collapse. */
+  --motion-dur-loop:  1.4s;
+  --motion-ease-loop: ease-in-out;
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --motion-dur-pop: 0.01ms; }
+}
+
+/* ==================== themes ==================== */
+/* A theme overrides colour only; it never changes the numeric floor. Set on a
+   scope: <html data-theme="dark">. Light is the default (:root above). */
+[data-theme="dark"] {
+  --surface-backdrop:      #0a0a08;
+  --surface-base:          #201d18;
+  --surface-raised:        rgba(255,255,255,.05);
+  --surface-well:          rgba(255,255,255,.04);
+  --surface-accent:        rgba(74,134,184,.16);
+  --surface-danger:        #1a0f0d;
+  --surface-danger-raised: #2a1512;
+
+  --line-subtle:  rgba(255,255,255,.10);
+
+  --scrim-modal:  rgba(0,0,0,.6);
+  --scrim-video:  rgba(0,0,0,.5);
+  --scrim-paused: rgba(10,10,8,.55);
+  --overlay-tint: rgba(255,255,255,.06);
+
+  --text-primary:   #f4f1ea;
+  --text-secondary: #c8c3b8;
+  --text-muted:     rgba(255,255,255,.5);
+  --text-on-accent: #ffffff;
+  --text-on-video:  #f4f1ea;
+
+  --accent:         #4a86b8;
+
+  --focus-ring:     #7fb3dc;
+  --focus-surface:  rgba(255,255,255,.10);
+
+  --progress-fill:  #4a86b8;
+  --progress-track: #3a352e;
+
+  --status-success:      #7fbca0;
+  --status-success-tint: rgba(127,188,160,.14);
+  --status-best:         #d9b84a;
+  --status-danger:       #e8b3a6;
+  --status-danger-tint:  rgba(211,90,72,.18);
+  --status-overtime:     #e0a179;
+
+  --video-surface: #1a231e;
+
+  --obj-clay:   #c48273;
+  --obj-fern:   #8ab596;
+  --obj-cobalt: #8299bd;
+  --obj-amber:  #c1a86e;
+  --obj-plum:   #c096b3;
+  --obj-teal:   #7cabb0;
+  --obj-neutral: #f4f1ea;
+}
+
+
+/* ============================================================
+   COMPONENT GEOMETRY — all surfaces
+   ============================================================
+   A component emits a hook (data-square / data-orientation / data-align) plus ONE
+   base inline style; the variant's geometry lives here. So no component carries a
+   layout branch, and every variant is reachable from a surface scope. These
+   properties are absent from the components' inline styles, so the rules win without
+   !important. The separator's 160/80px minimums are one-off geometry, REPORTED not
+   tokenized. ---- */
+[data-part="button"]{ justify-content:var(--btn-justify,center); padding:0 var(--control-pad-x) }
+[data-part="button"][data-square="true"]{ width:var(--control-size); padding:0 }
+
+/* Flex items default to min-width:auto, which refuses to shrink below content and makes a
+   long label overflow its column instead of ellipsizing. Every component root carries a
+   data-part, so one reset covers the whole library and the bug cannot come back per
+   element. .sc-host is the harness's mount wrapper — a mockup artifact with no production
+   counterpart, listed because it is the flex item a parent actually lays out. */
+[data-part], .sc-host{ min-width:0 }
+
+[data-part="separator"]{
+  background:var(--line-subtle); align-self:stretch;
+  height:var(--border-width-thin); min-width:160px;
+}
+[data-part="separator"][data-orientation="vertical"]{
+  height:auto; min-height:80px; width:var(--border-width-thin); min-width:0;
+}
+
+/* Fill is the parent's call, not the block's: the board hands it a pane to fill and centre
+   in, the phone drawer sizes to content so the CTA lands in the thumb zone. */
+[data-part="empty-state"]{ height:auto }
+[data-part="empty-state"][data-fill="true"]{ height:100% }
+
+/* A tall control (colour grid, stepper stack) wants its label at the top; default is
+   centred. Content's call, not a surface's. */
+[data-part="field-row"]{ align-items:center }
+[data-part="field-row"][data-align="start"]{ align-items:flex-start }
+[data-part="field-row"][data-align="start"] [data-part="field-label"]{ padding-top:var(--space-16) }
+
+/* ============================================================
+   SURFACE TOKEN SCOPES
+   Each scope carries the --fs-* set authored for its own viewing
+   distance, NEVER divided down from another surface. Colour, the
+   4/8 spacing ramp, radii, borders, focus widths and motion stay
+   shared at :root.
+
+   DEV HANDOFF: in the mockups a surface is selected by declaring
+   data-surface on the app root ("board" | "desk" | "phone").
+   PRODUCTION HAS NO SUCH ATTRIBUTE — the scope is selected by
+   viewport width. The full mapping, and the two traps in the
+   conversion, are in the DEV HANDOFF block above "surface scopes"
+   further down this file. Read it before porting any of these rules.
+   ============================================================ */
+:root{
+  /* Interactive-atom floor, at the root so it resolves on EVERY surface. WCAG 2.2
+     SC 2.5.8 asks 24px; 44px is the platform standard and our floor. Board
+     controls sit above it. */
+  --control-min-size: 44px;
+
+  /* Control geometry, read by the Button atom and by the geometry rules above, so a
+     surface re-authors the control box with a token instead of overriding an inline
+     style. Root values are the board's. */
+  --control-size:  64px;
+  --control-pad-x: var(--space-24);
+  --icon-size:     28px;
+}
+
+/* ==================== surface scopes ====================
+   DEV HANDOFF — these attribute selectors are a MOCKUP MECHANISM. Production
+   has no [data-surface] attribute at all: one tree, scope selected by viewport
+   width. The canvases select by attribute only because two boards and a phone
+   share one browser window, where a real width query would restyle all of them.
+
+   Mechanical conversion (design-system.md §4):
+     [data-surface="board"]  -> unqualified / :root       (widest band, no query)
+     [data-surface="desk"]   -> @media (max-width:1400px)
+     [data-surface="phone"]  -> SPLITS: type   -> @media (max-width:900px)
+                                        layout -> @media (max-width:600px)
+   Strip the prefix, wrap the block in its query, keep source order
+   board -> desk -> phone so the cascade resolves narrowest-last.
+
+   Two traps: (1) the phone scope below merges both phone bands because a
+   portrait canvas is always in both — production must not, or a 700px tablet
+   gets bottom sheets. (2) Every !important in the phone scope exists only to
+   beat the mockups' inline component styles; production has no inline styles,
+   so drop them all and re-verify each rule still applies.
+   ======================================================== */
+
+/* TV board — the same set as :root, re-asserted so the scope is explicit
+   and never the bare default. */
+[data-surface="board"]{
+  --fs-2xl: 112px; --fs-xl: 68px;
+  --fs-lg:   52px; --fs-md:  40px; --fs-sm: 32px; --fs-xs: 28px;
+}
+
+/* Desk distance, board layout intact — hero sizes step down. */
+[data-surface="desk"]{
+  --fs-2xl:  64px; --fs-xl: 38px;
+  --fs-lg:   30px; --fs-md:  24px; --fs-sm: 20px; --fs-xs: 17px;
+}
+
+/* Phone / narrow window, arm's length. --fs-sm 17px is the reading floor
+   (objective rows sit on it); --fs-xs 14px is meta only. The control box drops to the
+   touch floor and its padding and icon each step one rung down the 4/8 ramp — no new
+   values, and no component override needed. */
+[data-surface="phone"]{
+  --fs-2xl:  48px; --fs-xl: 30px;
+  --fs-lg:   24px; --fs-md:  20px; --fs-sm: 17px; --fs-xs: 14px;
+
+  --control-size:  var(--control-min-size);
+  --control-pad-x: var(--space-16);
+  --icon-size:     var(--space-24);
+}
+
+/* ---- One control size for this surface (integrity rule 4: a given element type has ONE
+   size per surface). The box itself comes from the tokens above; what is left here is the
+   label, which cannot: --fs-xs is the board's family-facing floor and 14px meta here, so a
+   button labelled with it would fall under the phone's 17px reading floor.
+   Placed FIRST in the scope so the specific rules further down still win where a control
+   genuinely differs (the bottom bar, segments, steppers). ---- */
+[data-surface="phone"] [data-part="button"]{ font-size:var(--fs-sm)!important }
+/* The crumb is the one control whose side padding steps down a further rung: it is a path
+   segment, not an action, its whole row is one tap-target strip, and the height (so the 44px
+   floor) is untouched. Long paths overrun the 380px column even so, and a wrap would cost
+   the sheet header a second 44px line, so the row stays one line and the ANCESTOR crumbs
+   ellipsize (owner's call — the Button atom truncates its own label). Flex shrink rather
+   than a max-width literal: no invented number, the current crumb never shrinks, ancestors
+   share the shortfall, the back icon holds size. */
+[data-surface="phone"] [data-part="breadcrumb"]{
+  gap:var(--space-4)!important; flex-wrap:nowrap!important;
+}
+[data-surface="phone"] [data-part="breadcrumb"] [data-part="button"]{
+  padding:0 var(--space-12); width:100%;
+}
+[data-surface="phone"] [data-part="breadcrumb"] > div{ flex:0 1 auto }
+[data-surface="phone"] [data-part="breadcrumb"] > div:last-child{ flex:none }
+
+/* ============================================================
+   PHONE PAINT — one tree, per-surface paint.
+   Every rule below restyles or hides an element the phone keeps;
+   none moves an element to a different parent. Hooks are data-part
+   attributes on the components themselves. !important is a mockup
+   constraint (components are inline-styled DCs), never a product one.
+   ============================================================ */
+
+/* Rail becomes the compact sticky top bar: title · done/total · timer. */
+[data-surface="phone"] [data-part="rail"]{
+  flex-direction:row!important;
+  align-items:center;
+  gap:var(--space-16)!important;
+  padding:var(--space-8) var(--space-16)!important;
+}
+[data-surface="phone"] [data-part="rail-upper"]{
+  flex-direction:row!important;
+  align-items:center;
+  /* space-8, not space-16: at 412px the mission name needs every pixel the
+     bar's other two readouts do not use. */
+  gap:var(--space-8)!important;
+  flex:1 1 auto!important;
+}
+[data-surface="phone"] [data-part="title-slot"]{ justify-content:flex-start!important; flex:1 1 auto }
+[data-surface="phone"] [data-part="title"]{ text-align:left!important }
+
+/* ---- HIDDEN ON PHONE. One reason each. Every element stays in the tree — nothing is
+   unmounted — so the challenge celebration still reads the best time.
+   • widget-label — the time-mode caption is a board affordance; in the phone's one-line
+     bar the timer is itself the mode readout (design-system.md §9's three data points).
+   • widget-best — not one of the bar's three readouts (design-system.md §9); on a 412px
+     bar it costs the mission name its last ~55px.
+   • clock — the phone's own OS status bar already shows the time, and the bar's three
+     data points are what design-system.md §9 specifies.
+   • ring-caption — the ring's arc geometry is off here and the centre count is promoted
+     into the bar (design-system.md §9).
+   • cheer — present in the DOM and not painted (design-system.md §9).
+   • time-stepper-at — the FieldRow label above already names the field, so the inline
+     "at" is redundant on this surface. ---- */
+[data-surface="phone"] [data-part="widget-label"],
+[data-surface="phone"] [data-part="widget-best"],
+[data-surface="phone"] [data-part="clock"],
+[data-surface="phone"] [data-part="ring-caption"],
+[data-surface="phone"] [data-part="cheer"],
+[data-surface="phone"] [data-part="time-stepper-at"]{ display:none!important }
+
+/* With the mode caption hidden the widget collapses to the time alone, vertically
+   centred with the bar's other two readouts. */
+[data-surface="phone"] [data-part="widget"]{
+  gap:0!important; justify-content:center;
+  /* done/total and the timer are two different readouts sitting side by side; without
+     a divider they read as one run of digits. A hairline separates them at the cost
+     of ~13px, which the bar can spend now the mode caption is gone. */
+  border-left:var(--border-width-thin) solid var(--line-subtle);
+  padding-left:var(--space-12); margin-left:var(--space-4);
+}
+
+/* Progress ring: arc geometry and fill off, the centre count kept and
+   promoted into the bar (design-system.md §9). Restyled, never hidden. */
+[data-surface="phone"] [data-part="ring-slot"]{ width:auto!important; flex:none }
+[data-surface="phone"] [data-part="ring"]{
+  width:auto!important; padding-bottom:0!important;
+  background:none!important; border-radius:0!important;
+}
+[data-surface="phone"] [data-part="ring-hole"]{
+  position:static!important; inset:auto!important; background:none!important;
+  flex-direction:row!important; align-items:baseline!important; gap:var(--space-8);
+}
+
+/* Video collapses rather than unmounting, so the phone keeps playing the
+   mission's audio. */
+[data-surface="phone"] [data-part="video-slot"]{ height:0!important }
+
+/* Bottom action bar: evenly spread across the thumb zone. */
+[data-surface="phone"] [data-part="actions-row"]{ padding:var(--space-8) var(--space-8)!important }
+[data-surface="phone"] [data-part="board-actions"]{
+  margin-left:0!important; width:100%;
+  justify-content:space-between!important; gap:var(--space-8)!important;
+}
+[data-surface="phone"] [data-part="board-action"]{ flex:1 1 0; min-width:var(--control-min-size) }
+[data-surface="phone"] [data-part="board-action"] > *{ flex:1 1 auto }
+[data-surface="phone"] [data-part="board-action"] button{
+  width:100%;
+  flex-direction:column!important; justify-content:center;
+  /* The bottom bar is the one deliberate exception to the surface's single button label
+     size: three labels share a 412px row above their icons, and "Switch mission" at the
+     17px reading floor wraps. Navigation-bar labels are meta, not action labels. */
+  font-size:var(--fs-xs)!important;
+  gap:var(--space-4)!important; padding:0 var(--space-8)!important;
+  min-height:var(--control-min-size);
+}
+
+/* Objectives: one column, groups stacked, scroll through everything. */
+[data-surface="phone"] [data-part="objective-grid"]{ grid-template-columns:1fr!important; overflow-y:auto }
+
+/* ---- THE PHONE DRAWER. The TV paints a centred card (overlay panel: settings, missions,
+   editors) or a centred box (modal) with a dimmed board behind it. On phone BOTH become the
+   same drawer, so the surface has ONE overlay treatment, keyed off the shared [data-overlay]
+   hook both components emit: full-width, bottom-anchored, as tall as its content, capped so
+   a strip of the dimmed board stays visible above it and gives the tap-outside dismiss a
+   target. The cap is read off --space-48, not a new value. Long content hits the cap and the
+   drawer's own scroll region takes over — one treatment, no short/tall distinction.
+   `align-self` is how a child of the component's centring wrapper moves to the bottom edge
+   without a hook on the wrapper. Each part's own chrome stays with that part, below, where
+   the two genuinely differ. ---- */
+[data-surface="phone"] [data-overlay]{
+  width:100%!important; max-width:none!important;
+  height:auto!important; max-height:calc(100% - var(--space-48))!important;
+  align-self:flex-end!important;
+  border-radius:var(--radius-lg) var(--radius-lg) 0 0!important;
+}
+[data-surface="phone"] [data-part="panel-rule"]{ margin:0 var(--space-16)!important }
+[data-surface="phone"] [data-part="panel-nav"]{
+  width:100%!important; flex:1 1 auto!important; border-right:none!important;
+}
+
+/* ---- ONE CONTENT PADDING for this surface: every block that frames content, in the drawer
+   or on the screen, takes --space-16 — the board's padding leaves too little of the 412px
+   column. The drawer body ([data-part="modal-box"] > div:only-child) takes the same value in
+   its own rule below, where it also owns the scrollport. ---- */
+[data-surface="phone"] [data-part="panel-head"],
+[data-surface="phone"] [data-part="panel-nav"],
+[data-surface="phone"] [data-part="pairing-card"],
+[data-surface="phone"] [data-part="celebration-hero"],
+[data-surface="phone"] [data-part="panel-well"],
+[data-surface="phone"] [data-part="empty-state"]{ padding:var(--space-16)!important }
+
+/* ---- THE WRAPPING IDENTITY ROW — the missions list row and the authoring edit rows
+   (group 07) share one wrap technique, gap and padding, so the surface has one row
+   vocabulary; only the action cluster differs, per row, below. The TV's single line runs
+   481–585px against 380px of phone content width, so identity takes its own line with mode
+   and count as meta beneath. Type and space tokens are the row's one designed set —
+   nothing is scaled (integrity rule 4). ---- */
+[data-surface="phone"] [data-part="mission-row"],
+[data-surface="phone"] [data-part="edit-row"]{
+  flex-wrap:wrap; gap:var(--space-12)!important;
+  padding:var(--space-12) var(--space-16)!important;
+}
+/* Full-basis identity = its own line; everything else wraps under it. */
+[data-surface="phone"] [data-part="mission-name"],
+[data-surface="phone"] [data-part="edit-row-field"]{ flex:1 1 100% }
+[data-surface="phone"] [data-part="mission-main"]{
+  display:flex!important; flex:1 1 0;
+  flex-wrap:wrap; align-items:center; gap:var(--space-8);
+}
+[data-surface="phone"] [data-part="mission-actions"]{ flex:none }
+
+/* Sheet footer, celebration actions and every modal cluster share THE PHONE ACTION BAR
+   block at the end of this scope. */
+
+/* Settings rows stack label over control on EVERY surface (SettingsListRow does that
+   itself). Here the track additionally spans the row, so the widest option set — Theme's
+   four — fits the 412px column at the 44px target floor instead of overflowing it. The
+   option pill also takes the reading floor: --fs-xs is 14px meta in this scope. */
+[data-surface="phone"] [data-part="segmented"]{ display:flex!important; width:100% }
+[data-surface="phone"] [data-part="segment"]{
+  flex:1 1 0; padding:var(--space-8) var(--space-12)!important;
+  font-size:var(--fs-sm)!important;
+}
+
+/* ---- Reading floor on the actionable text of the settings sheet. --fs-xs is the one type
+   token that does not carry across surfaces: 28px on the board is the family-facing floor,
+   but re-authored as 14px meta here it would put every settings label, option pill and
+   crumb below the phone's 17px reading floor. These swap to --fs-sm — a token swap, no new
+   token (integrity rule 5). Deliberately NOT swapped: SettingsListRow's value/hint spans and
+   the s5d safety note, genuinely secondary text that belongs at meta size. ---- */
+[data-surface="phone"] [data-part="settings-label"],
+[data-surface="phone"] [data-part="edit-row-field"]{ font-size:var(--fs-sm)!important }
+
+/* Settings rows carrying an operable control go label-above / control-full-width.
+   412px cannot hold a label plus Theme's four-option switch at the 44px target floor.
+   data-control is set by SettingsListRow from its own content, never from a surface
+   prop (design-system.md §4 rule 5). Value/link rows are unaffected: scanned, not
+   operated, and stacking them would double the length of every list. */
+[data-surface="phone"] [data-part="settings-row"][data-control="true"]{
+  flex-direction:column!important; align-items:stretch!important;
+  gap:var(--space-12)!important;
+}
+[data-surface="phone"] [data-part="settings-row"][data-control="true"] [data-part="settings-label"]{
+  flex:none!important;
+}
+
+/* ---- Authoring rows & fields (group 07). The 412px column cannot carry a fixed label
+   gutter or a four-button action cluster on one line, so both re-lay out here. Same
+   components, same tokens, one designed size — only the flow direction changes. ---- */
+
+/* Label over control: read in one fixation, and survives a long (or Polish) label — the
+   board's 264px gutter would leave the field ~84px of the column. */
+[data-surface="phone"] [data-part="field-row"]{
+  flex-direction:column!important; align-items:stretch!important;
+  gap:var(--space-8)!important;
+}
+[data-surface="phone"] [data-part="field-label"]{
+  width:auto!important; padding-top:0!important;
+}
+[data-surface="phone"] [data-part="field-control"]{ flex-wrap:wrap }
+[data-surface="phone"] [data-part="field-hint"]{ margin-left:0!important }
+
+/* Edit rows: identity on line one, the whole action cluster on line two, so every action
+   stays visible (no swipe, no overflow menu) — the one way it differs from mission-row,
+   which pins its single action right. */
+[data-surface="phone"] [data-part="edit-row-actions"]{
+  flex:1 1 100%; margin-left:0!important;
+  gap:var(--space-8)!important;
+}
+
+/* Steppers tighten: the time pair plus its prefix runs ~496px against 380px of column, so
+   gap and value width step down the existing ramp. The pair is the binding case — two
+   squares each — so both the value column and the pair's own gap give ground. */
+[data-surface="phone"] [data-part="stepper"]{ gap:var(--space-8)!important }
+[data-surface="phone"] [data-part="stepper-value"]{ min-width:var(--space-32)!important }
+[data-surface="phone"] [data-part="time-stepper"]{ gap:var(--space-4)!important }
+[data-surface="phone"] [data-part="time-stepper-colon"]{ padding:0!important }
+
+/* The swatch is a focusable control, and ObjectiveEditRow sizes it 40px — under the root
+   touch floor. Raised to the floor token here; the board keeps its 40px geometry. */
+[data-surface="phone"] [data-part="swatch"]{
+  min-width:var(--control-min-size)!important; min-height:var(--control-min-size)!important;
+}
+
+/* ---- Celebration (group 09). The hero steps down to the surface's single content padding
+   (ONE CONTENT PADDING block above). ---- */
+
+/* ---- Modals on phone: the same DRAWER as the overlay panel, so the surface has ONE overlay
+   treatment. Height follows content — no void between the last line of copy and the action
+   bar — capped at the same calc(100% - --space-48) as the panel, with the content block
+   scrolling on overflow and the action bar stuck to its bottom edge. The scrim stays a
+   scrim: the board is visible above the drawer, which is also the dismiss target. ---- */
+[data-surface="phone"] [data-part="modal-scrim"]{
+  padding:0!important;
+  align-items:flex-end!important; justify-content:stretch!important;
+}
+/* Geometry (full width, bottom anchor, cap, top-only radius) comes from THE PHONE DRAWER
+   block above; what is left here is the modal's own chrome and its column layout. */
+[data-surface="phone"] [data-part="modal-box"]{
+  border:none!important;
+  overflow:hidden!important;
+  display:flex; flex-direction:column;
+}
+/* The modal's own content block (the single child a caller passes) is the drawer body:
+   content at the top, the surface's single content padding on every side, and the
+   scrollport when the drawer is capped. Drawers with no action bar (12a, 10e) keep that
+   bottom padding; the bar, where there is one, bleeds through it. */
+[data-surface="phone"] [data-part="modal-box"] > div:only-child{
+  flex:1 1 auto; min-height:0; overflow-y:auto;
+  display:flex; flex-direction:column; justify-content:flex-start!important;
+  padding:var(--space-16)!important;
+}
+/* The entry modal's field spans the sheet: its wrapper is centred on the board, which at 412px
+   would leave the input at its intrinsic width beside the label. */
+[data-surface="phone"] [data-part="modal-box"] [data-part="text-field"]{ width:100% }
+
+/* ============================================================
+   THE PHONE ACTION BAR
+   ============================================================
+   One bottom edge for every screen on this surface, keyed off the [data-action-bar] hook
+   every cluster emits rather than each cluster's own part name: full-bleed to the surface
+   edge, pinned to the bottom, a hairline above it, --space-8 padding, one row of
+   equal-width actions, height from --control-min-size (a 60px bar). The primary action has
+   to sit in the same place screen to screen, which separate per-component edges cannot do.
+   Evidence: Material 3 puts standard buttons at 48dp minimum height with 16dp side padding,
+   and mobile guidance stacks a pair vertically only where the row cannot hold it.
+   The hook's value names the two variations: "borderless" already carries a real Separator
+   atom above it (the sheet footer), so it takes no hairline; "drawer" sits inside the drawer
+   body and bleeds back out to its edges (block below). The sheet footer does not repeat
+   Close — the "Board" crumb is the phone's dismiss. ---- */
+[data-surface="phone"] [data-action-bar]{
+  display:flex!important;
+  align-items:stretch!important; justify-content:flex-start!important;
+  gap:var(--space-8)!important;
+  padding:var(--space-8)!important;
+}
+[data-surface="phone"] [data-action-bar]:not([data-action-bar="borderless"]){
+  border-top:var(--border-width-thin) solid var(--line-subtle);
+}
+[data-surface="phone"] [data-action-bar] > *{ flex:1 1 0 }
+[data-surface="phone"] [data-action-bar] button{ width:100% }
+
+/* The two clusters that live inside the drawer body ([data-action-bar="drawer"]) bleed back
+   out through its padding to the drawer's own edges, and stick there, so a capped drawer
+   never scrolls its actions away. Both the negative margin and the sticky offset are the
+   drawer padding read back off its own token, not new values.
+
+   The TOP margin is InputModal's authored --space-24, and cannot be `auto`: the drawer is
+   height:auto, so there is never free space for `auto` to absorb and the bar would butt
+   against the last content element with only --space-8 and the hairline between them —
+   worst where that element is itself a control, reading as one merged block. */
+[data-surface="phone"] [data-action-bar="drawer"]{
+  width:auto!important; align-self:stretch!important;
+  margin:var(--space-24) calc(var(--space-16) * -1) calc(var(--space-16) * -1)!important;
+  position:sticky; bottom:calc(var(--space-16) * -1); background:var(--surface-raised);
+}
+
+/* The one documented exception to the single row: guarded destructive confirms keep the
+   vertical stack, column-REVERSE, so the markup's safe-first order puts the SAFE action
+   nearest the thumb and a stray tap can never land on the destructive one. */
+[data-surface="phone"] [data-part="dialog-actions"]{
+  flex-direction:column-reverse!important; align-items:stretch!important;
+}
+[data-surface="phone"] [data-part="dialog-actions"] > *{ flex:none }
+
+/* Celebration: three equal full-width buttons under the hero read as three competing
+   CTAs and cost 21% of the surface, which breaks the moment. "Done" is the single dominant
+   action and sits nearest the thumb; "Play again" and "Switch mission" share the line above
+   it, so no action is lost and the hero keeps the screen. wrap-reverse puts the 100%-basis
+   first child (Done) on the BOTTOM line. */
+[data-surface="phone"] [data-part="celebration-actions"]{ flex-wrap:wrap-reverse!important }
+[data-surface="phone"] [data-part="celebration-actions"] > *:first-child{ flex:1 1 100% }
+
+/* ---- Empty state (06b). In the drawer the block sizes to its content, so the CTA lands in
+   the thumb zone with every other bottom action and spans the drawer to read as one. The
+   action stays in the block (one primary, not a second copy in a bar). */
+[data-surface="phone"] [data-part="empty-cta"]{ width:100% }
+[data-surface="phone"] [data-part="empty-cta"] button{ width:100% }
