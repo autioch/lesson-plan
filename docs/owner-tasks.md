@@ -9,6 +9,12 @@ Manual steps only the repo owner can do. Delete a line once it's done.
 - **Check the plan on a real phone.** The three bands were verified with browser viewport emulation.
   A physical phone confirms the touch targets, the swipe, and that the day fits without scrolling
   under the browser's own chrome.
-- **Decide on adding `@astrojs/check` to the gate.** `npm run build` does not typecheck, so a type
-  error in `.astro` frontmatter ships. Adding `@astrojs/check` + `typescript` as devDependencies and
-  running `astro check && astro build` closes it, at the cost of two dependencies and a slower CI.
+- **Provide `GITHUB_PAT` for the GitHub MCP server.** [.mcp.json](../.mcp.json) points at
+  `https://api.githubcopilot.com/mcp/` and reads the token from that environment variable. Without
+  it the server fails to connect and PR work falls back to the `gh` CLI. Scope it to this
+  repository; it only needs to read and write pull requests.
+- **Decide on the Astro upgrade.** `npm audit` reports 13 advisories against `astro@5.13.5`. Almost
+  all are server-side (SSR, middleware, server islands, image endpoint) and cannot apply to a static
+  GitHub Pages build with no server — but two hit the **dev server** on your own machine: arbitrary
+  local file read and a reflected XSS on its error page. The fix is a major upgrade (5 → 7), which
+  is its own unit of work, not an `npm audit fix`.

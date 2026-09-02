@@ -40,13 +40,13 @@ system is built**; read this before writing code for **how to write it here**.
 
 **Copy from** — canonical examples for building blocks:
 
-| Building…                  | Copy the pattern from                                        |
-| -------------------------- | ------------------------------------------------------------ |
-| Page structure / layout    | [src/pages/index.astro](../../src/pages/index.astro)         |
-| Data type definitions      | [src/data/types.ts](../../src/data/types.ts)                 |
-| A component reading labels | [src/components/WeekGrid.astro](../../src/components/WeekGrid.astro) |
-| Build-time transform       | [src/utils/plan.ts](../../src/utils/plan.ts)                 |
-| Band-aware layout CSS      | [src/assets/plan.css](../../src/assets/plan.css)             |
+| Building…                  | Copy the pattern from                                                  |
+| -------------------------- | ---------------------------------------------------------------------- |
+| Page structure / layout    | [src/pages/index.astro](../../src/pages/index.astro)                   |
+| Data type definitions      | [src/data/types.ts](../../src/data/types.ts)                           |
+| A component reading labels | [src/components/WeekGrid.astro](../../src/components/WeekGrid.astro)   |
+| Build-time transform       | [src/utils/plan.ts](../../src/utils/plan.ts)                           |
+| Band-aware layout CSS      | [src/assets/plan.css](../../src/assets/plan.css)                       |
 | Runtime (clock, day pick)  | the `<script>` in [src/pages/index.astro](../../src/pages/index.astro) |
 
 ## Keeping docs in sync
@@ -56,7 +56,7 @@ Two doc classes, two rules:
 - **Durable docs** — CLAUDE.md, README.md, and every doc under `docs/` — describe the **current**
   state. They must never contradict the code.
 - **Working notes** — a plan file for an in-flight multi-session feature — are scratch. They are
-  deleted at close-out; the durable record is the commit history plus the archive entry.
+  deleted at close-out; the durable record is the commit history.
 
 Durable docs stay current two ways:
 
@@ -85,18 +85,34 @@ when you add a new doc or code area.
 
 ## Full command reference
 
-| Command           | Purpose                                    |
-| ----------------- | ------------------------------------------ |
-| `npm run dev`     | Dev server with hot reload                 |
-| `npm run build`   | Production static build. Confirms compile. |
-| `npm run preview` | Preview the production build locally       |
+| Command             | Purpose                                               |
+| ------------------- | ----------------------------------------------------- |
+| `npm run dev`       | Dev server with hot reload                            |
+| `npm run build`     | Production static build. Confirms compile.            |
+| `npm run preview`   | Preview the production build locally                  |
+| `npm run ci:ts`     | `astro check` — types, including `.astro` frontmatter |
+| `npm run ci:lint`   | ESLint over JS/TS, `.astro`, CSS, JSON and Markdown   |
+| `npm run ci:knip`   | Unused files, exports, types and dependencies         |
+| `npm run ci:format` | `prettier --check .`                                  |
+| `npm run ci`        | All four, in that order — read-only                   |
+| `npm run fix`       | `eslint --fix` then `prettier --write`                |
+| `npm run verify`    | `fix`, then `ci`, then `build` — **the gate**         |
 
-**The gate** is `npm run build`. It runs at pre-push and in CI.
+**The gate** is `npm run verify`. There are **no git hooks in this repo** — run it yourself before
+pushing. CI is the authority: [ci.yml](../../.github/workflows/ci.yml) runs `ci` + `build` on every
+pull request, and [deploy.yml](../../.github/workflows/deploy.yml) re-runs them on `main` before
+deploying. CI runs `ci`, never `fix` — a check that rewrites files is not a check.
 
-**What the gate does not do:** it does not typecheck. `astro build` transpiles; `@astrojs/check` is
-not installed, so a type error in `.astro` frontmatter compiles and ships. Until that is fixed
-(`docs/owner-tasks.md`), typecheck a changed `.ts` module by hand:
+Configs: [eslint.config.mjs](../../eslint.config.mjs),
+[prettier.config.mjs](../../prettier.config.mjs), [knip.json](../../knip.json). `designs/` is
+excluded from all of them — it is a verbatim design snapshot, not our code.
 
-```bash
-npx tsc --noEmit --strict --resolveJsonModule --module esnext --moduleResolution bundler --target es2022 --skipLibCheck src/utils/plan.ts
-```
+Node is pinned in [.nvmrc](../../.nvmrc); both workflows read it, so local and CI never drift.
+
+## Agent tooling
+
+[.mcp.json](../../.mcp.json) declares GitHub's hosted MCP server, so PRs, issues and checks are
+read and written through it rather than by shelling out to `gh`. It authenticates with a
+`GITHUB_PAT` environment variable — see [owner-tasks.md](../owner-tasks.md) — and is enabled per
+machine via `enabledMcpjsonServers` in `.claude/settings.local.json`. MCP servers connect at session
+start, so a new token or a config change needs a restarted session.

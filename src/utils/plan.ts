@@ -16,7 +16,7 @@
 
 import type { Labels, LessonsPlan } from "../data/types";
 
-export interface PlanCell {
+type PlanCell = {
   /** Full lesson name, as it is in the data. Empty slots carry "". */
   name: string;
   /** Name shortened for narrow columns; equals `name` when nothing is shortened. */
@@ -26,9 +26,9 @@ export interface PlanCell {
   /** Exact hex from the palette. Empty slots carry "". */
   color: string;
   empty: boolean;
-}
+};
 
-export interface PlanRow {
+export type PlanRow = {
   /** Index into `slots` — kept so markup can be traced back to the data. */
   slotIndex: number;
   /** "HH:MM - HH:MM" */
@@ -37,28 +37,28 @@ export interface PlanRow {
   breakText: string;
   /** One cell per day, in week order. */
   cells: PlanCell[];
-}
+};
 
-export interface PlanDay {
+export type PlanDay = {
   name: string;
   short: string;
   /** ISO weekday, 1 = Monday — what the page script matches the clock against. */
   weekday: number;
-}
+};
 
-export interface LegendGroup {
+export type LegendGroup = {
   color: string;
   /** What the color means. The lessons carrying it are on screen already. */
   title: string;
-}
+};
 
-export interface Plan {
+export type Plan = {
   locale: string;
   labels: Labels;
   days: PlanDay[];
   rows: PlanRow[];
   legend: LegendGroup[];
-}
+};
 
 function toMinutes(time: string): number {
   const [h, m] = time.split(":").map(Number);
@@ -82,7 +82,9 @@ const EMPTY_CELL: PlanCell = {
 export function buildPlan(data: LessonsPlan): Plan {
   const colors = new Map(data.palette.map((color) => [color.id, color]));
   const types = new Map(data.lessonTypes.map((type) => [type.id, type]));
-  const teachers = new Map(data.teachers.map((teacher) => [teacher.id, teacher]));
+  const teachers = new Map(
+    data.teachers.map((teacher) => [teacher.id, teacher]),
+  );
 
   function formatBreak(gapMinutes: number): string {
     if (gapMinutes <= 0) return "";

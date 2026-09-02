@@ -10,12 +10,16 @@ It answers **what** to test, **how** for this stack, and **how much** for a give
 Most changes resolve in seconds. Ask, in order:
 
 1. Touched a **data transformation** (JSON → component shape, a derived field, a computed timetable
-   row)? → a co-located **unit test** in TypeScript, in the same commit.
+   row)? → the **gate** (`npm run verify` type-checks it) plus a **rendered check** that the real
+   data comes out right on the page. **This project has no test runner** — that is a deliberate
+   call for one pure transform behind one page, not an omission to fix.
 2. Changed **component rendering logic**? → a **visual check** — render the change in the dev server
    and confirm it looks right.
-3. Changed **JSON data files**? → a **build check** — run `npm run build` to confirm parsing and
-   no type errors.
-4. None of the above (docs, config, a comment)? → **the gate only** (`npm run build`).
+3. Changed **JSON data files**? → the **gate**, then confirm the changed values actually appear in
+   the rendered output.
+4. Changed anything **date-dependent**? → check it against a **stubbed clock**, not just today. The
+   page script must be right on every weekday and at the weekend.
+5. None of the above (docs, config, a comment)? → **the gate only**.
 
 Rules keep the answer deterministic:
 
@@ -25,25 +29,26 @@ Rules keep the answer deterministic:
 
 ## Operational stages
 
-| Stage                   | What                                            | Runs where                              |
-| ----------------------- | ----------------------------------------------- | --------------------------------------- |
-| **The gate** _(always)_ | Astro build: type-check, parse, compile         | `npm run build` — pre-push hook + PR CI |
-| **Visual check**        | Rendered output on the dev server looks correct | `npm run dev` + browser                 |
-| **Unit test**           | Data transforms produce expected output         | co-located .test.ts files + CI          |
+| Stage                   | What                                            | Runs where                                    |
+| ----------------------- | ----------------------------------------------- | --------------------------------------------- |
+| **The gate** _(always)_ | Types, lint, dead code, format, build           | `npm run verify` — by hand, then PR CI + main |
+| **Visual check**        | Rendered output on the dev server looks correct | `npm run dev` + browser                       |
 
-**The gate** is `npm run build` — runs Astro's full type-check and build. It validates the whole
-tree. A successful build means:
+**The gate** is `npm run verify` — `fix`, then `ci` (`ci:ts` → `ci:lint` → `ci:knip` →
+`ci:format`), then `build`. A green run means:
 
-- TypeScript types check out
-- JSON parses correctly
-- All imports resolve
-- The static output builds
+- Types check out, `.astro` frontmatter included (`astro check`, not bare `tsc`)
+- Lint passes over JS/TS, `.astro`, CSS, JSON and Markdown
+- No unused file, export, type or dependency is left behind
+- Formatting is settled, JSON parses, imports resolve, the static output builds
+
+No git hook runs this. Run it yourself before pushing.
 
 ## Always-on checks (every code change)
 
 Independent of scope, every code change confirms:
 
-- **Gate green** — `npm run build`.
+- **Gate green** — `npm run verify`.
 - **Data files parse** — if JSON changed, the build catches parse errors and type mismatches.
 - **Rendered output looks right** — for UI changes, a visual check in the dev server on the primary
   surface (modern desktop browser).
@@ -56,7 +61,7 @@ Match the change to the layer(s) it touches.
 | ------------------------------------ | --------------------------------------------------------------------------------------------- |
 | **Data files (JSON)**                | Build succeeds; JSON parses and type-checks; rendered data appears in the output.             |
 | **Component rendering**              | Visual check in dev server; confirm the layout, spacing, colors, and text match expectations. |
-| **Data transformation / pure logic** | Unit test the transformation; confirm input→output for the real data and edge cases.          |
+| **Data transformation / pure logic** | Gate green, then confirm input→output on the real data in the rendered page. No test runner.  |
 | **Page structure / routing**         | Build succeeds; all pages render; internal links resolve.                                     |
 | **Static assets**                    | Build includes them; they load in the dev server preview.                                     |
 

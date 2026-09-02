@@ -8,12 +8,12 @@ silent.
 
 The plan is read on a phone during the week and printed once a term. Both are binding.
 
-| Band       | Width       | Shows                                                                    |
-| ---------- | ----------- | ------------------------------------------------------------------------ |
-| **A**      | ≤ 480px     | One day: tabs, time gutter, lesson name and teacher, "?" legend sheet    |
-| **B**      | 481–1023px  | Whole week, shortened names, no teacher, "?" legend sheet                |
-| **C**      | ≥ 1024px    | Whole week, full names and teachers, fixed legend column                 |
-| **Print**  | A4 landscape | Band C's layout on one page: legend at the bottom, no "today"           |
+| Band      | Width        | Shows                                                                 |
+| --------- | ------------ | --------------------------------------------------------------------- |
+| **A**     | ≤ 480px      | One day: tabs, time gutter, lesson name and teacher, "?" legend sheet |
+| **B**     | 481–1023px   | Whole week, shortened names, no teacher, "?" legend sheet             |
+| **C**     | ≥ 1024px     | Whole week, full names and teachers, fixed legend column              |
+| **Print** | A4 landscape | Band C's layout on one page: legend at the bottom, no "today"         |
 
 Bands are chosen by **width only**. A phone in landscape is 915px wide and lands in band B, so
 orientation queries are never needed and must not be added — they misfire on tablets. Reference

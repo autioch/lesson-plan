@@ -260,6 +260,9 @@ body {
   font-size: var(--fs-sm);
   font-weight: var(--fw-bold);
   line-height: var(--lh-body-min);
+  /* Progressive enhancement: a browser without it wraps normally, which is the
+   * pre-2024 rendering and perfectly readable. */
+  /* eslint-disable-next-line css/use-baseline */
   text-wrap: pretty;
 }
 
@@ -285,6 +288,9 @@ body {
   /* Only band A swipes, so only band A gives up text selection for it. */
   .plan {
     touch-action: pan-y;
+    /* Without it the swipe drag-selects text; a browser that ignores it just
+     * keeps selection, which costs nothing. */
+    /* eslint-disable-next-line css/use-baseline */
     user-select: none;
   }
 
@@ -478,6 +484,8 @@ body {
   font-size: var(--fs-sm);
   font-weight: var(--fw-medium);
   line-height: var(--lh-body-min);
+  /* Progressive enhancement — see .cell__name above. */
+  /* eslint-disable-next-line css/use-baseline */
   text-wrap: pretty;
 }
 
