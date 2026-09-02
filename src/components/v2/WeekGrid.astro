@@ -1,0 +1,185 @@
+---
+import TimeSlotRow from "./TimeSlotRow.astro";
+
+interface TimeSlot {
+  start: string;
+  duration: number;
+}
+
+interface Lesson {
+  lessonId: string;
+  teacherId: string;
+  paused?: boolean;
+  ignored?: boolean;
+}
+
+interface LessonType {
+  id: string;
+  name: string;
+  color: string;
+}
+
+interface Day {
+  name: string;
+  short: string;
+  lessons: Record<number, Lesson | undefined>;
+}
+
+interface Props {
+  days: Day[];
+  slots: TimeSlot[];
+  selectedDayIndex: number;
+  todayIndex: number;
+  lessonTypes: Record<string, LessonType>;
+  teachers: Record<string, string>;
+  layout: "portrait" | "landscape" | "desktop";
+}
+
+const {
+  days,
+  slots,
+  selectedDayIndex,
+  todayIndex,
+  lessonTypes,
+  teachers,
+  layout,
+} = Astro.props;
+
+// Determine visible days based on layout
+const visibleDays =
+  layout === "portrait" ? [selectedDayIndex] : [0, 1, 2, 3, 4];
+const visibleDayObjects = visibleDays.map((idx) => days[idx]);
+---
+
+<div class="v2-week-grid">
+  <div class="v2-grid-header">
+    <div class="v2-grid-header__corner"></div>
+
+    <div class="v2-grid-header__days">
+      {
+        visibleDayObjects.map((day, visIdx) => {
+          const dayIndex = visibleDays[visIdx];
+          const isToday = dayIndex === todayIndex;
+          const classes = `v2-day-header ${isToday ? "v2-day-header--today" : ""}`;
+
+          return (
+            <div class={classes}>
+              <div class="v2-day-header__name">{day.name}</div>
+              {isToday && <div class="v2-day-header__marker">DZIŚ</div>}
+            </div>
+          );
+        })
+      }
+    </div>
+  </div>
+
+  <div class="v2-grid-body">
+    {
+      slots.map((slot, slotIndex) => (
+        <TimeSlotRow
+          slot={slot}
+          nextSlot={slots[slotIndex + 1]}
+          days={days}
+          slotIndex={slotIndex}
+          selectedDayIndex={selectedDayIndex}
+          lessonTypes={lessonTypes}
+          teachers={teachers}
+          layout={layout}
+        />
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .v2-week-grid {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    background-color: var(--surface-bg);
+  }
+
+  .v2-grid-header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    border-bottom: var(--border-width-thin) solid var(--line-subtle);
+    background-color: var(--surface-raised);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+
+  .v2-grid-header__corner {
+    min-width: 80px;
+    flex-shrink: 0;
+    border-right: var(--border-width-thin) solid var(--line-subtle);
+    background-color: var(--surface-raised);
+  }
+
+  .v2-grid-header__days {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: var(--space-4);
+    padding: var(--space-12);
+  }
+
+  .v2-day-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    padding: var(--space-8);
+    text-align: center;
+    position: relative;
+    border-radius: var(--radius-sm);
+  }
+
+  .v2-day-header__name {
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+    line-height: var(--lh-body-min);
+    color: var(--text-primary);
+  }
+
+  .v2-day-header__marker {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    padding-top: var(--space-4);
+    border-top: 3px solid var(--accent-primary);
+    width: 100%;
+  }
+
+  /* Today styling */
+  .v2-day-header--today {
+    background-color: var(--surface-hover);
+  }
+
+  .v2-grid-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  /* Print styles: show all 5 days, scaled to 1 page */
+  @media print {
+    .v2-week-grid {
+      overflow: visible;
+      height: auto;
+    }
+
+    .v2-grid-header {
+      position: static;
+    }
+
+    .v2-grid-body {
+      flex: none;
+    }
+  }
+</style>

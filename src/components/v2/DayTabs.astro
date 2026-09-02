@@ -1,0 +1,125 @@
+---
+interface Props {
+  days: Array<{ name: string; short: string }>;
+  selectedDayIndex: number;
+  todayIndex: number;
+}
+
+const { days, selectedDayIndex, todayIndex } = Astro.props;
+---
+
+<div class="v2-day-tabs">
+  {
+    days.map((day, index) => {
+      const isSelected = index === selectedDayIndex;
+      const isToday = index === todayIndex;
+      const classes = `v2-tab ${isSelected ? "v2-tab--active" : ""} ${
+        isToday ? "v2-tab--today" : ""
+      }`;
+
+      return (
+        <button
+          class={classes}
+          data-day-index={index}
+          aria-label={`${day.name}${isToday ? " (dziś)" : ""}`}
+          aria-pressed={isSelected}
+        >
+          <span class="v2-tab__label">{isToday ? "DZIŚ" : day.short}</span>
+          <span class="v2-tab__fullname">{day.name}</span>
+        </button>
+      );
+    })
+  }
+</div>
+
+<style>
+  .v2-day-tabs {
+    display: flex;
+    border-bottom: var(--border-width-thin) solid var(--line-subtle);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  .v2-tab {
+    flex-shrink: 0;
+    padding: var(--space-12) var(--space-16);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+    color: var(--text-secondary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    position: relative;
+    min-height: var(--control-min-size);
+    justify-content: center;
+  }
+
+  .v2-tab__label {
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .v2-tab__fullname {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-regular);
+    display: none;
+  }
+
+  /* Active tab indicator */
+  .v2-tab::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: transparent;
+    transition:
+      height 0.2s,
+      background-color 0.2s;
+  }
+
+  .v2-tab--active::after {
+    height: 3px;
+    background-color: var(--accent-primary);
+  }
+
+  /* Today styling: wider tab + thicker underline */
+  .v2-tab--today {
+    flex-grow: 1.5;
+    flex-basis: auto;
+  }
+
+  .v2-tab--today::after {
+    height: 3px;
+    background-color: var(--accent-primary);
+  }
+
+  /* Hover state */
+  .v2-tab:hover:not(.v2-tab--active) {
+    color: var(--text-primary);
+  }
+
+  .v2-tab--active {
+    color: var(--text-primary);
+  }
+
+  /* Hide on landscape+ */
+  @media (orientation: landscape) and (max-width: 1023px) {
+    .v2-day-tabs {
+      display: none;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .v2-day-tabs {
+      display: none;
+    }
+  }
+</style>

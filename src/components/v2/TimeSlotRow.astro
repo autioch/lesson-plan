@@ -1,0 +1,181 @@
+---
+import { formatBreak, formatSlotRange } from "../../utils/v2/breaks";
+import LessonCell from "./LessonCell.astro";
+
+interface TimeSlot {
+  start: string;
+  duration: number;
+}
+
+interface Lesson {
+  lessonId: string;
+  teacherId: string;
+  paused?: boolean;
+  ignored?: boolean;
+}
+
+interface LessonType {
+  id: string;
+  name: string;
+  color: string;
+}
+
+interface Props {
+  slot: TimeSlot;
+  nextSlot?: TimeSlot;
+  days: Array<{
+    name: string;
+    lessons: Record<number, Lesson | undefined>;
+  }>;
+  slotIndex: number;
+  selectedDayIndex: number;
+  lessonTypes: Record<string, LessonType>;
+  teachers: Record<string, string>;
+  layout: "portrait" | "landscape" | "desktop";
+}
+
+const {
+  slot,
+  nextSlot,
+  days,
+  slotIndex,
+  selectedDayIndex,
+  lessonTypes,
+  teachers,
+  layout,
+} = Astro.props;
+
+// Calculate break duration
+const breakDuration = nextSlot
+  ? Math.max(
+      0,
+      new Date(`2000-01-01 ${nextSlot.start}`).getTime() -
+        (new Date(`2000-01-01 ${slot.start}`).getTime() + slot.duration * 60000)
+    ) / 60000
+  : 0;
+
+const breakText = formatBreak(breakDuration);
+const timeRange = formatSlotRange(slot);
+
+// Determine which days to show based on layout
+const visibleDays =
+  layout === "portrait" ? [selectedDayIndex] : [0, 1, 2, 3, 4];
+---
+
+<div class="v2-time-row">
+  <div class="v2-time-cell">
+    <div class="v2-time-cell__range">{timeRange}</div>
+    {breakText && <div class="v2-time-cell__break">{breakText}</div>}
+  </div>
+
+  <div class="v2-time-row__cells">
+    {
+      visibleDays.map((dayIndex) => {
+        const day = days[dayIndex];
+        const lesson = day?.lessons[slotIndex];
+
+        if (!lesson || lesson.ignored) {
+          return (
+            <div class="v2-slot-cell v2-slot-cell--empty">
+              <span class="v2-slot-cell__text">wolne</span>
+            </div>
+          );
+        }
+
+        const lessonType = lessonTypes[lesson.lessonId];
+        const teacher = teachers[lesson.teacherId];
+
+        return (
+          <LessonCell
+            lessonName={lessonType?.name || ""}
+            teacherName={teacher || ""}
+            backgroundColor={lessonType?.color || "#e8e8e8"}
+            isPaused={lesson.paused}
+            breakText={breakText && dayIndex === visibleDays[0] ? breakText : ""}
+          />
+        );
+      })
+    }
+  </div>
+</div>
+
+<style>
+  .v2-time-row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    border-bottom: var(--border-width-thin) solid var(--line-subtle);
+    min-height: 4rem;
+  }
+
+  .v2-time-cell {
+    background-color: var(--surface-raised);
+    border-right: var(--border-width-thin) solid var(--line-subtle);
+    padding: var(--space-12);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-4);
+    min-width: 80px;
+    flex-shrink: 0;
+    position: sticky;
+    left: 0;
+    z-index: 10;
+  }
+
+  .v2-time-cell__range {
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+    font-variant-numeric: tabular-nums;
+    line-height: var(--lh-body-min);
+    color: var(--text-primary);
+  }
+
+  .v2-time-cell__break {
+    font-size: var(--fs-xs);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-secondary);
+    line-height: var(--lh-body-min);
+  }
+
+  .v2-time-row__cells {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: var(--space-4);
+    padding: var(--space-12);
+    align-items: center;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .v2-slot-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3rem;
+    background-color: var(--surface-bg);
+    border: var(--border-width-thin) dashed var(--line-subtle);
+    border-radius: var(--radius-sm);
+    padding: var(--space-12);
+  }
+
+  .v2-slot-cell--empty .v2-slot-cell__text {
+    font-size: var(--fs-xs);
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Ensure cells take equal space in week grid */
+  @media (orientation: landscape) and (max-width: 1023px) {
+    .v2-time-row__cells {
+      gap: var(--space-8);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .v2-time-row__cells {
+      gap: var(--space-8);
+    }
+  }
+</style>

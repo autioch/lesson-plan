@@ -1,0 +1,90 @@
+/* v2 Design Tokens — CSS Custom Properties */
+
+:root {
+  /* Spacing (4px base unit) */
+  --space-4: 0.25rem;
+  --space-8: 0.5rem;
+  --space-12: 0.75rem;
+  --space-16: 1rem;
+  --space-24: 1.5rem;
+  --space-32: 2rem;
+  --space-48: 3rem;
+
+  /* Typography - Font Sizes */
+  --fs-xs: 0.875rem; /* 14px */
+  --fs-sm: 0.9375rem; /* 15px */
+  --fs-md: 1rem; /* 16px */
+  --fs-lg: 1.0625rem; /* 17px */
+  --fs-xl: 1.25rem; /* 20px */
+  --fs-2xl: 1.5rem; /* 24px */
+
+  /* Typography - Font Families */
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  --font-mono: "Courier New", monospace;
+
+  /* Typography - Font Weights */
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-bold: 700;
+
+  /* Typography - Line Heights */
+  --lh-tight: 1.2;
+  --lh-body-min: 1.3;
+  --lh-body: 1.5;
+  --lh-relaxed: 1.75;
+
+  /* Colors - Surfaces */
+  --surface-bg: #ffffff;
+  --surface-raised: #f7f5f0;
+  --surface-hover: #ebe7df;
+
+  /* Colors - Text */
+  --text-primary: #17170f;
+  --text-secondary: #7a7466;
+  --text-tertiary: #a8a294;
+  --text-inverse: #ffffff;
+  --text-on-accent: #ffffff;
+
+  /* Colors - Semantic */
+  --accent-primary: #1f5f4b;
+  --accent-hover: #0e3a2c;
+  --success: #4ade80;
+  --warning: #facc15;
+  --error: #f87171;
+
+  /* Colors - Borders & Lines */
+  --line-subtle: #dbd5c8;
+  --line-default: #c9c3ba;
+  --border-width-thin: 1px;
+
+  /* Radius */
+  --radius-sm: 0.375rem; /* 6px */
+  --radius-md: 0.5rem; /* 8px */
+  --radius-lg: 0.75rem; /* 12px */
+  --radius-xl: 1rem; /* 16px */
+  --radius-circle: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
+
+  /* Controls */
+  --control-min-size: 44px; /* Touch target minimum */
+  --control-size: 56px; /* FAB size */
+
+  /* Scrim (modal backdrop) */
+  --scrim-modal: rgba(0, 0, 0, 0.5);
+}
+
+/* Print mode adjustments */
+@media print {
+  :root {
+    --space-16: 0.5rem;
+    --space-24: 0.75rem;
+    --fs-md: 0.75rem;
+    --fs-lg: 0.875rem;
+  }
+}

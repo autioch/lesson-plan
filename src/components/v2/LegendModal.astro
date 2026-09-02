@@ -1,0 +1,150 @@
+---
+interface LessonType {
+  id: string;
+  name: string;
+  color: string;
+}
+
+interface Props {
+  lessonTypes: LessonType[];
+  isOpen?: boolean;
+}
+
+const { lessonTypes, isOpen = false } = Astro.props;
+---
+
+<div class="v2-legend-modal" data-legend-open={isOpen}>
+  <div class="v2-legend-modal__backdrop"></div>
+  <div class="v2-legend-modal__panel">
+    <div class="v2-legend-modal__header">
+      <h2 class="v2-legend-modal__title">Legenda kolorów</h2>
+      <span class="v2-legend-modal__hint">dotknij, aby zamknąć</span>
+    </div>
+
+    <div class="v2-legend-modal__list">
+      {
+        lessonTypes.map((type) => (
+          <div class="v2-legend-item">
+            <span
+              class="v2-legend-item__color"
+              style={`background-color: ${type.color}`}
+            />
+            <div class="v2-legend-item__content">
+              <span class="v2-legend-item__name">{type.name}</span>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+  .v2-legend-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .v2-legend-modal[data-legend-open="true"] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .v2-legend-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: var(--scrim-modal);
+  }
+
+  .v2-legend-modal__panel {
+    position: relative;
+    z-index: 41;
+    background-color: var(--surface-raised);
+    border-top-left-radius: var(--radius-lg);
+    border-top-right-radius: var(--radius-lg);
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: var(--space-16);
+    animation: slideUp 0.3s ease-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  .v2-legend-modal__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-8);
+    margin-bottom: var(--space-16);
+    padding-bottom: var(--space-16);
+    border-bottom: var(--border-width-thin) solid var(--line-subtle);
+  }
+
+  .v2-legend-modal__title {
+    margin: 0;
+    font-size: var(--fs-md);
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+  }
+
+  .v2-legend-modal__hint {
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  .v2-legend-modal__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+
+  .v2-legend-item {
+    display: flex;
+    gap: var(--space-12);
+    align-items: flex-start;
+  }
+
+  .v2-legend-item__color {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    border-radius: var(--radius-sm);
+    border: var(--border-width-thin) solid var(--line-subtle);
+  }
+
+  .v2-legend-item__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    min-width: 0;
+  }
+
+  .v2-legend-item__name {
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+    line-height: var(--lh-body-min);
+    color: var(--text-primary);
+  }
+
+  /* Hide on desktop */
+  @media (min-width: 1024px) {
+    .v2-legend-modal {
+      display: none;
+    }
+  }
+</style>
