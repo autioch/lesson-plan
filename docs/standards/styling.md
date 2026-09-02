@@ -13,7 +13,7 @@ The plan is read on a phone during the week and printed once a term. Both are bi
 | **A**      | ≤ 480px     | One day: tabs, time gutter, lesson name and teacher, "?" legend sheet    |
 | **B**      | 481–1023px  | Whole week, shortened names, no teacher, "?" legend sheet                |
 | **C**      | ≥ 1024px    | Whole week, full names and teachers, fixed legend column                 |
-| **Print**  | A4 landscape | One page, legend at the bottom, no "today"                              |
+| **Print**  | A4 landscape | Band C's layout on one page: legend at the bottom, no "today"           |
 
 Bands are chosen by **width only**. A phone in landscape is 915px wide and lands in band B, so
 orientation queries are never needed and must not be added — they misfire on tablets. Reference
@@ -37,6 +37,11 @@ canvas for band A is 412 × 915.
 - **Lesson colours are data, not decoration.** Exact hex from `src/data/lessons.json`, full strength,
   never tokenized, tinted or made transparent, and never shown without the legend. Tile ink comes
   from luminance (see `src/utils/v2/plan.ts`); the teacher line is the weaker variant of it.
+- **The palette is six colours plus plain white**, and adding a seventh is a decision, not an edit.
+  Each one must clear 4.5:1 against both the tile ink and the teacher line, sit above the 0.55
+  luminance switch so no tile ever flips to white text, and stay separable from the other five under
+  red-green colour blindness. A lesson that asks nothing of the family (Kółko, Religia/Etyka) is
+  plain white.
 - **Everything else is a token** from `src/assets/v2/tokens.css` — type scale, spacing ramp, radii,
   lines, surfaces, accent. No values from outside the ramp, no inline styles beyond the per-cell
   colour custom properties.

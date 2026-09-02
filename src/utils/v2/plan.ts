@@ -19,7 +19,8 @@ const NO_TEACHER = new Set(["multiple", "<extra>"]);
 
 const INK_DARK = "#17170F";
 const INK_LIGHT = "#FFFFFF";
-const SUB_ON_LIGHT = "#5A5648";
+/* Dark enough to clear 4.5:1 on every colour in the palette at 14px. */
+const SUB_ON_LIGHT = "#3D3A33";
 const SUB_ON_DARK = "rgba(255,255,255,0.85)";
 
 export interface PlanCell {
@@ -84,9 +85,12 @@ function toTime(minutes: number): string {
 
 /**
  * Relative luminance, the design's formula: channels straight off the hex, no
- * gamma step. Below 0.55 the tile takes white text. Do not swap this for the
- * WCAG-linearized version — it flips the greens to white text, against the
- * design's stated outcome that `#08f` is the only tile with white text.
+ * gamma step. Below 0.55 the tile would take white text.
+ *
+ * The shipped palette never reaches down there — its darkest colour sits at
+ * 0.61 — so every tile carries dark ink. The branch stays as a guard: a colour
+ * added to the data that *would* be unreadable in dark ink still flips rather
+ * than shipping black on a dark tile.
  */
 function luminance(hex: string): number {
   let h = hex.replace("#", "");

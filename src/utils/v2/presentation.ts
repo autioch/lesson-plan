@@ -42,18 +42,18 @@ export function shortName(name: string): string {
  * and one legend entry, which says what the color means — not which lessons
  * carry it, since those are on screen beside it. A color with no title here
  * falls back to the lesson name itself.
+ *
+ * Six coded colors, plus plain white for a lesson that needs no preparation.
+ * Lessons that ask nothing of the family — Kółko, Religia/Etyka — are plain.
  */
 const LEGEND_TITLES: Record<string, string> = {
   "#ffffff": "Zwykła lekcja",
-  "#9bf093": "Spakuj strój",
-  "#7cd874": "Spakuj strój",
-  "#57d14c": "Basen — kąpielówki i czepek",
-  "#80d7f1": "Język obcy",
-  "#92cbe2": "Religia / etyka",
-  "#f7aec6": "Zajęcia twórcze",
-  "#fcb8e7": "Zajęcia indywidualne i rytmika",
-  "#ffb8bd": "Kółko szkolne",
-  "#08f": "Dodatkowe",
+  "#4fb0f0": "Język obcy",
+  "#b6ee7a": "Spakuj strój",
+  "#7fe7d5": "Basen — kąpielówki i czepek",
+  "#ff8fb1": "Zajęcia twórcze",
+  "#dcc0ff": "Zajęcia indywidualne i rytmika",
+  "#ffcf4d": "Dodatkowe",
 };
 
 export function legendTitle(color: string, fallback: string): string {
