@@ -6,15 +6,17 @@
  *
  * Hidden on screen; the screen view is hidden in print.
  */
-import type { LegendGroup, PlanDay, PlanRow } from "../../utils/v2/plan.ts";
+import type { Labels } from "../data/types";
+import type { LegendGroup, PlanDay, PlanRow } from "../utils/plan";
 
 interface Props {
   days: PlanDay[];
   rows: PlanRow[];
   legend: LegendGroup[];
+  labels: Labels;
 }
 
-const { days, rows, legend } = Astro.props;
+const { days, rows, legend, labels } = Astro.props;
 ---
 
 <section class="print-sheet" aria-hidden="true">
@@ -36,13 +38,10 @@ const { days, rows, legend } = Astro.props;
           {row.cells.map((cell) =>
             cell.empty ? (
               <div class="print-cell print-cell--empty">
-                <span class="print-free">wolne</span>
+                <span class="print-free">{labels.freeSlot}</span>
               </div>
             ) : (
-              <div
-                class="print-cell"
-                style={`--cell-bg:${cell.color};--cell-ink:${cell.ink};--cell-sub:${cell.sub}`}
-              >
+              <div class="print-cell" style={`--cell-bg:${cell.color}`}>
                 <span class="print-lesson">{cell.name}</span>
                 {cell.teacher && (
                   <span class="print-teacher">{cell.teacher}</span>

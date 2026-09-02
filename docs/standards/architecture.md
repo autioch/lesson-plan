@@ -12,33 +12,40 @@ This is a static site generated at build time. No runtime layers in the traditio
 Read:   JSON files → component rendering → static HTML
 ```
 
-| Layer               | Does                                                                                            | Must not                                             |
-| ------------------- | ----------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| **JSON files**      | Source of record for lesson data, teacher lists, time slots, lesson types                       | Hold HTML, rendering logic, or component state       |
-| **Data processing** | Transform JSON into the shape components need; computed fields (derived times, timetable grids) | Be intermingled with component rendering             |
-| **Components**      | Render tables, headers, cells, and document structure; read the processed data                  | Load or transform JSON directly; hold business logic |
+| Layer               | Does                                                                                             | Must not                                             |
+| ------------------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------------------- |
+| **JSON file**       | Source of record for everything displayed: schedule, palette, day names, and every fixed string  | Hold HTML, rendering logic, or component state       |
+| **Data processing** | Transform JSON into the shape components need; computed fields (derived times, timetable grids)  | Be intermingled with component rendering; read the clock |
+| **Components**      | Render headers, cells, and document structure; read the processed data                           | Load or transform JSON directly; hold logic or copy  |
+| **Page script**     | The two runtime facts: which weekday it is, and which day the phone shows                        | Hold data, copy, or layout decisions                 |
 
 Core rules:
 
-- **Data is immutable.** JSON files are the source of record; all transformations are computed at
+- **Data is immutable.** The JSON file is the source of record; all transformations are computed at
   build time or in pure functions.
 - **Components are presentation-only.** They read prepared data and render HTML; no data fetching,
-  no logic beyond layout and markup decisions.
+  no logic beyond layout and markup decisions, and no copy of their own — every visible string is a
+  label from the data.
+- **Nothing user-visible lives outside `lessons.json`.** Colours, day names and abbreviations, page
+  title, "DZIŚ", "wolne", the legend titles and the break templates are all data. Code holds
+  structure; CSS holds theme.
+- **The build never reads the clock.** The site is generated once a term, so "today" is a runtime
+  fact — see [Today](#today).
 
 ## Source layout
 
 ```text
 src/
-├─ components/       # Astro components (tables, rows, cells, page structure)
-├─ data/             # JSON source files and TypeScript type definitions
+├─ components/       # Astro components (DayTabs, WeekGrid, Legend, PrintSheet)
+├─ data/             # lessons.json — the source of record — and its types
 ├─ layouts/          # Page wrapper (shared head, structure)
-├─ pages/            # Astro pages (one per route)
-├─ utils/            # Pure build-time transforms (no rendering, no I/O)
-└─ assets/           # Static images, fonts, stylesheets
+├─ pages/            # Astro pages (one per route) and the page script
+├─ utils/            # Pure build-time transforms (no rendering, no I/O, no clock)
+└─ assets/           # tokens.css, plan.css (screen), print.css
 ```
 
-Two routes today: `/` is the original A4-style table, `/v2` the responsive plan built to
-`designs/`. They share the data and nothing else.
+One route: `/`, the responsive plan built to `designs/`. It renders three screen bands and an
+A4-landscape print sheet from the same DOM.
 
 The site is published to GitHub Pages under the project subpath `/lesson-plan/`. That subpath is
 defined once in `src/site.mjs`: `astro.config.mjs` feeds it to the build as `base`, and layouts
@@ -49,30 +56,38 @@ Import aliases: none currently used.
 
 ## Data loading & composition
 
-At build time, Astro imports JSON files from `src/data/` and passes them to components:
+At build time, Astro imports one JSON file and passes it through one transform:
 
-- **lessons.json** — the full timetable: teacher assignments, room numbers, times, lesson types
-- **lessonTypes.ts** — the catalog of lesson types with icons and colors
+- **`src/data/lessons.json`** — everything displayed. Root keys: `locale`, `labels` (every fixed
+  string), `palette` (`{ id, hex, legendTitle, inLegend }` — the only place a colour is written),
+  `teachers`, `slots`, `lessonTypes` (referencing a colour by `colorId`), `days`.
+- **`src/data/types.ts`** — the type of that file, and so the checklist of what may be rendered.
 
-All composition happens in the page layout or a top-level component that reads the data once and
-passes it down. No per-component data loading.
+`src/pages/index.astro` reads it once and `src/utils/plan.ts` turns it into the render shape
+(shared row set, breaks, cells, legend). Components lay that out and compute nothing. A reference
+that does not resolve — an unknown `lessonId`, `colorId` or `teacherId` — throws and fails the
+build rather than rendering a blank tile.
 
-For `/v2`, `src/utils/v2/plan.ts` is that single read: it turns the JSON into the render shape
-(shared row set, breaks, cells, legend groups, ink colours) and the components lay it out without
-computing anything. Choices about how the data is *shown* — name abbreviations, legend group
-titles — sit beside it in `presentation.ts`, out of the data.
+## Today
+
+The site is built once a term, so a weekday baked into the HTML would be wrong the next morning.
+Nothing in `src/utils/` may read the clock: the build emits no today marks and opens on Monday.
+The page script in `index.astro` reads `new Date()`, matches it against the `data-weekday` each day
+carries from the data, and applies the marks and the initial day selection. A page with JavaScript
+off shows Monday, unmarked.
 
 ## State ownership
 
 Static site; the only runtime state is which day a phone is showing.
 
-| Data                                    | Owner                                              |
-| --------------------------------------- | -------------------------------------------------- |
-| Lesson schedule, teachers, lesson types | JSON files in src/data/                            |
-| Derived render shape                    | src/utils/                                         |
-| Render logic and HTML structure         | src/components/                                    |
-| Page routing                            | src/pages/                                         |
-| Selected day, today (≤480px only)       | `data-day` on the page root, set by the v2 page script |
+| Data                                              | Owner                                                    |
+| ------------------------------------------------- | -------------------------------------------------------- |
+| Schedule, teachers, lesson types, palette, copy   | `src/data/lessons.json`                                  |
+| Derived render shape                              | `src/utils/plan.ts`                                      |
+| Render logic and HTML structure                   | `src/components/`                                        |
+| Theme — type scale, spacing, surfaces, text ink   | `src/assets/tokens.css`                                  |
+| Page routing                                      | `src/pages/`                                             |
+| Today, and the selected day (≤480px only)         | `data-day` on the page root, set by the page script       |
 
 ## Design goals
 

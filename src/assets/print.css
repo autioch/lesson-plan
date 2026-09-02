@@ -128,7 +128,7 @@
     padding: 2pt 6pt;
     /* An empty cell sets no colour, and must still paint over the rules. */
     background: var(--cell-bg, #ffffff);
-    color: var(--cell-ink);
+    color: var(--text-primary);
   }
 
   .print-lesson {
@@ -141,7 +141,7 @@
     font-size: 12pt;
     line-height: 1.15;
     overflow-wrap: anywhere;
-    color: var(--cell-sub);
+    color: var(--text-on-tile-weak);
   }
 
   /* Six colours, one row. The label wraps; the row never does. */

@@ -1,49 +1,98 @@
 {
+  "locale": "pl",
+  "labels": {
+    "pageTitle": "Plan lekcji",
+    "today": "DZIŚ",
+    "todayAria": "dziś",
+    "freeSlot": "wolne",
+    "dayTabsLabel": "Dzień tygodnia",
+    "legendTitle": "Legenda kolorów",
+    "legendHint": "dotknij, aby zamknąć",
+    "breakMinutes": "+{value}min przerwy",
+    "breakHours": "+{value}h przerwy"
+  },
+  "palette": [
+    {
+      "id": "plain",
+      "hex": "#ffffff",
+      "legendTitle": "Zwykła lekcja",
+      "inLegend": false
+    },
+    {
+      "id": "lang",
+      "hex": "#4fb0f0",
+      "legendTitle": "Język obcy",
+      "inLegend": true
+    },
+    {
+      "id": "kit",
+      "hex": "#b6ee7a",
+      "legendTitle": "Spakuj strój",
+      "inLegend": true
+    },
+    {
+      "id": "pool",
+      "hex": "#7fe7d5",
+      "legendTitle": "Basen — kąpielówki i czepek",
+      "inLegend": true
+    },
+    {
+      "id": "creative",
+      "hex": "#ff8fb1",
+      "legendTitle": "Zajęcia twórcze",
+      "inLegend": true
+    },
+    {
+      "id": "individual",
+      "hex": "#dcc0ff",
+      "legendTitle": "Zajęcia indywidualne i rytmika",
+      "inLegend": true
+    },
+    {
+      "id": "extra",
+      "hex": "#ffcf4d",
+      "legendTitle": "Dodatkowe",
+      "inLegend": true
+    }
+  ],
   "teachers": [
     {
       "id": "t1",
-      "name": "MSkrzypczak",
-      "email": "alice@school.edu"
+      "name": "MSkrzypczak"
     },
     {
       "id": "t2",
-      "name": "APiskorska/IGłowacka",
-      "email": "bob@school.edu"
+      "name": "APiskorska/IGłowacka"
     },
     {
       "id": "t3",
-      "name": "IGruszka",
-      "email": "bob@school.edu"
+      "name": "IGruszka"
     },
     {
       "id": "t4",
-      "name": "ESzymańska",
-      "email": "bob@school.edu"
+      "name": "ESzymańska"
     },
     {
       "id": "t5",
-      "name": "AKozłowska",
-      "email": "bob@school.edu"
+      "name": "AKozłowska"
     },
     {
       "id": "t6",
-      "name": "ABartkowski",
-      "email": "bob@school.edu"
+      "name": "ABartkowski"
     },
     {
       "id": "t7",
       "name": "multiple",
-      "email": "bob@school.edu"
+      "anonymous": true
     },
     {
       "id": "t8",
-      "name": "Joanna Nikuła-Szymaniak",
-      "email": "bob@school.edu"
+      "name": "Joanna Nikuła-Szymaniak"
     },
     {
       "id": "t9",
       "name": "<extra>",
-      "email": "bob@school.edu"
+      "anonymous": true
     }
   ],
   "slots": [
@@ -96,133 +145,120 @@
     {
       "id": "1_ep",
       "name": "Edukacja",
-      "iconId": "math",
-      "color": "#ffffff"
+      "colorId": "plain"
     },
     {
       "id": "2_eng",
       "name": "Angielski",
-      "iconId": "english",
-      "color": "#4FB0F0"
+      "colorId": "lang"
     },
     {
       "id": "3_wfew",
       "name": "W/F ew",
-      "iconId": "pe",
-      "color": "#B6EE7A"
+      "colorId": "kit"
     },
     {
       "id": "4_pool",
       "name": "Basen",
-      "iconId": "science",
-      "color": "#7FE7D5"
+      "colorId": "pool"
     },
     {
       "id": "5_wf",
       "name": "W/F",
-      "iconId": "history",
-      "color": "#B6EE7A"
+      "colorId": "kit"
     },
     {
       "id": "6_art",
       "name": "Zajęcia Twórcze",
-      "iconId": "art",
-      "color": "#FF8FB1"
+      "short": "Twórcze",
+      "colorId": "creative"
     },
     {
       "id": "7_extra",
       "name": "Kółko",
-      "iconId": "music",
-      "color": "#ffffff"
+      "colorId": "plain"
     },
     {
       "id": "8_gimkor",
       "name": "Gimnastyka korekcyjna",
-      "iconId": "music",
-      "color": "#B6EE7A"
+      "short": "Gimn. kor.",
+      "colorId": "kit"
     },
     {
       "id": "9_ethics",
       "name": "Religia/Etyka",
-      "iconId": "music",
-      "color": "#ffffff"
+      "short": "Religia",
+      "colorId": "plain"
     },
     {
       "id": "10_rhytm",
       "name": "Rytmika",
-      "iconId": "music",
-      "color": "#DCC0FF"
+      "colorId": "individual"
     },
     {
       "id": "11_",
       "name": "Logopedia",
-      "iconId": "music",
-      "color": "#DCC0FF"
+      "colorId": "individual"
     },
     {
       "id": "12_",
       "name": "Akrobatyka",
-      "iconId": "music",
-      "color": "#FFCF4D"
+      "colorId": "extra"
     },
     {
       "id": "13_",
       "name": "Trening Umiejętności Społecznych",
-      "iconId": "music",
-      "color": "#FFCF4D"
+      "short": "TUS",
+      "colorId": "extra"
     },
     {
       "id": "14_",
       "name": "Kółko etyczno-filozoficzne",
-      "iconId": "music",
-      "color": "#ffffff"
+      "colorId": "plain"
     },
     {
       "id": "15_",
       "name": "Arteterapia",
-      "iconId": "music",
-      "color": "#FF8FB1"
+      "colorId": "creative"
     },
     {
       "id": "16_",
       "name": "Aikido",
-      "iconId": "music",
-      "color": "#FFCF4D"
+      "colorId": "extra"
     },
     {
       "id": "17_",
       "name": "Robotyka",
-      "iconId": "music",
-      "color": "#FFCF4D"
+      "colorId": "extra"
     },
     {
       "id": "18_",
       "name": "Kółko muzyczne \"Chórek\"",
-      "iconId": "music",
-      "color": "#ffffff"
+      "colorId": "plain"
     },
     {
       "id": "19_",
       "name": "Dance 4 Friends",
-      "iconId": "music",
-      "color": "#FFCF4D"
+      "short": "Dance 4 F.",
+      "colorId": "extra"
     },
     {
       "id": "20_",
       "name": "Akademia Gier CUBE",
-      "iconId": "music",
-      "color": "#FFCF4D"
+      "short": "Gry CUBE",
+      "colorId": "extra"
     },
     {
       "id": "21_",
       "name": "Szachy",
-      "iconId": "music",
-      "color": "#FFCF4D"
+      "colorId": "extra"
     }
   ],
   "days": [
     {
       "name": "Poniedziałek",
+      "short": "Pn",
+      "weekday": 1,
       "lessons": [
         {},
         {
@@ -257,6 +293,8 @@
     },
     {
       "name": "Wtorek",
+      "short": "Wt",
+      "weekday": 2,
       "lessons": [
         {},
         {
@@ -292,6 +330,8 @@
     },
     {
       "name": "Środa",
+      "short": "Śr",
+      "weekday": 3,
       "lessons": [
         {},
         {
@@ -329,6 +369,8 @@
     },
     {
       "name": "Czwartek",
+      "short": "Cz",
+      "weekday": 4,
       "lessons": [
         {},
         {
@@ -367,6 +409,8 @@
     },
     {
       "name": "Piątek",
+      "short": "Pt",
+      "weekday": 5,
       "lessons": [
         {},
         {
