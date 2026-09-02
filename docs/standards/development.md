@@ -13,7 +13,11 @@ system is built**; read this before writing code for **how to write it here**.
   pass them to components.
 - **One folder per component**, holding its implementation and any component-local styles.
 - **Styling:** use scoped styles inside `.astro` files with `<style>` tags, or shared stylesheets
-  in `src/assets/`.
+  in `src/assets/`. Rules that cross component boundaries — the v2 responsive bands — belong in the
+  shared stylesheet; scoped styles cannot express them.
+- **Layout is never a build-time prop.** This is a static site: frontmatter cannot know the
+  viewport, so anything that varies by width is decided in CSS. See
+  [styling.md](styling.md#surfaces).
 - **Data is read-only:** JSON files in `src/data/` are the source of record. Transformations are
   pure functions in TypeScript modules, never mutations.
 - **Props are closed:** variant / option props are enums or string literals; content is free-form.
@@ -38,6 +42,9 @@ system is built**; read this before writing code for **how to write it here**.
 | Table rendering         | [src/components/Table2.astro](../../src/components/Table2.astro) |
 | Data type definitions   | [src/data/lessonTypes.ts](../../src/data/lessonTypes.ts)         |
 | Styled component        | [src/components/Cell.astro](../../src/components/Cell.astro)     |
+| Responsive page         | [src/pages/v2.astro](../../src/pages/v2.astro)                   |
+| Build-time transform    | [src/utils/v2/plan.ts](../../src/utils/v2/plan.ts)               |
+| Band-aware layout CSS   | [src/assets/v2/v2.css](../../src/assets/v2/v2.css)               |
 
 ## Keeping docs in sync
 

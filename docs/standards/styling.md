@@ -1,38 +1,60 @@
 # Styling & UI
 
-The rules for visual consistency and the responsive surfaces the site targets.
+The rules for visual consistency and the surfaces the site targets. The v2 plan
+(`src/pages/v2.astro`) is built to `designs/Przekazanie deweloperom.dc.html`; that spec is the
+authority where this doc is silent.
 
 ## Surfaces
 
-- **Primary surface:** desktop browsers (1920×1080 and wider), modern Chrome/Firefox/Safari/Edge
-- **Secondary surfaces:** tablets (iPad, 768px and up) — tested, optional enhancements
-- **Unsupported:** old browsers (no polyfills or IE support)
+The plan is read on a phone during the week and printed once a term. Both are binding.
 
-The primary surface is the binding baseline. Enhancements above it are allowed when the primary
-surface still works without them.
+| Band       | Width       | Shows                                                                    |
+| ---------- | ----------- | ------------------------------------------------------------------------ |
+| **A**      | ≤ 480px     | One day: tabs, time gutter, lesson name and teacher, "?" legend sheet    |
+| **B**      | 481–1023px  | Whole week, shortened names, no teacher, "?" legend sheet                |
+| **C**      | ≥ 1024px    | Whole week, full names and teachers, fixed legend column                 |
+| **Print**  | A4 landscape | One page, legend at the bottom, no "today"                              |
+
+Bands are chosen by **width only**. A phone in landscape is 915px wide and lands in band B, so
+orientation queries are never needed and must not be added — they misfire on tablets. Reference
+canvas for band A is 412 × 915.
+
+**Unsupported:** old browsers (no polyfills, no IE).
+
+## Floors — non-negotiable
+
+- **px, not rem.** These are floors, not preferences.
+- **Text ≥ 17px.** 14px only for meta: end time, break text, teacher name. Nothing smaller.
+- **Touch targets ≥ 44 × 44px** — day tabs and the legend button.
+- **Line height ≥ 1.3** for anything that can wrap.
+- **WCAG AA**: 4.5:1 body text, 3:1 large text and UI.
+- **No state carried by colour alone.** The viewed day has a bar and its full name, today has the
+  word DZIŚ and a wider tab, an empty slot says "wolne".
+- **A full day fits the screen without scrolling.** Rows divide the viewport height.
 
 ## Visual conventions
 
-- **Color:** define a fixed palette in a CSS file or config; use class names or CSS variables, never
-  inline styles.
-- **Typography:** fixed type scale with named sizes (small, body, large, heading); use semantic
-  heading levels (`<h1>` — `<h6>`).
-- **Spacing:** fixed scale (4px, 8px, 16px, 24px, etc.); use margin/padding utility classes or
-  shared components.
-- **Components:** share UI patterns across pages. A button, a card, a table cell — define once, reuse
-  everywhere. Extend with optional props (size, variant), never duplicate.
+- **Lesson colours are data, not decoration.** Exact hex from `src/data/lessons.json`, full strength,
+  never tokenized, tinted or made transparent, and never shown without the legend. Tile ink comes
+  from luminance (see `src/utils/v2/plan.ts`); the teacher line is the weaker variant of it.
+- **Everything else is a token** from `src/assets/v2/tokens.css` — type scale, spacing ramp, radii,
+  lines, surfaces, accent. No values from outside the ramp, no inline styles beyond the per-cell
+  colour custom properties.
+- **Type scale** switches once, at 1024px: phone `17/20/24`, desk `20/24/30`.
+- **Layout lives in `src/assets/v2/v2.css`**, not in scoped component styles — the band rules cross
+  component boundaries.
+- **Semantic HTML**: heading levels, real buttons, `aria-selected` on the day tabs.
 
 ## Building new UI
 
-1. **Follow the design system.** Use existing colors, type styles, and spacing. Extend the system
-   before hand-rolling a custom look.
-2. **Think mobile-first.** Start with the constraints; add enhancements for larger screens.
-3. **Test on the primary surface.** Desktop browser rendering is the truth for this site.
-4. **Accessibility:** headings, link text, color contrast, focus states, semantic HTML.
-5. **Performance:** keep the CSS small; avoid layout thrashing; preload critical assets.
+1. Read the design spec and the token file before writing CSS. Extend the scale, never hand-roll a
+   size.
+2. Decide layout in CSS. This is a static site: a build-time prop cannot know the viewport, so a
+   layout that depends on width must never be chosen in `.astro` frontmatter.
+3. Verify on all three bands plus print. Resizing the dev server in a browser is the check.
+4. Keep the CSS small; no runtime layout work.
 
 ## Commands
 
-No separate style build. CSS is written in `.astro` files as scoped `<style>` tags or in shared
-stylesheets bundled by Astro at build time. Verify responsive behavior in the dev server with
-`npm run dev` — resize the browser or use the browser's device emulation.
+No separate style build — CSS is bundled by Astro. Verify with `npm run dev` at 412 × 915, 915 × 412
+and 1440 × 900, and in the browser's print preview.
