@@ -5,16 +5,18 @@
  * Nothing user-visible is allowed to live outside that data, so this type is
  * also the checklist for what a component may render.
  *
- * It is split in two files, along one line: **does a school year decide it?**
- * `commons.json` holds what the school fixes — copy, colours, bell times, the
- * days of the week; `<year>.json` holds what a year decides — its teachers,
- * its subjects, its week. `plans/index.ts` merges them back into one
- * `LessonsPlan`, which is what the transform and the components see.
+ * It is split in three files, along one line: **how often does it change?**
+ * `commons.json` is the school's fixtures — copy, colours, bell times, the days
+ * of the week — and effectively frozen. `catalog.json` is reference data, the
+ * people and the subjects: it grows as new ones appear and is never rewritten.
+ * `<year>.json` is one year's facts, its week, and is never edited once
+ * published. `plans/index.ts` merges the three into one `LessonsPlan`, which is
+ * what the transform and the components see.
  *
- * The split means an edit to commons reaches back into published years. That
- * is accepted for chrome and bell times and nothing else: a year's teachers,
- * lesson types and lessons stay in the year file, where they are never edited
- * again.
+ * Two files are shared, so an edit to either reaches back into published years.
+ * That is the point for a correction — a misspelled teacher lands in every year
+ * at once — and it is why catalog rows are appended and never repurposed. A
+ * teacher who leaves keeps their row; the lessons simply stop referencing it.
  */
 
 /** Every fixed string on screen, so no component hardcodes copy. */
@@ -46,6 +48,11 @@ type PaletteColor = {
 };
 
 type Teacher = {
+  /**
+   * Opaque and permanent, for the same reason a slot's is: names change —
+   * marriages, corrections, a co-teaching pair splitting up — and a key that is
+   * also displayed data starts lying. Never reused once allocated.
+   */
   id: string;
   name: string;
   /** A placeholder record ("multiple", "<extra>") — never rendered as a name. */
@@ -66,6 +73,11 @@ type Slot = {
 };
 
 type LessonType = {
+  /**
+   * Readable, unlike a teacher's — a subject's identity does not change, so
+   * there is nothing here to rot. Two subjects that merely read alike
+   * ("Gimnastyka korekcyjna" and "kompensacyjna") are two rows, not one.
+   */
   id: string;
   name: string;
   /** Abbreviation for the narrow band; the full name is used when absent. */
@@ -111,10 +123,19 @@ export type PlanCommons = {
   days: Day[];
 };
 
-/** `<year>.json` — what one school year decides. Never edited once published. */
-export type SchoolYear = {
+/**
+ * `catalog.json` — the people and subjects the years draw on. Append-only: a
+ * row is added when a new teacher or subject appears and edited only to correct
+ * it. Rows no year references any more are inert — `buildPlan` renders what the
+ * lessons point at, so a retired subject costs nothing but a line.
+ */
+export type PlanCatalog = {
   teachers: Teacher[];
   lessonTypes: LessonType[];
+};
+
+/** `<year>.json` — one year's week. Never edited once published. */
+export type SchoolYear = {
   /**
    * `Day.id` → `Slot.id` → the lesson. Every key on both levels must resolve
    * or `buildPlan` throws, so a retired slot or a mistyped day can never
@@ -123,4 +144,4 @@ export type SchoolYear = {
   lessons: Record<string, Record<string, Lesson>>;
 };
 
-export type LessonsPlan = PlanCommons & SchoolYear;
+export type LessonsPlan = PlanCommons & PlanCatalog & SchoolYear;

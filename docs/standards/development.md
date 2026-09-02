@@ -31,10 +31,11 @@ system is built**; read this before writing code for **how to write it here**.
 
 ## Adding a feature
 
-1. **Data layer** — extend `src/data/plans/` and its type in `src/data/types.ts`. New copy, colours
-   or day labels go in `commons.json`; anything one year decides goes in that year's file — never
-   into a component. A type change must keep the archived years compiling too — they are all merged
-   and typed by `src/data/plans/index.ts`.
+1. **Data layer** — extend `src/data/plans/` and its type in `src/data/types.ts`. The three files
+   split by change frequency: new copy, colours or day labels go in `commons.json`; a new teacher or
+   subject goes in `catalog.json`; only the week itself goes in that year's file — and never into a
+   component. A type change must keep the archived years compiling too — they are all merged and
+   typed by `src/data/plans/index.ts`.
 2. **Components** — add or extend components in `src/components/`.
 3. **Page** — mount the component in `src/pages/` where it belongs, or create a new page.
 4. **Build and verify** — run `npm run build` and check the output.
@@ -46,8 +47,9 @@ system is built**; read this before writing code for **how to write it here**.
 | --------------------------- | ---------------------------------------------------------------------- |
 | Page structure / layout     | [src/pages/index.astro](../../src/pages/index.astro)                   |
 | Data type definitions       | [src/data/types.ts](../../src/data/types.ts)                           |
-| A school year's data        | [src/data/plans/2026.json](../../src/data/plans/2026.json)             |
+| A school year's week        | [src/data/plans/2026.json](../../src/data/plans/2026.json)             |
 | Shared copy, colours, bells | [src/data/plans/commons.json](../../src/data/plans/commons.json)       |
+| Teachers and subjects       | [src/data/plans/catalog.json](../../src/data/plans/catalog.json)       |
 | A component reading labels  | [src/components/WeekGrid.astro](../../src/components/WeekGrid.astro)   |
 | Build-time transform        | [src/utils/plan.ts](../../src/utils/plan.ts)                           |
 | Band-aware layout CSS       | [src/assets/plan.css](../../src/assets/plan.css)                       |
@@ -77,6 +79,7 @@ Durable docs stay current two ways:
 | ---------------------------------- | ------------------------------------------------------------------- |
 | Data shape (JSON / types)          | `architecture.md`; this guide (Copy-from)                           |
 | User-visible copy or a colour      | `commons.json` only — no doc change, but never a component          |
+| A new teacher or subject           | `catalog.json` only — no doc change; append a row, never repurpose  |
 | A new school year published        | `docs/importing-a-plan.md` if the procedure itself changed          |
 | New component or changed structure | this guide (Copy-from); `architecture.md` (layout)                  |
 | New page or route                  | this guide (Copy-from); README.md if user-facing                    |

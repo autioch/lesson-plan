@@ -6,9 +6,10 @@
  * one line is the whole "publish next year" change, and its diff says which
  * year went up.
  *
- * What the years share — copy, palette, bell times, the days of the week —
- * lives once in `commons.json` and is merged in here, so a year file holds
- * only what that year decided. See `../types.ts` for where the line falls.
+ * What the years share is merged in here, so a year file holds only its week:
+ * `commons.json` for the fixtures — copy, palette, bell times, the days — and
+ * `catalog.json` for the teachers and subjects every year draws on. See
+ * `../types.ts` for where the lines fall.
  *
  * Every year is merged and typed, not just the active one, so `astro check`
  * types them all against `LessonsPlan`. That is deliberate: when the type
@@ -19,13 +20,20 @@
  * Adding a year: docs/importing-a-plan.md.
  */
 
-import type { LessonsPlan, PlanCommons, SchoolYear } from "../types";
+import type {
+  LessonsPlan,
+  PlanCatalog,
+  PlanCommons,
+  SchoolYear,
+} from "../types";
 
 import commonsData from "./commons.json";
+import catalogData from "./catalog.json";
 import y2025 from "./2025.json";
 import y2026 from "./2026.json";
 
 const commons: PlanCommons = commonsData;
+const catalog: PlanCatalog = catalogData;
 
 const years: Record<string, SchoolYear> = {
   "2025": y2025,
@@ -34,7 +42,10 @@ const years: Record<string, SchoolYear> = {
 
 /** Keyed by the September the plan starts. */
 export const plans: Record<string, LessonsPlan> = Object.fromEntries(
-  Object.entries(years).map(([year, data]) => [year, { ...commons, ...data }]),
+  Object.entries(years).map(([year, data]) => [
+    year,
+    { ...commons, ...catalog, ...data },
+  ]),
 );
 
 /** The year the site renders. The only line that moves in September. */

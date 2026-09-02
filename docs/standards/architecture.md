@@ -56,26 +56,35 @@ Import aliases: none currently used.
 
 ## Data loading & composition
 
-At build time, Astro imports the shared file plus one JSON file per school year, merges and renders
-one of them, and passes it through one transform:
+At build time, Astro imports two shared files plus one JSON file per school year, merges and renders
+one of them, and passes it through one transform. **The three files are split by how often they
+change**, not by who uses them:
 
-- **`src/data/plans/commons.json`** — what the school fixes and a year does not: `locale`, `labels`
+- **`src/data/plans/commons.json`** — the school's fixtures, effectively frozen: `locale`, `labels`
   (every fixed string), `palette` (`{ id, hex, legendTitle, inLegend }` — the only place a colour is
   written), `slots` (the bell day: `id`, `start`, `duration`), `days` (`id`, `name`, `short`,
   `weekday`).
-- **`src/data/plans/<year>.json`** — what one year decides, named for the September it starts. Root
-  keys: `teachers`, `lessonTypes` (referencing a colour by `colorId`), and `lessons` — the week, as
-  `Day.id` → `Slot.id` → `{ lessonId, teacherId }`. A slot with no entry is free.
-- **`src/data/plans/index.ts`** — merges commons into **every** year to build `plans`, and names the
-  live one in `ACTIVE_YEAR`. Only the active year reaches the page; the rest are merged purely so
-  `astro check` types them against `LessonsPlan` and a type change names every file it breaks.
-  Publishing a new year is one line here — see [importing-a-plan.md](../importing-a-plan.md).
-- **`src/data/types.ts`** — `PlanCommons`, `SchoolYear`, and the `LessonsPlan` they merge into; the
-  checklist of what may be rendered, and where the line between the two files falls.
+- **`src/data/plans/catalog.json`** — the people and subjects the years draw on, append-only:
+  `teachers` (`id`, `name`, optional `anonymous`) and `lessonTypes` (`id`, `name`, optional `short`,
+  `colorId`). A row is added when a new one appears and edited only to correct it; a teacher who
+  leaves keeps their row and the lessons simply stop referencing it. Rows no year references are
+  inert — `buildPlan` renders what the lessons point at, so nothing flags a retired row and nothing
+  needs to.
+- **`src/data/plans/<year>.json`** — one year's week, named for the September it starts. One root
+  key, `lessons`: `Day.id` → `Slot.id` → `{ lessonId, teacherId }`. A slot with no entry is free.
+- **`src/data/plans/index.ts`** — merges commons and catalog into **every** year to build `plans`,
+  and names the live one in `ACTIVE_YEAR`. Only the active year reaches the page; the rest are merged
+  purely so `astro check` types them against `LessonsPlan` and a type change names every file it
+  breaks. Publishing a new year is one line here — see
+  [importing-a-plan.md](../importing-a-plan.md).
+- **`src/data/types.ts`** — `PlanCommons`, `PlanCatalog`, `SchoolYear`, and the `LessonsPlan` they
+  merge into; the checklist of what may be rendered, and where the lines between the files fall.
 
 Past years are never edited: a published year is a snapshot of the week that hung on the wall. The
-split is what makes that affordable — an edit to commons reaches back into published years, which is
-accepted for copy, colours and bell times and for nothing else.
+split is what makes that affordable — the year file holds only the facts that were true that
+September, and the two shared files hold what a correction should reach back and fix everywhere.
+That reach is the point for a misspelled name and the hazard for anything else, which is why catalog
+rows are appended and never repurposed.
 
 ### Data modelling rules
 
@@ -86,11 +95,14 @@ migrate; it is the discipline that keeps the files honest while they are hand-ed
   and `days` all carry one; `colorId`, `lessonId`, `teacherId` and the two levels of `lessons` are
   foreign keys to them. **Nothing is referenced by array position** — order is presentation, and a
   row inserted mid-list must never re-point an existing reference.
-- **An id is opaque and permanent, display text is not.** `Slot.id` is `s1`, never the start time,
-  because bell times move and a key that is also displayed data starts lying the day it changes.
-  `Day.id` is readable (`mon`) only because a day's identity genuinely cannot change. **A retired id
-  is never reused** — one quietly pointing at a different subject, colour or hour repaints the plan
-  and nothing fails.
+- **An id is opaque and permanent, display text is not.** `Slot.id` is `s1` and `Teacher.id` is
+  `t1`, never the start time or the name, because bell times move and people are renamed, and a key
+  that is also displayed data starts lying the day it changes. `Day.id` (`mon`) and `LessonType.id`
+  (`wf-ew`) are readable only because a day's or a subject's identity genuinely cannot change.
+- **A retired id is never reused, and ids are unique across years.** One quietly pointing at a
+  different subject, colour or hour repaints the plan and nothing fails. This is why `teachers` and
+  `lessonTypes` are one shared table rather than a copy per year: while they were per-year, `t3`
+  named a different person in each file and nothing could see it.
 - **Absence is a fact, not a blank row.** A free slot has no entry; there is no empty-lesson shape.
 - **Every foreign key is resolved, never trusted.** `src/utils/plan.ts` throws on any id that does
   not resolve and on any `lessons` key that names no day or slot. A school timetable with a blank
@@ -116,7 +128,8 @@ Static site; the only runtime state is which day a phone is showing.
 | Data                                            | Owner                                               |
 | ----------------------------------------------- | --------------------------------------------------- |
 | Palette, copy, bell times, day names            | `src/data/plans/commons.json`                       |
-| Schedule, teachers, lesson types                | `src/data/plans/<year>.json`                        |
+| Teachers, lesson types                          | `src/data/plans/catalog.json`                       |
+| The schedule itself                             | `src/data/plans/<year>.json`                        |
 | Derived render shape                            | `src/utils/plan.ts`                                 |
 | Render logic and HTML structure                 | `src/components/`                                   |
 | Theme — type scale, spacing, surfaces, text ink | `src/assets/tokens.css`                             |

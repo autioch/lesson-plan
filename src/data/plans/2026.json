@@ -1,250 +1,149 @@
 {
-  "teachers": [
-    {
-      "id": "t1",
-      "name": "MSkrzypczak"
-    },
-    {
-      "id": "t2",
-      "name": "APiskorska/PŁuczak"
-    },
-    {
-      "id": "t3",
-      "name": "KOrdza"
-    },
-    {
-      "id": "t4",
-      "name": "MWołejnio"
-    },
-    {
-      "id": "t5",
-      "name": "ABartkowski"
-    },
-    {
-      "id": "t6",
-      "name": "JProniewski"
-    },
-    {
-      "id": "t7",
-      "name": "multiple",
-      "anonymous": true
-    },
-    {
-      "id": "t8",
-      "name": "Instruktor szachy",
-      "anonymous": true
-    }
-  ],
-  "lessonTypes": [
-    {
-      "id": "1_ew",
-      "name": "Edukacja",
-      "colorId": "plain"
-    },
-    {
-      "id": "2_eng",
-      "name": "Angielski",
-      "colorId": "lang"
-    },
-    {
-      "id": "3_es",
-      "name": "Hiszpański",
-      "colorId": "lang"
-    },
-    {
-      "id": "4_wf",
-      "name": "W/F",
-      "colorId": "kit"
-    },
-    {
-      "id": "5_wfew",
-      "name": "W/F ew",
-      "colorId": "kit"
-    },
-    {
-      "id": "6_gym",
-      "name": "Gimnastyka kompensacyjna",
-      "short": "Gimnastyka",
-      "colorId": "kit"
-    },
-    {
-      "id": "7_pool",
-      "name": "Basen",
-      "colorId": "pool"
-    },
-    {
-      "id": "8_ethics",
-      "name": "Etyka",
-      "colorId": "plain"
-    },
-    {
-      "id": "9_club",
-      "name": "Kółko",
-      "colorId": "plain"
-    },
-    {
-      "id": "10_inf",
-      "name": "Informatyka",
-      "short": "Inform.",
-      "colorId": "plain"
-    },
-    {
-      "id": "11_art",
-      "name": "Zajęcia Twórcze",
-      "short": "Twórcze",
-      "colorId": "creative"
-    },
-    {
-      "id": "12_chess",
-      "name": "Szachy",
-      "colorId": "extra"
-    }
-  ],
   "lessons": {
     "mon": {
       "s2": {
-        "lessonId": "3_es",
-        "teacherId": "t4"
+        "lessonId": "spanish",
+        "teacherId": "t12"
       },
       "s3": {
-        "lessonId": "4_wf",
-        "teacherId": "t3"
+        "lessonId": "wf",
+        "teacherId": "t11"
       },
       "s4": {
-        "lessonId": "2_eng",
-        "teacherId": "t2"
+        "lessonId": "english",
+        "teacherId": "t10"
       },
       "s5": {
-        "lessonId": "1_ew",
+        "lessonId": "education",
         "teacherId": "t1"
       },
       "s6": {
-        "lessonId": "1_ew",
+        "lessonId": "education",
         "teacherId": "t1"
       },
       "s7": {
-        "lessonId": "1_ew",
+        "lessonId": "education",
         "teacherId": "t1"
       },
       "s8": {
-        "lessonId": "10_inf",
-        "teacherId": "t6"
+        "lessonId": "it",
+        "teacherId": "t13"
       }
     },
     "tue": {
       "s2": {
-        "lessonId": "8_ethics",
-        "teacherId": "t5"
+        "lessonId": "ethics",
+        "teacherId": "t6"
       },
       "s3": {
-        "lessonId": "3_es",
-        "teacherId": "t4"
+        "lessonId": "spanish",
+        "teacherId": "t12"
       },
       "s4": {
-        "lessonId": "4_wf",
-        "teacherId": "t3"
+        "lessonId": "wf",
+        "teacherId": "t11"
       },
       "s5": {
-        "lessonId": "1_ew",
+        "lessonId": "education",
         "teacherId": "t1"
       },
       "s6": {
-        "lessonId": "1_ew",
+        "lessonId": "education",
         "teacherId": "t1"
       },
       "s7": {
-        "lessonId": "1_ew",
+        "lessonId": "education",
         "teacherId": "t1"
       },
       "s8": {
-        "lessonId": "2_eng",
-        "teacherId": "t2"
+        "lessonId": "english",
+        "teacherId": "t10"
       }
     },
     "wed": {
       "s2": {
-        "lessonId": "1_ew",
+        "lessonId": "education",
         "teacherId": "t1"
       },
       "s3": {
-        "lessonId": "1_ew",
+        "lessonId": "education",
         "teacherId": "t1"
       },
       "s4": {
-        "lessonId": "1_ew",
+        "lessonId": "education",
         "teacherId": "t1"
       },
       "s5": {
-        "lessonId": "7_pool",
+        "lessonId": "pool",
         "teacherId": "t7"
       },
       "s6": {
-        "lessonId": "7_pool",
+        "lessonId": "pool",
         "teacherId": "t7"
       },
       "s7": {
-        "lessonId": "9_club",
+        "lessonId": "club",
         "teacherId": "t1"
       }
     },
     "thu": {
       "s2": {
-        "lessonId": "6_gym",
-        "teacherId": "t3"
+        "lessonId": "gym-compensatory",
+        "teacherId": "t11"
       },
       "s3": {
-        "lessonId": "1_ew",
+        "lessonId": "education",
         "teacherId": "t1"
       },
       "s4": {
-        "lessonId": "1_ew",
+        "lessonId": "education",
         "teacherId": "t1"
       },
       "s5": {
-        "lessonId": "2_eng",
-        "teacherId": "t2"
+        "lessonId": "english",
+        "teacherId": "t10"
       },
       "s6": {
-        "lessonId": "1_ew",
+        "lessonId": "education",
         "teacherId": "t1"
       },
       "s7": {
-        "lessonId": "1_ew",
+        "lessonId": "education",
         "teacherId": "t1"
       },
       "s8": {
-        "lessonId": "1_ew",
+        "lessonId": "education",
         "teacherId": "t1"
       }
     },
     "fri": {
       "s2": {
-        "lessonId": "1_ew",
+        "lessonId": "education",
         "teacherId": "t1"
       },
       "s3": {
-        "lessonId": "5_wfew",
+        "lessonId": "wf-ew",
         "teacherId": "t1"
       },
       "s4": {
-        "lessonId": "11_art",
+        "lessonId": "art",
         "teacherId": "t1"
       },
       "s5": {
-        "lessonId": "11_art",
+        "lessonId": "art",
         "teacherId": "t1"
       },
       "s6": {
-        "lessonId": "12_chess",
-        "teacherId": "t8"
+        "lessonId": "chess",
+        "teacherId": "t14"
       },
       "s7": {
-        "lessonId": "1_ew",
+        "lessonId": "education",
         "teacherId": "t1"
       },
       "s8": {
-        "lessonId": "2_eng",
-        "teacherId": "t2"
+        "lessonId": "english",
+        "teacherId": "t10"
       }
     }
   }
