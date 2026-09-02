@@ -1,0 +1,198 @@
+{
+  "teachers": [
+    {
+      "id": "t1",
+      "name": "MSkrzypczak"
+    },
+    {
+      "id": "t2",
+      "name": "APiskorska/IGłowacka"
+    },
+    {
+      "id": "t3",
+      "name": "IGruszka"
+    },
+    {
+      "id": "t4",
+      "name": "ESzymańska"
+    },
+    {
+      "id": "t5",
+      "name": "AKozłowska"
+    },
+    {
+      "id": "t6",
+      "name": "ABartkowski"
+    },
+    {
+      "id": "t7",
+      "name": "multiple",
+      "anonymous": true
+    },
+    {
+      "id": "t8",
+      "name": "Joanna Nikuła-Szymaniak"
+    },
+    {
+      "id": "t9",
+      "name": "<extra>",
+      "anonymous": true
+    },
+    {
+      "id": "t10",
+      "name": "APiskorska/PŁuczak"
+    },
+    {
+      "id": "t11",
+      "name": "KOrdza"
+    },
+    {
+      "id": "t12",
+      "name": "MWołejnio"
+    },
+    {
+      "id": "t13",
+      "name": "JProniewski"
+    },
+    {
+      "id": "t14",
+      "name": "Instruktor szachy",
+      "anonymous": true
+    }
+  ],
+  "lessonTypes": [
+    {
+      "id": "acrobatics",
+      "name": "Akrobatyka",
+      "colorId": "extra"
+    },
+    {
+      "id": "aikido",
+      "name": "Aikido",
+      "colorId": "extra"
+    },
+    {
+      "id": "art",
+      "name": "Zajęcia Twórcze",
+      "short": "Twórcze",
+      "colorId": "creative"
+    },
+    {
+      "id": "art-therapy",
+      "name": "Arteterapia",
+      "colorId": "creative"
+    },
+    {
+      "id": "chess",
+      "name": "Szachy",
+      "colorId": "extra"
+    },
+    {
+      "id": "choir",
+      "name": "Kółko muzyczne \"Chórek\"",
+      "colorId": "plain"
+    },
+    {
+      "id": "club",
+      "name": "Kółko",
+      "colorId": "plain"
+    },
+    {
+      "id": "dance",
+      "name": "Dance 4 Friends",
+      "short": "Dance 4 F.",
+      "colorId": "extra"
+    },
+    {
+      "id": "education",
+      "name": "Edukacja",
+      "colorId": "plain"
+    },
+    {
+      "id": "english",
+      "name": "Angielski",
+      "colorId": "lang"
+    },
+    {
+      "id": "ethics",
+      "name": "Etyka",
+      "colorId": "plain"
+    },
+    {
+      "id": "ethics-club",
+      "name": "Kółko etyczno-filozoficzne",
+      "colorId": "plain"
+    },
+    {
+      "id": "games-cube",
+      "name": "Akademia Gier CUBE",
+      "short": "Gry CUBE",
+      "colorId": "extra"
+    },
+    {
+      "id": "gym-compensatory",
+      "name": "Gimnastyka kompensacyjna",
+      "short": "Gimnastyka",
+      "colorId": "kit"
+    },
+    {
+      "id": "gym-corrective",
+      "name": "Gimnastyka korekcyjna",
+      "short": "Gimn. kor.",
+      "colorId": "kit"
+    },
+    {
+      "id": "it",
+      "name": "Informatyka",
+      "short": "Inform.",
+      "colorId": "plain"
+    },
+    {
+      "id": "pool",
+      "name": "Basen",
+      "colorId": "pool"
+    },
+    {
+      "id": "religion-ethics",
+      "name": "Religia/Etyka",
+      "short": "Religia",
+      "colorId": "plain"
+    },
+    {
+      "id": "rhythmics",
+      "name": "Rytmika",
+      "colorId": "individual"
+    },
+    {
+      "id": "robotics",
+      "name": "Robotyka",
+      "colorId": "extra"
+    },
+    {
+      "id": "social-skills",
+      "name": "Trening Umiejętności Społecznych",
+      "short": "TUS",
+      "colorId": "extra"
+    },
+    {
+      "id": "spanish",
+      "name": "Hiszpański",
+      "colorId": "lang"
+    },
+    {
+      "id": "speech-therapy",
+      "name": "Logopedia",
+      "colorId": "individual"
+    },
+    {
+      "id": "wf",
+      "name": "W/F",
+      "colorId": "kit"
+    },
+    {
+      "id": "wf-ew",
+      "name": "W/F ew",
+      "colorId": "kit"
+    }
+  ]
+}

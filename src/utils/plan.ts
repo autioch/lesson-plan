@@ -1,17 +1,18 @@
 /**
- * Build-time transform: `lessons.json` → the shape the components render.
+ * Build-time transform: the merged plan → the shape the components render.
  *
- * Everything derived lives here — the shared row set, time ranges, break text,
- * per-day cells and the legend. Components read the result and lay it out; they
- * compute nothing and they hold no copy of their own.
+ * Everything derived lives here — time ranges, break text, per-day cells and
+ * the legend. Components read the result and lay it out; they compute nothing
+ * and they hold no copy of their own.
  *
  * What is deliberately *not* here: today. The site is built once a term, so the
  * weekday is a runtime fact — the page script decides it. Nothing in this file
  * may read the clock.
  *
- * A reference that does not resolve (an unknown lesson, colour or teacher id)
- * throws. `lessons.json` is hand-edited, and a blank tile on a school timetable
- * is worse than a red build.
+ * A reference that does not resolve (an unknown lesson, colour or teacher id,
+ * or a day with no lessons filed under its name) throws. The plan files are
+ * hand-edited, and a blank tile on a school timetable is worse than a red
+ * build.
  */
 
 import type { Labels, LessonsPlan } from "../data/types";
@@ -97,32 +98,46 @@ export function buildPlan(data: LessonsPlan): Plan {
     return data.labels.breakMinutes.replace("{value}", String(gapMinutes));
   }
 
-  /** A lesson counts only when it has a type and is not marked ignored. */
-  const lessonAt = (dayIndex: number, slotIndex: number) => {
-    const lesson = data.days[dayIndex]?.lessons?.[slotIndex];
-    if (!lesson?.lessonId || lesson.ignored) return null;
-    return lesson;
-  };
+  /* Both levels of `lessons` are foreign keys, so both are checked here rather
+   * than trusted. A key that resolves to nothing would render as a blank column
+   * or a lost lesson — a plausible-looking week hiding a typo. */
+  const slotIds = new Set(data.slots.map((slot) => slot.id));
 
-  /* Row set: the unbroken span from the first slot any day uses to the last,
-   * shared across days so rows don't jump when the phone switches day. A slot
-   * inside that span that nobody uses still gets its own row — an empty hour is
-   * the truth, and dropping it would fold two free slots into one and overstate
-   * the break on the row above. Only the unused slots outside the span are
-   * dropped: those are edges of the school day, not gaps in this plan. */
-  const slotUsed = data.slots.map((_, slotIndex) =>
-    data.days.some((_, dayIndex) => lessonAt(dayIndex, slotIndex)),
-  );
-  const firstSlot = slotUsed.indexOf(true);
-  const lastSlot = slotUsed.lastIndexOf(true);
+  const week = data.days.map((day) => {
+    const rows = data.lessons[day.id];
+    if (!rows) {
+      throw new Error(`No lessons filed for day "${day.id}"`);
+    }
+    for (const slotId of Object.keys(rows)) {
+      if (!slotIds.has(slotId)) {
+        throw new Error(`Day "${day.id}": unknown slotId "${slotId}"`);
+      }
+    }
+    return rows;
+  });
+
+  for (const dayId of Object.keys(data.lessons)) {
+    if (!data.days.some((day) => day.id === dayId)) {
+      throw new Error(`Lessons filed under unknown day "${dayId}"`);
+    }
+  }
+
+  /** A slot with no row is free; so is one the family does not attend. */
+  const lessonAt = (dayIndex: number, slotId: string) => {
+    const lesson = week[dayIndex][slotId];
+    return lesson && !lesson.ignored ? lesson : null;
+  };
 
   const usedColorIds = new Set<string>();
 
-  const spanSlots =
-    firstSlot < 0 ? [] : data.slots.slice(firstSlot, lastSlot + 1);
+  const lastSlot = data.slots.length - 1;
 
-  const rows: PlanRow[] = spanSlots.map((slot, offset) => {
-    const slotIndex = firstSlot + offset;
+  /* Row set: the whole bell day, every year. A slot nobody uses still gets its
+   * own row — an empty hour is the truth, and dropping it would fold two free
+   * slots into one and overstate the break on the row above. Trimming the
+   * unused ends as well would make the grid a different height each year and
+   * hide that the school day runs wider than this class's week. */
+  const rows: PlanRow[] = data.slots.map((slot, slotIndex) => {
     const start = toMinutes(slot.start);
     const end = start + slot.duration;
     const gap =
@@ -135,13 +150,13 @@ export function buildPlan(data: LessonsPlan): Plan {
       range: `${slot.start} - ${toTime(end)}`,
       breakText: formatBreak(gap),
       cells: data.days.map((day, dayIndex) => {
-        const lesson = lessonAt(dayIndex, slotIndex);
-        if (!lesson?.lessonId) return EMPTY_CELL;
+        const lesson = lessonAt(dayIndex, slot.id);
+        if (!lesson) return EMPTY_CELL;
 
         const type = types.get(lesson.lessonId);
         if (!type) {
           throw new Error(
-            `${day.name}, slot ${slotIndex}: unknown lessonId "${lesson.lessonId}"`,
+            `${day.id}/${slot.id}: unknown lessonId "${lesson.lessonId}"`,
           );
         }
 
@@ -152,12 +167,10 @@ export function buildPlan(data: LessonsPlan): Plan {
           );
         }
 
-        const teacher = lesson.teacherId
-          ? teachers.get(lesson.teacherId)
-          : undefined;
-        if (lesson.teacherId && !teacher) {
+        const teacher = teachers.get(lesson.teacherId);
+        if (!teacher) {
           throw new Error(
-            `${day.name}, slot ${slotIndex}: unknown teacherId "${lesson.teacherId}"`,
+            `${day.id}/${slot.id}: unknown teacherId "${lesson.teacherId}"`,
           );
         }
 
@@ -166,7 +179,7 @@ export function buildPlan(data: LessonsPlan): Plan {
         return {
           name: type.name,
           short: type.short ?? type.name,
-          teacher: teacher && !teacher.anonymous ? teacher.name : "",
+          teacher: teacher.anonymous ? "" : teacher.name,
           color: color.hex,
           empty: false,
         };

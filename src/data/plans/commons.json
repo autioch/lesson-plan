@@ -1,0 +1,147 @@
+{
+  "locale": "pl",
+  "labels": {
+    "pageTitle": "Plan lekcji",
+    "today": "DZIŚ",
+    "todayAria": "dziś",
+    "freeSlot": "wolne",
+    "dayTabsLabel": "Dzień tygodnia",
+    "legendTitle": "Legenda kolorów",
+    "legendHint": "dotknij, aby zamknąć",
+    "breakMinutes": "+{value}min przerwy",
+    "breakHours": "+{value}h przerwy"
+  },
+  "palette": [
+    {
+      "id": "plain",
+      "hex": "#ffffff",
+      "legendTitle": "Zwykła lekcja",
+      "inLegend": false
+    },
+    {
+      "id": "lang",
+      "hex": "#4fb0f0",
+      "legendTitle": "Język obcy",
+      "inLegend": true
+    },
+    {
+      "id": "kit",
+      "hex": "#b6ee7a",
+      "legendTitle": "Spakuj strój",
+      "inLegend": true
+    },
+    {
+      "id": "pool",
+      "hex": "#7fe7d5",
+      "legendTitle": "Basen",
+      "inLegend": true
+    },
+    {
+      "id": "creative",
+      "hex": "#ff8fb1",
+      "legendTitle": "Zajęcia twórcze",
+      "inLegend": true
+    },
+    {
+      "id": "individual",
+      "hex": "#dcc0ff",
+      "legendTitle": "Zajęcia indywidualne i rytmika",
+      "inLegend": true
+    },
+    {
+      "id": "extra",
+      "hex": "#ffcf4d",
+      "legendTitle": "Dodatkowe",
+      "inLegend": true
+    }
+  ],
+  "slots": [
+    {
+      "id": "s1",
+      "start": "07:30",
+      "duration": 45
+    },
+    {
+      "id": "s2",
+      "start": "08:15",
+      "duration": 45
+    },
+    {
+      "id": "s3",
+      "start": "09:05",
+      "duration": 45
+    },
+    {
+      "id": "s4",
+      "start": "10:00",
+      "duration": 45
+    },
+    {
+      "id": "s5",
+      "start": "11:00",
+      "duration": 45
+    },
+    {
+      "id": "s6",
+      "start": "11:55",
+      "duration": 45
+    },
+    {
+      "id": "s7",
+      "start": "13:00",
+      "duration": 45
+    },
+    {
+      "id": "s8",
+      "start": "14:05",
+      "duration": 45
+    },
+    {
+      "id": "s9",
+      "start": "14:55",
+      "duration": 45
+    },
+    {
+      "id": "s10",
+      "start": "15:45",
+      "duration": 45
+    },
+    {
+      "id": "s11",
+      "start": "16:45",
+      "duration": 60
+    }
+  ],
+  "days": [
+    {
+      "id": "mon",
+      "name": "Poniedziałek",
+      "short": "Pn",
+      "weekday": 1
+    },
+    {
+      "id": "tue",
+      "name": "Wtorek",
+      "short": "Wt",
+      "weekday": 2
+    },
+    {
+      "id": "wed",
+      "name": "Środa",
+      "short": "Śr",
+      "weekday": 3
+    },
+    {
+      "id": "thu",
+      "name": "Czwartek",
+      "short": "Cz",
+      "weekday": 4
+    },
+    {
+      "id": "fri",
+      "name": "Piątek",
+      "short": "Pt",
+      "weekday": 5
+    }
+  ]
+}

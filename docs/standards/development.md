@@ -15,7 +15,7 @@ system is built**; read this before writing code for **how to write it here**.
 - **Styling:** use scoped styles inside `.astro` files with `<style>` tags, or shared stylesheets
   in `src/assets/`. Rules that cross component boundaries — the responsive bands — belong in the
   shared stylesheet; scoped styles cannot express them.
-- **No copy in components.** Every user-visible string is a label from the year's plan, passed in as
+- **No copy in components.** Every user-visible string is a label from `commons.json`, passed in as
   a prop. A hardcoded word in an `.astro` file is a bug, not a shortcut.
 - **No dates at build time.** Frontmatter and `src/utils/` must never call `new Date()`: the site is
   generated once a term. Anything that depends on the day belongs in the page script.
@@ -31,9 +31,11 @@ system is built**; read this before writing code for **how to write it here**.
 
 ## Adding a feature
 
-1. **Data layer** — extend the active year in `src/data/plans/` and its type in `src/data/types.ts`.
-   New copy, colours or day labels go there, never into a component. A type change must keep the
-   archived years compiling too — they are all imported by `src/data/plans/index.ts`.
+1. **Data layer** — extend `src/data/plans/` and its type in `src/data/types.ts`. The three files
+   split by change frequency: new copy, colours or day labels go in `commons.json`; a new teacher or
+   subject goes in `catalog.json`; only the week itself goes in that year's file — and never into a
+   component. A type change must keep the archived years compiling too — they are all merged and
+   typed by `src/data/plans/index.ts`.
 2. **Components** — add or extend components in `src/components/`.
 3. **Page** — mount the component in `src/pages/` where it belongs, or create a new page.
 4. **Build and verify** — run `npm run build` and check the output.
@@ -41,15 +43,17 @@ system is built**; read this before writing code for **how to write it here**.
 
 **Copy from** — canonical examples for building blocks:
 
-| Building…                  | Copy the pattern from                                                  |
-| -------------------------- | ---------------------------------------------------------------------- |
-| Page structure / layout    | [src/pages/index.astro](../../src/pages/index.astro)                   |
-| Data type definitions      | [src/data/types.ts](../../src/data/types.ts)                           |
-| A school year's data       | [src/data/plans/2025.json](../../src/data/plans/2025.json)             |
-| A component reading labels | [src/components/WeekGrid.astro](../../src/components/WeekGrid.astro)   |
-| Build-time transform       | [src/utils/plan.ts](../../src/utils/plan.ts)                           |
-| Band-aware layout CSS      | [src/assets/plan.css](../../src/assets/plan.css)                       |
-| Runtime (clock, day pick)  | the `<script>` in [src/pages/index.astro](../../src/pages/index.astro) |
+| Building…                   | Copy the pattern from                                                  |
+| --------------------------- | ---------------------------------------------------------------------- |
+| Page structure / layout     | [src/pages/index.astro](../../src/pages/index.astro)                   |
+| Data type definitions       | [src/data/types.ts](../../src/data/types.ts)                           |
+| A school year's week        | [src/data/plans/2026.json](../../src/data/plans/2026.json)             |
+| Shared copy, colours, bells | [src/data/plans/commons.json](../../src/data/plans/commons.json)       |
+| Teachers and subjects       | [src/data/plans/catalog.json](../../src/data/plans/catalog.json)       |
+| A component reading labels  | [src/components/WeekGrid.astro](../../src/components/WeekGrid.astro)   |
+| Build-time transform        | [src/utils/plan.ts](../../src/utils/plan.ts)                           |
+| Band-aware layout CSS       | [src/assets/plan.css](../../src/assets/plan.css)                       |
+| Runtime (clock, day pick)   | the `<script>` in [src/pages/index.astro](../../src/pages/index.astro) |
 
 ## Keeping docs in sync
 
@@ -74,7 +78,8 @@ Durable docs stay current two ways:
 | Change                             | Sync these durable docs                                             |
 | ---------------------------------- | ------------------------------------------------------------------- |
 | Data shape (JSON / types)          | `architecture.md`; this guide (Copy-from)                           |
-| User-visible copy or a colour      | the active year's plan only — no doc change, but never a component  |
+| User-visible copy or a colour      | `commons.json` only — no doc change, but never a component          |
+| A new teacher or subject           | `catalog.json` only — no doc change; append a row, never repurpose  |
 | A new school year published        | `docs/importing-a-plan.md` if the procedure itself changed          |
 | New component or changed structure | this guide (Copy-from); `architecture.md` (layout)                  |
 | New page or route                  | this guide (Copy-from); README.md if user-facing                    |
@@ -116,6 +121,33 @@ excluded from all of them — it is a verbatim design snapshot, not our code.
 Node is pinned in [.nvmrc](../../.nvmrc); both workflows read it, so local and CI never drift.
 
 ## Agent tooling
+
+Permissions live in two files, split by what belongs to the repo and what belongs to a machine:
+
+- **[.claude/settings.json](../../.claude/settings.json)** — tracked. Generic `Bash(cmd:*)` prefix
+  rules for the toolchain this repo actually uses: git's local operations, npm/npx, `node`, and the
+  small shell tools. **Add a rule here in its generic form** rather than letting a prompt append a
+  one-off literal — a literal for a command with a path or a session id in it can never match twice,
+  which is how an allowlist grows to ninety dead entries.
+- **[.claude/settings.local.json](../../.claude/settings.local.json)** — gitignored. Only what is
+  true of one machine: enabled MCP servers, absolute scratchpad paths.
+
+Anything not listed still prompts. Three categories stay that way on purpose: **anything leaving the
+machine** (`git push`, `gh pr create`, `gh pr merge`) is in `ask`, because
+[CLAUDE.md](../../CLAUDE.md) requires it regardless of what else is allowed; **`sed -i`** is absent
+so in-place rewrites of source go through the Edit tool, where the diff is visible; and **command
+dispatchers** (`xargs`, `sh -c`, `eval`) are absent so a chain cannot launder a command past those
+`ask` rules.
+
+**The allowlist is friction control, not a security boundary.** `Bash(node:*)` is arbitrary code
+execution, so a determined process could reach anything the shell can — the `ask` entries are a
+speed bump and a reminder, and the actual guard on pushing, publishing or deleting is
+[CLAUDE.md](../../CLAUDE.md#working-style). Widen the list for convenience; don't mistake it for
+a control.
+
+**A newly created `settings.json` is not picked up mid-session** — the watcher only sees edits to a
+file that existed at session start. Symptom: prompts for commands the tracked file already allows,
+and duplicates of those rules appearing in `settings.local.json`. Restart the session.
 
 [.mcp.json](../../.mcp.json) declares GitHub's hosted MCP server, so PRs, issues and checks are
 read and written through it rather than by shelling out to `gh`. It authenticates with a

@@ -38,10 +38,12 @@
     display: none !important;
   }
 
+  /* No gap between the head and the rows: the column rules must run unbroken
+   * from the day names into the grid, or the header floats free of the table.
+   * The legend earns its separation with a margin of its own. */
   .print-sheet {
     display: flex;
     flex-direction: column;
-    gap: 8pt;
     box-sizing: border-box;
     width: 297mm;
     height: 210mm;
@@ -57,11 +59,12 @@
     grid-template-columns: 112pt repeat(5, 1fr);
   }
 
-  /* The header band runs to the paper's edge, like the screen's does; the
-   * negative margin cancels the sheet padding while the columns stay aligned
-   * with the rows below. */
+  /* The band bleeds left and right to the paper's edge, like the screen's does,
+   * but never to the top: `@page` margin is 0, so a printer's own non-printable
+   * strip would eat the day names. The sheet's 24pt top padding is the reserved
+   * space that keeps them on the paper. */
   .print-head {
-    margin: -24pt -28pt 6pt;
+    margin: 0 -28pt;
     padding: 10pt 28pt 8pt;
     background: #faf8f2;
     border-bottom: 0.75pt solid #c9c4b6;
@@ -154,7 +157,7 @@
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     gap: 10pt;
-    margin: 0;
+    margin: 8pt 0 0;
     padding-top: 6pt;
     border-top: 1pt solid #d8d4c8;
     list-style: none;
