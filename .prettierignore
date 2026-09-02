@@ -6,3 +6,6 @@ designs/
 # Build output and Astro's generated types.
 dist/
 .astro/
+
+# Per-machine agent settings, written by the tool rather than by hand.
+.claude/settings.local.json

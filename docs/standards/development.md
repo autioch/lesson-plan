@@ -56,7 +56,7 @@ Two doc classes, two rules:
 - **Durable docs** — CLAUDE.md, README.md, and every doc under `docs/` — describe the **current**
   state. They must never contradict the code.
 - **Working notes** — a plan file for an in-flight multi-session feature — are scratch. They are
-  deleted at close-out; the durable record is the commit history plus the archive entry.
+  deleted at close-out; the durable record is the commit history.
 
 Durable docs stay current two ways:
 
@@ -108,3 +108,11 @@ Configs: [eslint.config.mjs](../../eslint.config.mjs),
 excluded from all of them — it is a verbatim design snapshot, not our code.
 
 Node is pinned in [.nvmrc](../../.nvmrc); both workflows read it, so local and CI never drift.
+
+## Agent tooling
+
+[.mcp.json](../../.mcp.json) declares GitHub's hosted MCP server, so PRs, issues and checks are
+read and written through it rather than by shelling out to `gh`. It authenticates with a
+`GITHUB_PAT` environment variable — see [owner-tasks.md](../owner-tasks.md) — and is enabled per
+machine via `enabledMcpjsonServers` in `.claude/settings.local.json`. MCP servers connect at session
+start, so a new token or a config change needs a restarted session.

@@ -116,8 +116,8 @@ fix to match the spec, or if the spec is what's wrong, ask, record, reconcile ag
 ### 5 · Close out
 
 See [Close-out](#close-out), plus: run a **repo-wide doc reconcile** (the backstop for whatever the
-per-commit syncs missed), and **delete `docs/_active-plan.md`** — the durable record is the archive
-entry and the git history.
+per-commit syncs missed), and **delete `docs/_active-plan.md`** — the durable record is the git
+history.
 
 ## The review pass
 
@@ -161,13 +161,11 @@ Docs drifted, or code just changed.
 The same ending for Bounded and Feature:
 
 1. **Gate green.** Stage the change **and every durable doc it affects**.
-2. **Archive the item** — move it from the open list to the archive. That entry is the durable
-   record, so make it **self-contained**: what and why in a line or two, the headline decision (took
-   X over Y) when one was made, any owed-check note, and a link to the PR or squash commit. Never
-   link a working note — those are deleted.
+2. **The commit message is the record.** There is no archive file — `git log` and the PR are the
+   history. So write the message to be read later: what and why, the headline decision (took X over
+   Y) when one was made, and any owed check.
 3. **Owner-owed manual steps** — a key or account to provide, an env var to set in a hosting UI, a
-   live check only they can run — go in `docs/owner-tasks.md`, not the backlog. It's their queue, not
-   yours.
+   live check only they can run — go in `docs/owner-tasks.md`. It's their queue, not yours.
 4. **Push, open a lean PR, merge on green.** See [Committing](#committing).
 5. **One line back**: the PR or commit, the gate result, and anything still owed. No summary.
 
@@ -189,8 +187,7 @@ The same ending for Bounded and Feature:
 
 Long sessions fill the context window and degrade. At a **clean boundary** — a close-out, or between
 steps — when context is saturating or the user asks, **stop there rather than pushing on degraded**.
-Durable state is already persisted (git + the archive + `docs/_active-plan.md`), so a handoff loses
-nothing.
+Durable state is already persisted (git + `docs/_active-plan.md`), so a handoff loses nothing.
 
 Emit a **ready-to-paste next-session prompt** — the prompt itself, not advice to restart. Three
 pointer blocks: **Mandate** (the task + the rules it resumes under), **State** (branch, last commit
