@@ -50,27 +50,51 @@
   .print-row {
     display: grid;
     grid-template-columns: 112pt repeat(5, 1fr);
-    gap: 3pt;
+  }
+
+  /* The header band runs to the paper's edge, like the screen's does; the
+   * negative margin cancels the sheet padding while the columns stay aligned
+   * with the rows below. */
+  .print-head {
+    margin: -24pt -28pt 6pt;
+    padding: 10pt 28pt 8pt;
+    background: #faf8f2;
+    border-bottom: 0.75pt solid #c9c4b6;
   }
 
   .print-dayhead {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4pt 6pt;
-    font-size: 13pt;
-    font-weight: 700;
+    padding: 0 6pt;
+    font-size: 12pt;
+    font-weight: 500;
+    color: #5b584f;
   }
 
+  /* Same grid as the screen: cells sit on the line colour with hairline gaps,
+   * so every rule runs unbroken and no lesson colour is overprinted. */
   .print-rows {
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
-    gap: 3pt;
+    gap: 0.75pt;
+    background: #c9c4b6;
   }
 
   .print-row {
     flex: 1 1 0;
+    gap: 0.75pt;
+    background: #c9c4b6;
+  }
+
+  .print-time {
+    background: #ffffff;
+  }
+
+  .print-free {
+    font-size: 12pt;
+    color: #706d64;
   }
 
   .print-time {
@@ -102,12 +126,9 @@
     gap: 1pt;
     overflow: hidden;
     padding: 2pt 6pt;
-    background: var(--cell-bg);
+    /* An empty cell sets no colour, and must still paint over the rules. */
+    background: var(--cell-bg, #ffffff);
     color: var(--cell-ink);
-  }
-
-  .print-cell--empty {
-    background: #ffffff;
   }
 
   .print-lesson {
@@ -123,10 +144,11 @@
     color: var(--cell-sub);
   }
 
+  /* Six colours, one row. The label wraps; the row never does. */
   .print-legend {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 4pt 12pt;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10pt;
     margin: 0;
     padding-top: 6pt;
     border-top: 1pt solid #d8d4c8;
@@ -135,9 +157,10 @@
 
   .print-legend__item {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 5pt;
     font-size: 12pt;
+    line-height: 1.2;
   }
 
   .print-legend__swatch {

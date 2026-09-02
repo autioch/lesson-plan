@@ -35,7 +35,9 @@ const { days, rows, legend } = Astro.props;
           </div>
           {row.cells.map((cell) =>
             cell.empty ? (
-              <div class="print-cell print-cell--empty" />
+              <div class="print-cell print-cell--empty">
+                <span class="print-free">wolne</span>
+              </div>
             ) : (
               <div
                 class="print-cell"
