@@ -277,8 +277,10 @@ body {
   display: none;
 }
 
+/* Quieter than the rest of the tile on purpose — it answers "who", which you
+ * look up once a term, not "what", which you read every morning. */
 .cell__teacher {
-  font-size: var(--fs-xs);
+  font-size: var(--fs-2xs);
   line-height: var(--lh-body-min);
   overflow-wrap: anywhere;
   color: var(--text-on-tile-weak);

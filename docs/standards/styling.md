@@ -37,7 +37,9 @@ construction. Three rules keep that true, and breaking any one of them breaks th
 ## Floors — non-negotiable
 
 - **px, not rem.** These are floors, not preferences.
-- **Text ≥ 17px.** 14px only for meta: end time, break text, teacher name. Nothing smaller.
+- **Text ≥ 17px.** 14px only for meta: end time, break text, teacher name. Nothing smaller — the
+  teacher line already sits on that floor at every width, so "make it smaller" has nowhere left to
+  go on a phone.
 - **Touch targets ≥ 44 × 44px** — day tabs and the legend button.
 - **Line height ≥ 1.3** for anything that can wrap.
 - **WCAG AA**: 4.5:1 body text, 3:1 large text and UI.
@@ -54,6 +56,12 @@ construction. Three rules keep that true, and breaking any one of them breaks th
 - **Tile ink is fixed, not computed.** Every tile takes `--text-primary`, and the teacher line
   `--text-on-tile-weak`. There is no luminance switch and no light-ink variant — which makes the
   palette's contrast a **hard entry condition** rather than something code compensates for.
+- **The teacher line is the quiet one** — `--fs-2xs` and `--text-on-tile-weak`, because it answers
+  "who", looked up once a term, not "what", read every morning. `--fs-2xs` is the one step that does
+  **not** scale with the band: 14px is the meta floor, so the desk scale leaves it alone and only
+  paper lifts it, to hold 12pt. How pale the ink can go is set by the **blue**, the darkest tint —
+  5.4:1 today, and it stays above 4.5:1 across the whole usable mix range, which is the point of not
+  reaching for `--text-secondary` here.
 - **The palette is six colours plus plain white**, and adding a seventh is a decision, not an edit.
   Each one must clear 4.5:1 at 14px against **both** ink tokens — check the new colour by hand,
   nothing enforces it — and stay separable from the other five under red-green colour blindness. A
@@ -68,7 +76,8 @@ construction. Three rules keep that true, and breaking any one of them breaks th
 - **Everything else is a token** from `src/assets/tokens.css` — type scale, spacing ramp, radii,
   lines, surfaces, text ink, accent. No values from outside the ramp, and the only inline style on a
   cell is `--cell-bg`.
-- **Type scale** switches once, at 1024px: phone `17/20/24`, desk `20/24/30`.
+- **Type scale** switches once, at 1024px: phone `17/20/24`, desk `20/24/30`. Meta is `14/17` under
+  those, and the teacher step below it is a flat `14` at both.
 - **Weight is a signal, not a default.** Bold is reserved for the hours, the day being viewed and
   today; lesson names in the week grid are medium, so the colour does the work.
 - **Headers sit on `--surface-base`** (day tabs, day names) — a band, not a first row of content.

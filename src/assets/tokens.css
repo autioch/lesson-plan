@@ -20,6 +20,13 @@
   --fs-sm: 17px;
   --fs-xs: 14px;
 
+  /* The teacher line, and only that. It is the one thing on a tile you look up
+   * rather than read, so it stays at the 14px meta floor on every screen band
+   * instead of riding `--fs-xs` up to 17px on the desk scale — which is why it
+   * is a step of its own and why the desk block below does not redefine it.
+   * Paper does, because 14px is 10.5pt and the sheet's floor is 12pt. */
+  --fs-2xs: 14px;
+
   --font-sans:
     "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
@@ -48,9 +55,14 @@
   --text-primary: #1c1b17;
   --text-secondary: #5b584f;
   --text-muted: #706d64;
-  /* The teacher line on a lesson tile. Dark enough to clear 4.5:1 at 14px on
-   * every colour in the palette — `--text-secondary` does not, on the blue. */
-  --text-on-tile-weak: #3d3a33;
+  /* The teacher line on a lesson tile — pale, because it is looked up rather
+   * than read. How pale is set by the blue, the darkest tint in the palette:
+   * this clears 4.5:1 at 14px on it with room to spare (5.4:1), and holds
+   * across the whole usable range of the white mix (4.7:1 even at the loud
+   * 35% end). `--text-secondary` does not — it passes at the current mix and
+   * fails at 35%, which is exactly the kind of tie to one palette value not
+   * worth taking. */
+  --text-on-tile-weak: #524f47;
   --text-on-accent: #ffffff;
   --accent: #4a86b8;
   --line-subtle: rgba(0, 0, 0, 0.09);
@@ -104,6 +116,7 @@
     --fs-md: 16px;
     --fs-sm: 16px;
     --fs-xs: 16px;
+    --fs-2xs: 16px;
 
     /* Toner is not a screen. A 6%-black hairline does not survive the print
      * pipeline, so the rules and borders take a solid grey instead. */
