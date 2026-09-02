@@ -54,8 +54,6 @@ body {
   flex-direction: column;
   overflow: hidden;
   background: var(--surface-raised);
-  touch-action: pan-y;
-  user-select: none;
 }
 
 .plan__main {
@@ -277,6 +275,12 @@ body {
 /* === Band A — phone portrait, one day ==================================== */
 
 @media (max-width: 480px) {
+  /* Only band A swipes, so only band A gives up text selection for it. */
+  .plan {
+    touch-action: pan-y;
+    user-select: none;
+  }
+
   .grid {
     padding-bottom: var(--space-16);
   }
@@ -463,6 +467,11 @@ body {
   line-height: var(--lh-tight);
   cursor: pointer;
   z-index: 30;
+}
+
+.fab:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
 }
 
 .sheet {

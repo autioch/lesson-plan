@@ -108,13 +108,16 @@ const plan = buildPlan(lessonsData as unknown as LessonsPlan);
     if (event.key === "Escape") setLegendOpen(false);
   });
 
-  /* Swipe changes the day by one and does not wrap from Friday to Monday. */
+  /* Swipe changes the day by one and does not wrap from Friday to Monday. It
+   * exists only where a day is selectable at all — the phone in portrait. */
+  const phonePortrait = window.matchMedia("(max-width: 480px)");
   let swipeStartX: number | null = null;
+
   grid?.addEventListener("pointerdown", (event) => {
-    swipeStartX = event.clientX;
+    swipeStartX = phonePortrait.matches ? event.clientX : null;
   });
   grid?.addEventListener("pointerup", (event) => {
-    if (swipeStartX === null) return;
+    if (swipeStartX === null || !phonePortrait.matches) return;
     const dx = event.clientX - swipeStartX;
     swipeStartX = null;
     if (Math.abs(dx) < SWIPE_MIN) return;
