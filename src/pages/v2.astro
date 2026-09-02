@@ -1,8 +1,11 @@
 ---
 import DayTabs from "../components/v2/DayTabs.astro";
 import Legend from "../components/v2/Legend.astro";
+import PrintSheet from "../components/v2/PrintSheet.astro";
 import WeekGrid from "../components/v2/WeekGrid.astro";
 import V2Layout from "../layouts/V2Layout.astro";
+
+import "../assets/v2/print.css";
 
 import lessonsData from "../data/lessons.json";
 import type { LessonsPlan } from "../data/lessonTypes";
@@ -40,6 +43,8 @@ const plan = buildPlan(lessonsData as unknown as LessonsPlan);
       </div>
     </div>
   </div>
+
+  <PrintSheet days={plan.days} rows={plan.rows} legend={plan.legend} />
 </V2Layout>
 
 <script>

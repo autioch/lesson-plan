@@ -1,0 +1,151 @@
+/* Plan lekcji — the printed sheet (spec §8).
+ *
+ * One A4 landscape page, its own view rather than a scaled screen: margins
+ * 24pt × 28pt, nothing below 12pt, the lesson colours reproduced exactly, the
+ * legend across the bottom, and no "today" mark — the sheet hangs all term.
+ *
+ * Sizes here are pt, not the screen tokens: paper has its own scale.
+ */
+
+.print-sheet {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+
+  html,
+  body {
+    height: auto;
+    background: #ffffff;
+  }
+
+  /* Colours are data — they must reach the paper. */
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .plan {
+    display: none !important;
+  }
+
+  .print-sheet {
+    display: flex;
+    flex-direction: column;
+    gap: 8pt;
+    box-sizing: border-box;
+    width: 297mm;
+    height: 210mm;
+    padding: 24pt 28pt;
+    color: #1c1b17;
+    font-family: var(--font-sans);
+    line-height: 1.2;
+  }
+
+  .print-head,
+  .print-row {
+    display: grid;
+    grid-template-columns: 112pt repeat(5, 1fr);
+    gap: 3pt;
+  }
+
+  .print-dayhead {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4pt 6pt;
+    font-size: 13pt;
+    font-weight: 700;
+  }
+
+  .print-rows {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 3pt;
+  }
+
+  .print-row {
+    flex: 1 1 0;
+  }
+
+  .print-time {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1pt;
+    padding-right: 6pt;
+  }
+
+  .print-range {
+    font-size: 12pt;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .print-break {
+    font-size: 12pt;
+    color: #4a4740;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .print-cell {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1pt;
+    overflow: hidden;
+    padding: 2pt 6pt;
+    border-radius: 3pt;
+    background: var(--cell-bg);
+    color: var(--cell-ink);
+  }
+
+  .print-cell--empty {
+    background: #ffffff;
+  }
+
+  .print-lesson {
+    font-size: 12pt;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  .print-teacher {
+    font-size: 12pt;
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+    color: var(--cell-sub);
+  }
+
+  .print-legend {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4pt 12pt;
+    margin: 0;
+    padding-top: 6pt;
+    border-top: 1pt solid #d8d4c8;
+    list-style: none;
+  }
+
+  .print-legend__item {
+    display: flex;
+    align-items: center;
+    gap: 5pt;
+    font-size: 12pt;
+  }
+
+  .print-legend__swatch {
+    width: 12pt;
+    height: 12pt;
+    flex: none;
+    border: 0.5pt solid #b8b3a6;
+    border-radius: 2pt;
+  }
+}
