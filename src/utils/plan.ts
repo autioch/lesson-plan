@@ -104,25 +104,31 @@ export function buildPlan(data: LessonsPlan): Plan {
     return lesson;
   };
 
-  /* Row set: every slot used by any day, shared across days so rows don't jump
-   * when the phone switches day. Slots nobody uses never render. */
-  const usedSlots = data.slots
-    .map((_, slotIndex) => slotIndex)
-    .filter((slotIndex) =>
-      data.days.some((_, dayIndex) => lessonAt(dayIndex, slotIndex)),
-    );
+  /* Row set: the unbroken span from the first slot any day uses to the last,
+   * shared across days so rows don't jump when the phone switches day. A slot
+   * inside that span that nobody uses still gets its own row — an empty hour is
+   * the truth, and dropping it would fold two free slots into one and overstate
+   * the break on the row above. Only the unused slots outside the span are
+   * dropped: those are edges of the school day, not gaps in this plan. */
+  const slotUsed = data.slots.map((_, slotIndex) =>
+    data.days.some((_, dayIndex) => lessonAt(dayIndex, slotIndex)),
+  );
+  const firstSlot = slotUsed.indexOf(true);
+  const lastSlot = slotUsed.lastIndexOf(true);
 
   const usedColorIds = new Set<string>();
 
-  const rows: PlanRow[] = usedSlots.map((slotIndex, position) => {
-    const slot = data.slots[slotIndex];
+  const spanSlots =
+    firstSlot < 0 ? [] : data.slots.slice(firstSlot, lastSlot + 1);
+
+  const rows: PlanRow[] = spanSlots.map((slot, offset) => {
+    const slotIndex = firstSlot + offset;
     const start = toMinutes(slot.start);
     const end = start + slot.duration;
-    const nextSlotIndex = usedSlots[position + 1];
     const gap =
-      nextSlotIndex === undefined
+      slotIndex === lastSlot
         ? 0
-        : toMinutes(data.slots[nextSlotIndex].start) - end;
+        : toMinutes(data.slots[slotIndex + 1].start) - end;
 
     return {
       slotIndex,
