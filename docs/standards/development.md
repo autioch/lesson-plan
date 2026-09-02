@@ -119,6 +119,21 @@ Node is pinned in [.nvmrc](../../.nvmrc); both workflows read it, so local and C
 
 ## Agent tooling
 
+Permissions live in two files, split by what belongs to the repo and what belongs to a machine:
+
+- **[.claude/settings.json](../../.claude/settings.json)** — tracked. Generic `Bash(cmd:*)` prefix
+  rules for the toolchain this repo actually uses: git's local operations, npm/npx, `node -e` and
+  `node scripts/`, read-only shell tools. **Add a rule here in its generic form** rather than letting
+  a prompt append a one-off literal — a literal for a command with a path or a session id in it can
+  never match twice, which is how an allowlist grows to ninety dead entries.
+- **[.claude/settings.local.json](../../.claude/settings.local.json)** — gitignored. Only what is
+  true of one machine: enabled MCP servers, absolute scratchpad paths.
+
+Anything not listed still prompts. Two categories stay that way on purpose: **anything leaving the
+machine** (`git push`, `gh pr create`, `gh pr merge`) is in `ask`, because
+[CLAUDE.md](../../CLAUDE.md) requires it regardless of what else is allowed; and **`sed -i`** is
+absent so in-place rewrites of source go through the Edit tool, where the diff is visible.
+
 [.mcp.json](../../.mcp.json) declares GitHub's hosted MCP server, so PRs, issues and checks are
 read and written through it rather than by shelling out to `gh`. It authenticates with a
 `GITHUB_PAT` environment variable — see [owner-tasks.md](../owner-tasks.md) — and is enabled per
