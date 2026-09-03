@@ -146,6 +146,7 @@ when you add a new doc or code area.
 | `npm run build`     | Production static build. Confirms compile.            |
 | `npm run preview`   | Preview the production build locally                  |
 | `npm run ci:ts`     | `astro check` — types, including `.astro` frontmatter |
+| `npm run ci:test`   | `node --test` — the `plan.ts` transform contract      |
 | `npm run ci:lint`   | ESLint over JS/TS, `.astro`, CSS, JSON and Markdown   |
 | `npm run ci:knip`   | Unused files, exports, types and dependencies         |
 | `npm run ci:format` | `prettier --check .`                                  |

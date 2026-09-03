@@ -61,7 +61,7 @@ a check pass without exercising anything.
 
 ## Always, whatever the path
 
-- **The gate is green before every commit** — `npm run verify` (types, lint, knip, format, build).
+- **The gate is green before every commit** — `npm run verify` (types, transform tests, lint, knip, format, build).
   There are no git hooks: nothing runs it for you. Never leave the tree broken.
 - **Docs ship with the change.** Code or config changes update the affected prose in the **same
   commit** — never a tree where docs contradict code. Which docs: the
@@ -77,9 +77,9 @@ a check pass without exercising anything.
 
 ## Commands
 
-The gate is `npm run verify` — `fix` (eslint + prettier), then `ci` (`astro check`, eslint, knip,
-prettier check), then `build`. No git hooks run it for you; CI runs `ci` + `build` on every PR and
-again on `main`. Dev server: `npm run dev`. Full table:
+The gate is `npm run verify` — `fix` (eslint + prettier), then `ci` (`astro check`, `node --test`,
+eslint, knip, prettier check), then `build`. No git hooks run it for you; CI runs `ci` + `build` on
+every PR and again on `main`. Dev server: `npm run dev`. Full table:
 [development.md](docs/standards/development.md#full-command-reference).
 
 ## Git

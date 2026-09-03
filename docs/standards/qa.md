@@ -9,17 +9,21 @@ It answers **what** to test, **how** for this stack, and **how much** for a give
 
 Most changes resolve in seconds. Ask, in order:
 
-1. Touched a **data transformation** (JSON → component shape, a derived field, a computed timetable
-   row)? → the **gate** (`npm run verify` type-checks it) plus a **rendered check** that the real
-   data comes out right on the page. **This project has no test runner** — that is a deliberate
-   call for one pure transform behind one page, not an omission to fix.
-2. Changed **component rendering logic**? → a **visual check** — render the change in the dev server
+1. Touched **`src/utils/plan.ts`** (the one pure transform)? → extend
+   **`src/utils/plan.test.ts`** so the behaviour you changed has an assertion, and the contract it
+   already holds — the six validation throws, the span rule, the legend filter — stays covered. Then
+   a **rendered check** that the real data still comes out right on the page. The test is the only
+   thing that exercises the error paths; the gate and the page never do.
+2. Touched **any other logic**? → the **gate**. There is no test runner for the components or the
+   page script — they are thin and checked visually — so **do not add one**; the transform earns a
+   test because it has a contract, and that is the line.
+3. Changed **component rendering logic**? → a **visual check** — render the change in the dev server
    and confirm it looks right.
-3. Changed **JSON data files**? → the **gate**, then confirm the changed values actually appear in
+4. Changed **JSON data files**? → the **gate**, then confirm the changed values actually appear in
    the rendered output.
-4. Changed anything **date-dependent**? → check it against a **stubbed clock**, not just today. The
+5. Changed anything **date-dependent**? → check it against a **stubbed clock**, not just today. The
    page script must be right on every weekday and at the weekend.
-5. None of the above (docs, config, a comment)? → **the gate only**.
+6. None of the above (docs, config, a comment)? → **the gate only**.
 
 Rules keep the answer deterministic:
 
@@ -29,15 +33,16 @@ Rules keep the answer deterministic:
 
 ## Operational stages
 
-| Stage                   | What                                            | Runs where                                    |
-| ----------------------- | ----------------------------------------------- | --------------------------------------------- |
-| **The gate** _(always)_ | Types, lint, dead code, format, build           | `npm run verify` — by hand, then PR CI + main |
-| **Visual check**        | Rendered output on the dev server looks correct | `npm run dev` + browser                       |
+| Stage                   | What                                                   | Runs where                                    |
+| ----------------------- | ------------------------------------------------------ | --------------------------------------------- |
+| **The gate** _(always)_ | Types, transform tests, lint, dead code, format, build | `npm run verify` — by hand, then PR CI + main |
+| **Visual check**        | Rendered output on the dev server looks correct        | `npm run dev` + browser                       |
 
-**The gate** is `npm run verify` — `fix`, then `ci` (`ci:ts` → `ci:lint` → `ci:knip` →
+**The gate** is `npm run verify` — `fix`, then `ci` (`ci:ts` → `ci:test` → `ci:lint` → `ci:knip` →
 `ci:format`), then `build`. A green run means:
 
 - Types check out, `.astro` frontmatter included (`astro check`, not bare `tsc`)
+- The transform contract holds (`node --test` over `src/utils/plan.test.ts`)
 - Lint passes over JS/TS, `.astro`, CSS, JSON and Markdown
 - No unused file, export, type or dependency is left behind
 - Formatting is settled, JSON parses, imports resolve, the static output builds
@@ -57,13 +62,13 @@ Independent of scope, every code change confirms:
 
 Match the change to the layer(s) it touches.
 
-| Change                               | What to test                                                                                  |
-| ------------------------------------ | --------------------------------------------------------------------------------------------- |
-| **Data files (JSON)**                | Build succeeds; JSON parses and type-checks; rendered data appears in the output.             |
-| **Component rendering**              | Visual check in dev server; confirm the layout, spacing, colors, and text match expectations. |
-| **Data transformation / pure logic** | Gate green, then confirm input→output on the real data in the rendered page. No test runner.  |
-| **Page structure / routing**         | Build succeeds; all pages render; internal links resolve.                                     |
-| **Static assets**                    | Build includes them; they load in the dev server preview.                                     |
+| Change                              | What to test                                                                                                                        |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| **Data files (JSON)**               | Build succeeds; JSON parses and type-checks; rendered data appears in the output.                                                   |
+| **Component rendering**             | Visual check in dev server; confirm the layout, spacing, colors, and text match expectations.                                       |
+| **Data transformation (`plan.ts`)** | Extend `plan.test.ts` for the changed behaviour (`node --test`, fixtures); then input→output on the real data in the rendered page. |
+| **Page structure / routing**        | Build succeeds; all pages render; internal links resolve.                                                                           |
+| **Static assets**                   | Build includes them; they load in the dev server preview.                                                                           |
 
 ## Recording QA
 

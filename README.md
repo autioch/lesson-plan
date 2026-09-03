@@ -13,5 +13,5 @@ reference — they are never rendered, only type-checked.
 npm run dev
 ```
 
-`npm run verify` is the gate — format, lint, type-check, dead-code scan, build. Working rules:
+`npm run verify` is the gate — format, lint, type-check, transform tests, dead-code scan, build. Working rules:
 [CLAUDE.md](CLAUDE.md) and [docs/](docs/).
