@@ -1,19 +1,11 @@
 ---
 /**
- * The plan itself — the header band and the hours, and nothing else.
+ * The plan itself — the header band and the hours. One DOM for all three bands:
+ * every day is always rendered, and which you see is a CSS decision, never a
+ * build-time one. Paper is band C at its own scale, from this same tree.
  *
- * One DOM for all three bands: every day is always rendered, and which of them
- * you see is a CSS decision, never a build-time one.
- *
- * - ≤480px: the row is the time gutter plus the selected day's cell; the four
- *   other cells are hidden by the `data-day` attribute on the page root.
- * - 481–1023px: gutter plus five columns, shortened names, no teacher.
- * - ≥1024px: the same five columns with full names and teachers.
- *
- * Paper is band C at its own scale, from this same tree.
- *
- * Exposes the `js-swipe-area` hook: the grid is what a swipe is measured on in
- * band A. Nothing here knows that — the hook names the job, not the element.
+ * Exposes `js-swipe-area`: the grid is what a swipe is measured on in band A.
+ * Nothing here knows that — the hook names the job, not the element.
  */
 import type { Day, Labels } from "../data/types";
 import type { PlanRow } from "../utils/plan";

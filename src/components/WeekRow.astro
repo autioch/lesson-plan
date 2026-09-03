@@ -1,14 +1,11 @@
 ---
 /**
- * One hour of the week: the time gutter, then one cell per day.
+ * One hour of the week: the time gutter, then one cell per day. The gutter is
+ * the row's anchor — in band A the only thing that stays put while the days
+ * slide behind it, which is why it is opaque and above them in the stack.
  *
- * The gutter is the row's anchor at every width — in band A it is the only
- * thing that stays put while the days slide behind it, which is why it is
- * opaque and sits above them in the stacking order.
- *
- * `breakText` is absent when the next hour follows directly, so the span is
- * omitted rather than rendered empty; `src/utils/plan.ts` decides that, not
- * this component.
+ * `breakText` is empty when the next hour follows directly, so the span is
+ * omitted; `src/utils/plan.ts` decides that, not this component.
  */
 import type { Labels } from "../data/types";
 import type { PlanRow } from "../utils/plan";

@@ -1,22 +1,17 @@
 /**
  * The shape of the plan data — the single source for everything the plan
- * displays: the schedule, the palette, and every fixed string on screen.
+ * displays, so this type is also the checklist for what a component may render.
  *
- * Nothing user-visible is allowed to live outside that data, so this type is
- * also the checklist for what a component may render.
+ * Split across three files by how often each changes, merged into one
+ * `LessonsPlan` by `index.ts`: `commons.json` is the school's frozen fixtures
+ * (copy, colours, bell times, days); `catalog.json` is append-only reference
+ * data (people, subjects); `<year>.json` is one year's week, never edited once
+ * published.
  *
- * It is split in three files, along one line: **how often does it change?**
- * `commons.json` is the school's fixtures — copy, colours, bell times, the days
- * of the week — and effectively frozen. `catalog.json` is reference data, the
- * people and the subjects: it grows as new ones appear and is never rewritten.
- * `<year>.json` is one year's facts, its week, and is never edited once
- * published. `index.ts` merges the three into one `LessonsPlan`, which is what
- * the transform and the components see.
- *
- * Two files are shared, so an edit to either reaches back into published years.
- * That is the point for a correction — a misspelled teacher lands in every year
- * at once — and it is why catalog rows are appended and never repurposed. A
- * teacher who leaves keeps their row; the lessons simply stop referencing it.
+ * The two shared files reach back into published years — the point for a
+ * correction (a misspelled teacher fixed everywhere at once), and why catalog
+ * rows are appended, never repurposed: a teacher who leaves keeps their row and
+ * the lessons simply stop referencing it.
  */
 
 /** Every fixed string on screen, so no component hardcodes copy. */
@@ -49,9 +44,8 @@ export type PaletteColor = {
 
 type Teacher = {
   /**
-   * Opaque and permanent, for the same reason a slot's is: names change —
-   * marriages, corrections, a co-teaching pair splitting up — and a key that is
-   * also displayed data starts lying. Never reused once allocated.
+   * Opaque and permanent: names change (marriages, corrections), and a key that
+   * doubles as displayed data starts lying. Never reused once allocated.
    */
   id: string;
   name: string;
@@ -60,11 +54,7 @@ type Teacher = {
 };
 
 type Slot = {
-  /**
-   * Opaque and permanent. Deliberately not the time: bell times move, and a
-   * key that is also displayed data either has to be rewritten everywhere or
-   * starts lying. A retired slot's id is never reused.
-   */
+  /** Opaque and permanent — deliberately not the time, since bell times move. */
   id: string;
   /** "HH:MM" */
   start: string;
@@ -74,9 +64,9 @@ type Slot = {
 
 type LessonType = {
   /**
-   * Readable, unlike a teacher's — a subject's identity does not change, so
-   * there is nothing here to rot. Two subjects that merely read alike
-   * ("Gimnastyka korekcyjna" and "kompensacyjna") are two rows, not one.
+   * Readable, unlike a teacher's — a subject's identity does not change. Two
+   * subjects that read alike ("Gimnastyka korekcyjna" and "kompensacyjna") are
+   * two rows, not one.
    */
   id: string;
   name: string;
@@ -98,10 +88,7 @@ type Lesson = {
 };
 
 export type Day = {
-  /**
-   * Readable, unlike a slot's — a day's identity cannot change, so there is
-   * nothing here to rot.
-   */
+  /** Readable, unlike a slot's — a day's identity cannot change. */
   id: string;
   /** Display only. */
   name: string;
@@ -117,21 +104,16 @@ export type PlanCommons = {
   locale: string;
   labels: Labels;
   palette: PaletteColor[];
-  /**
-   * The bell day, in order. A year renders the span from the first slot its
-   * week uses to the last — unused slots inside it keep their row, unused ends
-   * are trimmed — so the same bell day yields a different grid height per year.
-   */
+  /** The bell day, in order. `buildPlan` trims it to each year's used span. */
   slots: Slot[];
   /** The week, in order. */
   days: Day[];
 };
 
 /**
- * `catalog.json` — the people and subjects the years draw on. Append-only: a
- * row is added when a new teacher or subject appears and edited only to correct
- * it. Rows no year references any more are inert — `buildPlan` renders what the
- * lessons point at, so a retired subject costs nothing but a line.
+ * `catalog.json` — the people and subjects the years draw on. Append-only, and
+ * unreferenced rows are inert: `buildPlan` renders only what lessons point at,
+ * so a retired subject costs nothing but a line.
  */
 export type PlanCatalog = {
   teachers: Teacher[];
@@ -141,9 +123,9 @@ export type PlanCatalog = {
 /** `<year>.json` — one year's week. Never edited once published. */
 export type SchoolYear = {
   /**
-   * `Day.id` → `Slot.id` → the lesson. Every key on both levels must resolve
-   * or `buildPlan` throws, so a retired slot or a mistyped day can never
-   * silently blank a week. A slot with no entry is free.
+   * `Day.id` → `Slot.id` → the lesson. Every key must resolve or `buildPlan`
+   * throws, so a mistyped key can never silently blank a week. A slot with no
+   * entry is free.
    */
   lessons: Record<string, Record<string, Lesson>>;
 };

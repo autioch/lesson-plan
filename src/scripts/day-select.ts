@@ -1,25 +1,23 @@
 /**
- * Picking a day — the only interaction the design allows, and it exists only
- * on a phone in portrait (≤480px). Every wider band shows the whole week and
- * has nothing to switch, which is why the tabs are hidden there rather than
- * disabled here: this module stays width-agnostic apart from the swipe.
+ * Picking a day — the only interaction the design allows, and only on a phone
+ * in portrait (≤480px). Wider bands show the whole week, so the tabs are hidden
+ * by CSS rather than disabled here: this module stays width-agnostic apart from
+ * the swipe.
  *
- * The selected day lives in exactly one place, `data-day` on the page root.
- * CSS does the rest — all five days stay laid out and each is offset by
- * `(its day − the current day) × 100%` — so nothing here knows that changing
- * the day animates anything at all.
+ * The selected day lives in one place, `data-day` on the page root; CSS offsets
+ * each day by `(its day − the current day) × 100%`, so nothing here knows that
+ * changing the day animates anything.
  *
- * Hooks: `.js-plan` (page root), `.js-swipe-area` (the surface a swipe is
- * measured on), `.js-day-tab`. What it writes — `data-day`, `aria-selected` —
- * is read by CSS and by assistive tech, so those keep their own names.
+ * Hooks: `.js-plan`, `.js-swipe-area`, `.js-day-tab`. What it writes
+ * (`data-day`, `aria-selected`) is read by CSS and assistive tech.
  */
 
 /** Horizontal travel, in px, before a pointer gesture counts as a swipe. */
 const SWIPE_MIN = 36;
 
 /**
- * Applies the starting day and wires the two ways it can change. Called before
- * motion is armed, so the starting day lands rather than sliding in.
+ * Applies the starting day and wires the two ways it can change (tap, swipe).
+ * Called before motion is armed, so the starting day lands rather than slides.
  */
 export function initDaySelect(initialIndex: number): void {
   const plan = document.querySelector<HTMLElement>(".js-plan");

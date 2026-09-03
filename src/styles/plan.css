@@ -7,15 +7,13 @@
  *   481–1023px  whole week, short names, bottom-sheet legend
  *   ≥1024px     whole week, full names, fixed legend column
  *
- * Every band renders the same DOM. Nothing here is decided at build time.
+ * Every band renders the same DOM; nothing here is decided at build time.
  *
- * Paper is the fourth surface and shares this DOM too — it takes band C's
- * layout, so every block band C needs also lists `print`, and the bands it
- * must never take are scoped to `screen`. Without that, the page box's width
- * would pick the band and a non-zero margin in the print dialog would silently
- * drop the sheet to band B's short names. The paper-only deltas — the page box,
- * the legend under the grid, no "today" — live in `print.css`.
- */
+ * Paper shares this DOM too and takes band C's layout, so every block band C
+ * needs also lists `print`, and bands paper must never take are scoped to
+ * `screen`. Without that, a non-zero print margin would narrow the page box
+ * and silently drop the sheet to band B's short names. Paper-only deltas live
+ * in `print.css`. */
 
 @import "./tokens.css";
 
@@ -100,11 +98,10 @@ body {
   white-space: nowrap;
   overflow: hidden;
   cursor: pointer;
-  /* The three things selection changes, and the width is the one that carries
-   * it: `flex-grow` is a number, so it interpolates and the tab widens into
-   * place instead of jumping. The label swaps to the full day name on the
-   * first frame and is revealed by the growing tab — `overflow: hidden` above
-   * is what turns that into a wipe rather than a reflow. */
+  /* Width carries the selection: `flex-grow` is a number, so it interpolates
+   * and the tab widens into place instead of jumping. The full name swaps in on
+   * the first frame and `overflow: hidden` turns the growing tab into a wipe
+   * rather than a reflow. */
   transition:
     flex-grow var(--dur-quick) var(--ease-out),
     color var(--dur-quick) var(--ease-out),
@@ -339,17 +336,12 @@ body {
     background: var(--surface-raised);
   }
 
-  /* One day is on screen and the other four are off to either side of it,
-   * ordered as the week is — so changing the day slides, and swiping follows
-   * the finger's direction with no rule of its own.
-   *
-   * They stack in the row's single content column rather than taking columns
-   * of their own; the offset is the only thing that separates them. Hiding the
-   * four is `visibility`, not `display`: it still takes them out of the
-   * accessibility tree, which is the job `display: none` was doing here, but
-   * it leaves them laid out so they have somewhere to slide from. The delay on
-   * the way out is what keeps the day you are leaving on screen for exactly as
-   * long as it takes to leave. */
+  /* All five days stack in the row's one content column, separated only by the
+   * offset and ordered as the week is, so changing the day slides. The four
+   * off-screen are hidden with `visibility`, not `display`: still out of the
+   * accessibility tree, but left laid out so they have somewhere to slide from.
+   * The delay on the way out keeps the leaving day on screen exactly as long as
+   * it takes to leave. */
   .cell {
     grid-column: 2;
     grid-row: 1;
@@ -372,11 +364,9 @@ body {
       visibility 0s;
   }
 
-  /* The two numbers the offset is subtracted from. `data-day` and
-   * `data-day-index` already carry them, but an attribute value is a string
-   * CSS cannot do arithmetic on, so each is mapped to a custom property once
-   * here and the transform above is written once instead of twenty-five
-   * times. */
+  /* An attribute value is a string CSS cannot do arithmetic on, so `data-day`
+   * and `data-day-index` are mapped to custom properties here — letting the
+   * transform above be written once instead of twenty-five times. */
   .plan[data-day="0"] {
     --day: 0;
   }
@@ -436,12 +426,10 @@ body {
     display: none;
   }
 
-  /* The header band runs edge to edge: it is pulled back out over the grid's
-   * side padding and pads the same amount in again, so the day names still sit
-   * over their columns. Both halves are needed — with only the padding the band
-   * was inset by the grid *and* its contents inset a second time, which is what
-   * used to leave the day names sitting a few pixels off their columns.
-   * `print.css` restates the pair against the page box's own 28pt inset. */
+  /* The header band runs edge to edge: pulled back out over the grid's side
+   * padding, then padded the same amount in, so the day names still sit over
+   * their columns rather than inset twice. `print.css` restates the pair
+   * against the page box's own 28pt inset. */
   .grid__head {
     display: grid;
     margin: 0 calc(-1 * var(--space-16));
@@ -482,12 +470,10 @@ body {
  * A4 sheet has the room for both, and a printed plan without teachers is a
  * worse sheet than a printed plan with a tight column. */
 @media screen and (min-width: 481px) and (max-width: 1023px) {
-  /* A phone on its side is 412px tall with the browser's own bar on top of
-   * that, so the frame around the grid is height the rows would rather have.
-   * The header band takes the top edge outright and the rows keep only the side
-   * inset that holds the hours off the screen edge and a gap under the last
-   * row — 32px back, a tenth of the height the rows divide. Band C is roomy and
-   * keeps its frame; this is the band that cannot afford one. */
+  /* A phone on its side is only 412px tall, so the frame around the grid is
+   * height the rows would rather have. The header takes the top edge outright
+   * and the rows keep only the side inset plus a gap under the last row. Band C
+   * is roomy and keeps its frame; this is the band that cannot afford one. */
   .grid {
     padding: 0 var(--space-16) var(--space-8);
   }
@@ -651,20 +637,14 @@ body {
   justify-content: flex-end;
   background: var(--scrim-modal);
   opacity: 1;
-  /* `hidden` stays the one place the sheet's state lives — the script sets it
-   * and nothing else needs to know. Animating that takes two things the browser
-   * only does when asked: `allow-discrete` keeps the element displayed until
-   * the fade has finished, and `@starting-style` gives it a state to come from,
-   * which an element that was `display: none` a moment ago otherwise has no
-   * way to have.
-   *
-   * `@starting-style` is nested rather than written as one block at the end on
-   * purpose — as a top-level block it applies to the sheet, whose own `display`
-   * changes, but not to the panel inside it, which is only newly rendered
-   * because its parent is. Nested, both take it.
+  /* Animating a `display` change takes two things: `allow-discrete` keeps the
+   * element displayed until the fade finishes, and `@starting-style` gives a
+   * `display: none` element a state to come from. The `@starting-style` is
+   * nested on purpose — a top-level block would reach the sheet but not the
+   * panel inside it, which is only newly rendered because its parent is.
    *
    * Progressive enhancement: without either, `hidden` still hides the sheet and
-   * it appears and goes in one frame — exactly what it did before. */
+   * it appears in one frame. */
   transition:
     opacity var(--dur-quick) var(--ease-out),
     display var(--dur-quick) allow-discrete;

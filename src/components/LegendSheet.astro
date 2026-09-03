@@ -1,19 +1,15 @@
 ---
 /**
  * The legend where there is no room for a column: the "?" button and the sheet
- * it opens, bands A and B only. From 1024px the legend is a fixed sidebar
- * instead and this pair is hidden — same `Legend` list either way, never a
- * second copy of the markup.
+ * it opens, bands A and B only. From 1024px it is a fixed sidebar and this pair
+ * is hidden — same `Legend` list either way, never a second copy.
  *
- * Open state lives in one place, the sheet's `hidden` attribute. The page
- * script sets it and knows nothing about animation; CSS does the rest via
- * `allow-discrete` and `@starting-style`, so without either the sheet still
- * opens, just in one frame.
+ * Open state lives in one place, the sheet's `hidden` attribute; the page
+ * script sets it and knows nothing about animation (CSS drives the slide off
+ * it). Exposes `js-legend-button` and `js-legend-sheet`.
  *
- * Exposes the `js-legend-button` and `js-legend-sheet` hooks. Neither element
- * carries an id: nothing referenced them, and the script is the only caller.
- * `aria-controls` would need one back — that is an open a11y gap, tracked
- * separately.
+ * Neither element carries an id, so there is no `aria-controls` back to the
+ * button — an open a11y gap, tracked separately.
  */
 import type { Labels, PaletteColor } from "../data/types";
 import Legend from "./Legend.astro";

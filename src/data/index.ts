@@ -1,21 +1,12 @@
 /**
- * Every school year the site has ever published, and which one is live.
+ * Every school year the site has ever published, and which one is live. A year
+ * is added, never edited in place; only `ACTIVE_YEAR` moves, and that one line
+ * is the whole "publish next year" change. `commons.json` and `catalog.json`
+ * are merged in here so a year file holds only its week — see `./types.ts`.
  *
- * A year is added, never edited in place: `2025.json` is exactly the week that
- * hung on the wall in 2025 and stays that way. Only `ACTIVE_YEAR` moves — that
- * one line is the whole "publish next year" change, and its diff says which
- * year went up.
- *
- * What the years share is merged in here, so a year file holds only its week:
- * `commons.json` for the fixtures — copy, palette, bell times, the days — and
- * `catalog.json` for the teachers and subjects every year draws on. See
- * `./types.ts` for where the lines fall.
- *
- * Every year is merged and typed, not just the active one, so `astro check`
- * types them all against `LessonsPlan`. That is deliberate: when the type
- * changes, the build names each file that needs fixing instead of leaving the
- * archive to rot unnoticed. An archive that has genuinely outlived the schema
- * gets deleted on purpose, not left behind to drift.
+ * Every year is merged and typed, not just the active one, so a schema change
+ * makes `astro check` name each archive file that needs fixing instead of
+ * letting it rot unnoticed. An outlived archive is deleted on purpose.
  *
  * Adding a year: docs/importing-a-plan.md.
  */

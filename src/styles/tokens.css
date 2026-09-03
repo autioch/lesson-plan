@@ -20,15 +20,11 @@
   --fs-sm: 17px;
   --fs-xs: 14px;
 
-  /* The teacher line, and only that. It is the one thing on a tile you look up
-   * rather than read, so it stays at the 14px meta floor on every surface
-   * instead of riding `--fs-xs` up to 17px on the desk scale — which is why it
-   * is a step of its own and why neither block below redefines it.
-   *
-   * Paper included, and that one is a decision rather than an omission: the
-   * sheet's 12pt floor is for the text the plan is read for, and a teacher line
-   * set at it comes out the same size as the lesson name above it, which reads
-   * flat. 14px is 10.5pt — the one line on the sheet allowed under the floor. */
+  /* The teacher line, and only that: looked up rather than read, so it stays at
+   * the 14px meta floor on every surface instead of riding `--fs-xs` up — which
+   * is why it is its own step and no block below redefines it. Paper included:
+   * at the 12pt reading floor it would match the lesson name above it and read
+   * flat; 14px (10.5pt) is the one line on the sheet allowed under the floor. */
   --fs-2xs: 14px;
 
   --font-sans:
@@ -59,13 +55,11 @@
   --text-primary: #1c1b17;
   --text-secondary: #5b584f;
   --text-muted: #706d64;
-  /* The teacher line on a lesson tile — pale, because it is looked up rather
-   * than read. How pale is set by the blue, the darkest tint in the palette:
-   * this clears 4.5:1 at 14px on it with room to spare (5.4:1), and holds
-   * across the whole usable range of the white mix (4.7:1 even at the loud
-   * 35% end). `--text-secondary` does not — it passes at the current mix and
-   * fails at 35%, which is exactly the kind of tie to one palette value not
-   * worth taking. */
+  /* The teacher line — pale, because it is looked up rather than read. Set by
+   * the blue, the palette's darkest tint: clears 4.5:1 at 14px with room (5.4:1)
+   * and holds across the whole white-mix range (4.7:1 at the loud 35% end),
+   * where `--text-secondary` fails — a tie to one palette value not worth
+   * taking. */
   --text-on-tile-weak: #524f47;
   --text-on-accent: #ffffff;
   --accent: #4a86b8;
@@ -85,21 +79,17 @@
   /* Layout — time gutter per band (spec §3). */
   --gutter: 152px;
 
-  /* Motion. Two durations, because there are two kinds of movement here: a
-   * control settling into its new state under your finger, and a day sliding
-   * in from off screen. Both are feedback on something you just did — long
-   * enough to be followed, short enough that nobody waits for them. The easing
-   * leaves fast and arrives slow, which is what makes a slide read as the day
-   * arriving rather than the page redrawing. */
+  /* Two durations for two kinds of movement: a control settling under your
+   * finger, and a day sliding in from off screen. The easing leaves fast and
+   * arrives slow, so a slide reads as the day arriving, not the page redrawing. */
   --dur-quick: 160ms;
   --dur-slide: 240ms;
   --ease-out: cubic-bezier(0.2, 0, 0, 1);
 }
 
-/* Motion is an accessibility setting before it is a design one: some people
- * get sick from it. Zeroing the durations is the whole switch — every
- * transition on the page reads them, and a 0s transition still lands on the
- * same end state, so nothing needs a second rule to fall back to. */
+/* Motion is an accessibility setting before a design one. Zeroing the durations
+ * is the whole switch — every transition reads them, and a 0s transition still
+ * lands on the same end state, so nothing needs a fallback rule. */
 @media (prefers-reduced-motion: reduce) {
   :root {
     --dur-quick: 0s;
@@ -127,18 +117,14 @@
   }
 }
 
-/* Paper. The sheet is band C's layout at its own scale — this block is the
- * "scale" half, `print.css` the layout half. It comes last so it wins over the
- * desk block whether or not the page box is wide enough to match it.
+/* Paper — the "scale" half of band C's paper layout (`print.css` is the other).
+ * Comes last so it wins over the desk block whatever the page box measures.
  *
- * One size for everything the sheet is read for: 16px is 12pt, the floor the
- * school set for the printed plan, and 11 rows plus a legend only fit 210mm at
- * that floor — the desk scale's 20/17 spills onto a second page. `--fs-2xs`,
- * the teacher line, is the one step this block leaves alone: flattened to 16px
- * with the rest it came out as loud as the lesson name it sits under, and on
- * paper size is most of the hierarchy — weight and a grey are all that is left
- * once the screen's four steps become one.
- */
+ * One size for everything the sheet is read for: 16px is 12pt, the school's
+ * printed floor, and 11 rows plus a legend only fit 210mm at it — the desk
+ * scale's 20/17 spills to a second page. `--fs-2xs` (the teacher line) is left
+ * alone: flattened to 16px it read as loud as the lesson name, and on paper
+ * size is most of the hierarchy once the screen's four steps become one. */
 @media print {
   :root {
     --fs-lg: 16px;

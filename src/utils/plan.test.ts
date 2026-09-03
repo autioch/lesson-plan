@@ -1,32 +1,25 @@
 /**
- * The one automated test in the project, and it earns its place: `buildPlan`
- * has a validation contract — six throws, the span rule, the legend filter —
- * that the gate and the rendered-HTML check never exercise, because both only
- * ever see the happy path with the real data. This locks that contract.
+ * The one automated test in the project: `buildPlan`'s validation contract (six
+ * throws, the span rule, the legend filter) that the gate and the rendered-HTML
+ * check never exercise, because both only see the happy path with real data.
  *
- * It runs on `node --test` (built into Node, no runner dependency) against
- * hand-built fixtures, never the real `src/data`: the transform is pure, so a
- * crafted `LessonsPlan` is the whole input, and a fixture does not go red when
- * next year's plan is published. Assertions are behavioural — a colour is in
- * the legend, a slot is trimmed — never a snapshot of the whole output, which
- * would break on every legitimate data edit.
- */
+ * Runs on `node --test` against hand-built fixtures, never real `src/data`: the
+ * transform is pure, so a crafted `LessonsPlan` is the whole input and a fixture
+ * does not go red when next year's plan is published. Assertions are
+ * behavioural, never a whole-output snapshot that every data edit would break. */
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
 import type { LessonsPlan } from "../data/types";
-/* The `.ts` extension is required here and nowhere else: this file runs under
- * raw `node --test`, whose ESM resolver does not guess extensions the way the
- * Astro/Vite bundler does for the rest of the app. `plan.ts` imports only
- * types, so stripping erases them and Node resolves nothing further. */
+/* The `.ts` extension is required here and nowhere else: `node --test`'s ESM
+ * resolver does not guess extensions the way the Astro/Vite bundler does. */
 import { buildPlan, type PlanCell } from "./plan.ts";
 
 /**
- * A valid baseline, shaped to exercise the awkward cases in one plan: `s3` is
- * used by nobody but sits between two used slots, `s1`/`s5` are unused at the
- * ends, `cB` is a legend colour no lesson carries, `cC` is a used colour kept
- * out of the legend, and `t2` is an anonymous teacher. Each test clones it and
- * bends the one thing it is about.
+ * A valid baseline that packs every awkward case into one plan: `s3` unused but
+ * between two used slots, `s1`/`s5` unused at the ends, `cB` a legend colour no
+ * lesson carries, `cC` a used colour kept out of the legend, `t2` anonymous.
+ * Each test clones it and bends the one thing it is about.
  */
 function makePlan(): LessonsPlan {
   return {

@@ -1,18 +1,16 @@
 ---
 /**
- * One slot on one day — a lesson tile, or the free slot in its place.
+ * One slot on one day — a lesson tile, or the free slot in its place. The
+ * empty/filled branch is the whole component; absence is a fact in the data
+ * (no lesson, no row), so there is no half-filled state to get wrong.
  *
- * The empty/filled branch is the whole component: absence is a fact in the
- * data (a slot with no lesson has no row at all), so there is no half-filled
- * state to render and no placeholder to get wrong.
+ * A filled tile carries both names and CSS picks one per band; the build never
+ * chooses. `--cell-bg` is the one inline style the styling rules allow, because
+ * a lesson colour is data and must reach the tile at full strength, not through
+ * a token.
  *
- * A filled tile carries both names — `cell__name` and `cell__short` — and CSS
- * picks one per band; the build never chooses. `--cell-bg` is the single inline
- * style the styling rules allow, because a lesson colour is data and must reach
- * the tile at full strength, not through a token.
- *
- * `data-day-index` is what band A's day switching reads. It is on every cell,
- * filled or free, so a free slot slides with its day like any other.
+ * `data-day-index` is what band A's day switching reads — on every cell, filled
+ * or free, so a free slot slides with its day like any other.
  */
 import type { Labels } from "../data/types";
 import type { PlanCell } from "../utils/plan";

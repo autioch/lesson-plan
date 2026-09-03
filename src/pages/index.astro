@@ -34,13 +34,9 @@ const { labels } = plan;
 
 <script>
   /* The load sequence — the page owns the order, `src/scripts/` owns the work.
-   *
-   * Two runtime facts reach the page here, and neither may be baked into the
-   * build: which weekday it is, and which day a phone is showing. Both are
-   * applied before motion is armed on the last lines, and that order is the
-   * whole reason this stays a sequence rather than three independent modules
-   * wiring themselves up.
-   */
+   * Two runtime facts (the weekday, the phone's selected day) are applied
+   * before motion is armed below; that ordering is why this stays a sequence
+   * rather than three modules wiring themselves up. */
   import { findTodayIndex, markToday } from "../scripts/today";
   import { initDaySelect } from "../scripts/day-select";
   import { initLegendSheet } from "../scripts/legend-sheet";
@@ -51,12 +47,11 @@ const { labels } = plan;
   initDaySelect(todayIndex < 0 ? 0 : todayIndex);
   initLegendSheet();
 
-  /* Only now is motion allowed. The day set above is the clock being applied,
-   * not a day being picked, and it would otherwise slide in from Monday on
-   * every load. Reading the layout settles that day while the CSS still says
-   * `transition: none`, so enabling motion on the next line has nothing left
-   * to animate — and unlike waiting a frame, it does not depend on the tab
-   * being on screen to happen at all. */
+  /* Only now is motion allowed: the day set above is the clock applied, not a
+   * pick, and would otherwise slide in from Monday every load. Reading the
+   * layout settles it while CSS still says `transition: none`, so enabling
+   * motion next has nothing to animate — and unlike waiting a frame, it does
+   * not depend on the tab being on screen. */
   const plan = document.querySelector<HTMLElement>(".js-plan");
   plan?.getBoundingClientRect();
   plan?.classList.add("plan--ready");

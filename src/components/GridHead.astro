@@ -1,18 +1,15 @@
 ---
 /**
- * The day-name band above the grid — a header, not a first row of content.
+ * The day-name band above the grid — a header, not a first row of content. It
+ * carries the rows' own gap and side inset so each name sits over its column;
+ * the leading corner is the empty square above the time gutter that keeps the
+ * band aligned with the rows.
  *
- * It bleeds to the edges of the area it heads and carries the rows' own gap and
- * side inset, so each name sits over its column. The leading corner is the
- * empty square above the time gutter; it exists to keep the band aligned with
- * the rows below it.
+ * No day is marked today here — the page script adds `dayhead--today` after
+ * reading the clock, so the band ships unmarked and stays that way on paper.
  *
- * No day is marked today here. The site is built once a term, so the page
- * script adds `dayhead--today` after it has read the clock — the band ships
- * unmarked and stays that way on paper.
- *
- * Exposes the `js-day-head` hook, counted in week order: the script marks the
- * one at today's index, so the days must stay in the order the data gives them.
+ * Exposes `js-day-head`, counted in week order: the script marks the one at
+ * today's index, so the days must stay in the data's order.
  */
 import type { Day, Labels } from "../data/types";
 

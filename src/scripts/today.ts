@@ -1,25 +1,17 @@
 /**
- * Today, applied at runtime — the one module allowed to read the clock.
+ * Today, applied at runtime — the one module allowed to read the clock. The
+ * site is built once a term, so a baked-in weekday would be wrong by morning:
+ * the build emits an unmarked week on purpose, and with JavaScript off the page
+ * shows Monday unmarked — a correct plan, not a broken one. Paper never gets
+ * here; `print.css` takes the mark back off.
  *
- * The site is built once a term, so a weekday baked into the HTML would be
- * wrong the next morning: `src/utils/` may never call `new Date()`, and the
- * build emits an unmarked week on purpose. The marks are added here or not at
- * all, which is why a page with JavaScript off shows Monday unmarked — a
- * correct plan, not a broken one.
- *
- * Paper never gets here: `print.css` takes the mark back off, because a sheet
- * that hangs all term would be wrong by Tuesday.
- *
- * Hooks: `.js-day-tab` and `.js-day-tabs` from `DayTabs.astro`, `.js-day-head`
- * from `GridHead.astro`. Nothing imports them across that line, so a hook
- * dropped there goes unnoticed until the mark stops appearing — the `js-`
- * prefix is what makes the dependency greppable, not what enforces it.
- *
- * The marks it writes — `tab--today`, `dayhead--today` — are the other
- * direction: CSS reads those, so they are BEM modifiers and stay that way.
+ * Hooks (`.js-day-tab`, `.js-day-tabs` from `DayTabs.astro`, `.js-day-head`
+ * from `GridHead.astro`) are untyped links: drop one and the mark silently
+ * stops appearing. The marks it *writes* (`tab--today`, `dayhead--today`) go
+ * the other way — CSS reads them, so they stay BEM modifiers.
  */
 
-/** The tabs, in week order — the same list both functions below count against. */
+/** The tabs, in week order — the index both functions below count against. */
 function dayTabs(): HTMLElement[] {
   return Array.from(document.querySelectorAll<HTMLElement>(".js-day-tab"));
 }
@@ -48,8 +40,7 @@ export function markToday(index: number): void {
 
   tab.classList.add("tab--today");
 
-  /* The suffix is copy, so it comes from the data via a data attribute on the
-   * tablist rather than being written here. */
+  /* The suffix is copy, so it rides a data attribute rather than being written here. */
   const todayAria =
     document.querySelector<HTMLElement>(".js-day-tabs")?.dataset.todayAria;
   if (todayAria) {

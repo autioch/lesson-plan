@@ -1,27 +1,18 @@
 /**
- * Build-time transform: the merged plan → the shape the components render.
+ * Build-time transform: the merged plan → the shape the components render. All
+ * derivation lives here (time ranges, break text, per-day cells, the legend);
+ * components lay the result out and compute nothing.
  *
- * Everything derived lives here — time ranges, break text, per-day cells and
- * the legend. Components read the result and lay it out; they compute nothing
- * and they hold no copy of their own.
+ * `today` is deliberately absent: the site is built once a term, so the weekday
+ * is a runtime fact the page script owns. Nothing here may read the clock.
  *
- * What is deliberately *not* here: today. The site is built once a term, so the
- * weekday is a runtime fact — the page script decides it. Nothing in this file
- * may read the clock.
+ * An unresolved reference (unknown lesson, colour or teacher id, or a day with
+ * no lessons filed under its name) throws — the files are hand-edited, and a
+ * blank tile on a school timetable is worse than a red build.
  *
- * A reference that does not resolve (an unknown lesson, colour or teacher id,
- * or a day with no lessons filed under its name) throws. The plan files are
- * hand-edited, and a blank tile on a school timetable is worse than a red
- * build.
- *
- * Nothing here is built for a shape the data does not have. Every field below
- * is read by a component; every branch is one the current plan reaches.
- *
- * **One name per concept, all the way through.** This file declares a type only
- * for what it actually derives — a row, a cell, the plan itself. Anything it
- * passes through keeps the data's own type and the data's own field names, so a
- * colour is `hex` and a legend caption is `name` in the JSON, here, and in the
- * component. Renaming a field on the way out buys nothing and costs everyone
+ * One name per concept: a derived type is declared only for what this file
+ * actually shapes; pass-through data keeps the JSON's own field names (a colour
+ * is `hex`, a caption is `name`), because renaming on the way out only costs
  * the lookup.
  */
 
@@ -29,24 +20,18 @@ import type { Day, Labels, LessonsPlan, PaletteColor } from "../data/types";
 
 /**
  * One slot on one day: a lesson, or nothing at all. An empty cell carries no
- * other field — the component puts `labels.freeSlot` in its place and reads
- * nothing else, so there is no blank name or colour to get wrong.
+ * other field — the component puts `labels.freeSlot` in its place, so there is
+ * no blank name or colour to get wrong.
  */
 export type PlanCell =
   | { empty: true }
   | {
       empty: false;
-      /** Full lesson name, as it is in the data. */
       name: string;
-      /** Name shortened for narrow columns; equals `name` when nothing is shortened. */
+      /** Shortened for narrow columns; equals `name` when nothing is shortened. */
       nameShort: string;
-      /**
-       * Teacher name, or "" when the record is a placeholder. The one field
-       * here that is renamed on the way in: a cell flattens a lesson type and
-       * a teacher, and `name` is already the lesson's.
-       */
+      /** Teacher name, or "" when the record is a placeholder. */
       teacher: string;
-      /** Exact hex from the palette — same field name as `PaletteColor.hex`. */
       hex: string;
     };
 
@@ -65,11 +50,11 @@ export type Plan = {
   /** The week, straight from the data — nothing here is derived. */
   days: Day[];
   rows: PlanRow[];
-  /** The palette rows worth showing, in palette order. Filtered, not reshaped. */
+  /** Palette rows worth showing, in palette order. Filtered, not reshaped. */
   legend: PaletteColor[];
 };
 
-/** Shared: every free slot renders the same way, and none of them is mutated. */
+/** Shared: every free slot renders the same, and none is mutated. */
 const EMPTY_CELL: PlanCell = { empty: true };
 
 function toMinutes(time: string): number {
@@ -91,9 +76,9 @@ export function buildPlan(data: LessonsPlan): Plan {
   );
   const slotIds = new Set(data.slots.map((slot) => slot.id));
 
-  /* Both levels of `lessons` are foreign keys, so both are checked up front
-   * rather than trusted. A key that resolves to nothing would render as a blank
-   * column or a lost lesson — a plausible-looking week hiding a typo. */
+  /* Both levels of `lessons` are foreign keys, checked up front: a key that
+   * resolves to nothing would render as a blank column or a lost lesson — a
+   * plausible-looking week hiding a typo. */
   for (const [dayId, daySlots] of Object.entries(data.lessons)) {
     if (!data.days.some((day) => day.id === dayId)) {
       throw new Error(`Lessons filed under unknown day "${dayId}"`);
@@ -151,13 +136,12 @@ export function buildPlan(data: LessonsPlan): Plan {
     };
   }
 
-  /* Row set: the span from the first slot this week uses to the last. A slot
-   * nobody uses *inside* that span still gets its own row — an empty hour is
-   * the truth, and dropping it would fold two free slots into one and overstate
-   * the break on the row above. Unused slots outside the span are trimmed: they
-   * are the school day running wider than this class's week, not gaps in it,
-   * and an empty band above and below the plan is noise on every surface. The
-   * grid is therefore a different height each year, by design. */
+  /* Row set: the span from the first used slot to the last. An unused slot
+   * *inside* the span keeps its row — an empty hour is the truth, and dropping
+   * it would fold two free slots into one and overstate the break above. Unused
+   * slots *outside* the span are trimmed: they are the school day running wider
+   * than this class's week, not gaps in it. So the grid is a different height
+   * each year, by design. */
   const slotUsed = data.slots.map((slot) =>
     data.days.some((day) => lessonAt(day.id, slot.id)),
   );
@@ -181,9 +165,8 @@ export function buildPlan(data: LessonsPlan): Plan {
     };
   });
 
-  /* Legend: palette order, only colours a rendered lesson actually carries, and
-   * only those that carry an instruction. The rendered cells are the source —
-   * palette hexes are unique, so a hex names exactly one palette entry. */
+  /* Legend: palette order, only colours a rendered lesson carries. The cells
+   * are the source — palette hexes are unique, so a hex names one entry. */
   const usedColors = new Set(
     rows.flatMap((row) =>
       row.cells.flatMap((cell) => (cell.empty ? [] : [cell.hex])),

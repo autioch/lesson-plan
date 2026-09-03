@@ -1,18 +1,12 @@
 ---
 /**
- * Day selection — phone portrait only (≤480px). Hidden by CSS everywhere else,
- * because every wider band shows the whole week and has nothing to switch.
+ * Day selection — phone portrait only (≤480px), hidden by CSS everywhere else.
+ * The build marks no day: the page script adds `tab--today` and the aria suffix
+ * once it has read the clock, so until then (and with JavaScript off) Monday is
+ * selected.
  *
- * The build marks no day: today is a runtime fact, so the page script adds
- * `tab--today` and the aria suffix once it has read the clock. Until then Monday
- * is selected, which is also what a page without JavaScript shows.
- *
- * Exposes the `js-day-tabs` and `js-day-tab` hooks. `tab--today` goes the other
- * way — the script writes it and CSS reads it, so it stays a BEM modifier.
- *
- * Today always reads the today label and takes a wider tab, even when another
- * day is viewed. The viewed day takes the full name and a 3px bar; the rest take
- * the two-letter short.
+ * Exposes `js-day-tabs` and `js-day-tab`. `tab--today` goes the other way — the
+ * script writes it and CSS reads it, so it stays a BEM modifier.
  */
 import type { Day, Labels } from "../data/types";
 

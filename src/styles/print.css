@@ -28,10 +28,9 @@
     print-color-adjust: exact;
   }
 
-  /* The sheet is the page box, not a viewport: a fixed height rather than
-   * `100dvh`, and the legend stacks under the grid rather than beside it.
-   * `overflow: hidden` carries over from the screen and is the one-page
-   * guarantee — the rows divide what is left, exactly as they do on a laptop. */
+  /* The sheet is the page box, not a viewport: a fixed height, legend stacked
+   * under the grid. `overflow: hidden` carries over from the screen and is the
+   * one-page guarantee — the rows divide what is left. */
   .plan {
     flex-direction: column;
     width: 297mm;
@@ -39,9 +38,8 @@
     padding: 24pt 28pt;
   }
 
-  /* Screen furniture. `.tabs`, `.fab` and `.sheet` are already gone by the band
-   * rules; the legend's heading is the paper-only one — the strip sits under
-   * the grid it explains and needs no label. */
+  /* `.tabs`, `.fab` and `.sheet` are already gone by the band rules; the legend
+   * heading is the one paper drops — the strip under the grid needs no label. */
   .legend-side__title {
     display: none;
   }
@@ -52,10 +50,9 @@
     padding: var(--space-8) 0;
   }
 
-  /* The band bleeds left and right to the paper's edge, like the screen's does,
-   * but never to the top: `@page` margin is 0, so a printer's own non-printable
-   * strip would eat the day names. The sheet's 24pt top padding is the reserved
-   * space that keeps them on the paper. */
+  /* The band bleeds to the paper's left and right edges but never the top:
+   * `@page` margin is 0, so a printer's non-printable strip would eat the day
+   * names — the sheet's 24pt top padding is the reserved space that saves them. */
   .grid__head {
     margin: 0 -28pt;
     padding: var(--space-8) 28pt;
@@ -67,30 +64,22 @@
     min-height: 0;
   }
 
-  /* Rows divide the leftover, they don't divide the page. On screen every row
-   * is an equal share of a viewport with room to spare; on 210mm an equal share
-   * is 58px, and the one lesson name that wraps to two lines — "Gimnastyka
-   * kompensacyjna" — needs 74px and loses its second line to `.cell`'s own
-   * overflow. An `auto` basis sizes each row to its content first and shares
-   * out what is left, so the tall row keeps its second line and the sheet still
-   * fills the page. */
+  /* Rows divide the leftover, not the page. On 210mm an equal share is 58px,
+   * but the one name that wraps to two lines ("Gimnastyka kompensacyjna") needs
+   * 74px and would lose its second line to `.cell`'s overflow. An `auto` basis
+   * sizes each row to its content first and shares out the rest. */
   .row {
     flex-basis: auto;
   }
 
-  /* …but a content-sized row is only worth having where the content differs.
-   * Left alone, a "wolne" row is one line and a lesson row is two, so the sheet
-   * comes out in three heights and reads ragged. Every tile reserves the two
-   * lines a lesson takes — name plus teacher — which levels all eleven rows
-   * against each other and leaves exactly one row taller: the one whose name
-   * genuinely needs a second line.
+  /* A content-sized row only helps where content differs, so left alone the
+   * sheet comes out ragged (one-line "wolne" rows, two-line lesson rows). Every
+   * tile reserves the two lines a lesson takes, levelling all eleven rows and
+   * leaving exactly one taller — the name that genuinely needs a second line.
    *
-   * The floor is derived from the scale rather than measured off it, so it
-   * follows the scale if that ever moves: the name's line, the teacher's line —
-   * a step smaller, the one thing paper does not flatten — the gap between
-   * them, and the tile's own padding top and bottom. `*` sets `border-box`, so
-   * the padding has to be inside the number. The tighter padding is the same
-   * eleven-rows-on-210mm squeeze as the header above. */
+   * The floor is derived from the scale, not measured, so it follows the scale:
+   * name line + teacher line + gap + padding. `*` sets `border-box`, so the
+   * padding is inside the number. */
   .cell {
     padding: var(--space-4) var(--space-8);
     min-height: calc(
@@ -99,9 +88,8 @@
     );
   }
 
-  /* No "today" — the sheet is printed once and hangs all term, so the day name
-   * stays a day name. The screen swaps it for DZIŚ at runtime; paper swaps it
-   * back and drops the emphasis with it. */
+  /* No "today" — the sheet hangs all term, so paper swaps DZIŚ back to the day
+   * name and drops the emphasis with it. */
   .dayhead--today {
     color: var(--text-secondary);
     font-weight: var(--fw-medium);
