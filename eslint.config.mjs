@@ -45,7 +45,7 @@ export default defineConfig([
     language: "css/css",
     extends: ["css/recommended"],
     rules: {
-      // Design tokens live in one central token layer (src/assets/tokens.css)
+      // Design tokens live in one central token layer (src/styles/tokens.css)
       // and are consumed via var(--token) from every other CSS file.
       // no-invalid-properties resolves var() references within a single file,
       // so cross-file token use would otherwise error. allowUnknownVariables

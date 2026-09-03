@@ -98,7 +98,7 @@ commit and wait for green CI before every merge; a prompt will not stop you.
 
 ## Environment
 
-No secrets, no runtime config. The plan data is committed JSON under `src/data/plans/` — the
+No secrets, no runtime config. The plan data is committed JSON under `src/data/` — the
 published output is a static build, so a bad data edit is caught by the gate and the visual check,
 not by a runtime guard.
 

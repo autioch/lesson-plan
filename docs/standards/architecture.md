@@ -37,11 +37,11 @@ Core rules:
 ```text
 src/
 ├─ components/       # Astro components (DayTabs, WeekGrid, Legend)
-├─ data/             # plans/ — one JSON per school year, the source of record — and its types
+├─ data/             # the plan JSON (two shared files + one per school year), its types, the merge
 ├─ layouts/          # Page wrapper (shared head, structure)
 ├─ pages/            # Astro pages (one per route) and the page script
 ├─ utils/            # Pure build-time transforms (no rendering, no I/O, no clock)
-└─ assets/           # tokens.css, plan.css (screen + the bands paper shares), print.css (deltas)
+└─ styles/           # tokens.css, plan.css (screen + the bands paper shares), print.css (deltas)
 ```
 
 One route: `/`, the responsive plan built to `designs/`. It renders three screen bands and an
@@ -62,19 +62,19 @@ At build time, Astro imports two shared files plus one JSON file per school year
 one of them, and passes it through one transform. **The three files are split by how often they
 change**, not by who uses them:
 
-- **`src/data/plans/commons.json`** — the school's fixtures, effectively frozen: `locale`, `labels`
+- **`src/data/commons.json`** — the school's fixtures, effectively frozen: `locale`, `labels`
   (every fixed string), `palette` (`{ id, hex, legendTitle, inLegend }` — the only place a colour is
   written), `slots` (the bell day: `id`, `start`, `duration`), `days` (`id`, `name`, `short`,
   `weekday`).
-- **`src/data/plans/catalog.json`** — the people and subjects the years draw on, append-only:
+- **`src/data/catalog.json`** — the people and subjects the years draw on, append-only:
   `teachers` (`id`, `name`, optional `anonymous`) and `lessonTypes` (`id`, `name`, optional `short`,
   `colorId`). A row is added when a new one appears and edited only to correct it; a teacher who
   leaves keeps their row and the lessons simply stop referencing it. Rows no year references are
   inert — `buildPlan` renders what the lessons point at, so nothing flags a retired row and nothing
   needs to.
-- **`src/data/plans/<year>.json`** — one year's week, named for the September it starts. One root
+- **`src/data/<year>.json`** — one year's week, named for the September it starts. One root
   key, `lessons`: `Day.id` → `Slot.id` → `{ lessonId, teacherId }`. A slot with no entry is free.
-- **`src/data/plans/index.ts`** — merges commons and catalog into **every** year to build `plans`,
+- **`src/data/index.ts`** — merges commons and catalog into **every** year to build `plans`,
   and names the live one in `ACTIVE_YEAR`. Only the active year reaches the page; the rest are merged
   purely so `astro check` types them against `LessonsPlan` and a type change names every file it
   breaks. Publishing a new year is one line here — see
@@ -129,12 +129,12 @@ Static site; the only runtime state is which day a phone is showing.
 
 | Data                                               | Owner                                               |
 | -------------------------------------------------- | --------------------------------------------------- |
-| Palette, copy, bell times, day names               | `src/data/plans/commons.json`                       |
-| Teachers, lesson types                             | `src/data/plans/catalog.json`                       |
-| The schedule itself                                | `src/data/plans/<year>.json`                        |
+| Palette, copy, bell times, day names               | `src/data/commons.json`                             |
+| Teachers, lesson types                             | `src/data/catalog.json`                             |
+| The schedule itself                                | `src/data/<year>.json`                              |
 | Derived render shape                               | `src/utils/plan.ts`                                 |
 | Render logic and HTML structure                    | `src/components/`                                   |
-| Theme — type scale, spacing, surfaces, ink, motion | `src/assets/tokens.css`                             |
+| Theme — type scale, spacing, surfaces, ink, motion | `src/styles/tokens.css`                             |
 | Page routing                                       | `src/pages/`                                        |
 | Today, and the selected day (≤480px only)          | `data-day` on the page root, set by the page script |
 

@@ -13,7 +13,7 @@ system is built**; read this before writing code for **how to write it here**.
   pass them to components.
 - **One folder per component**, holding its implementation and any component-local styles.
 - **Styling:** use scoped styles inside `.astro` files with `<style>` tags, or shared stylesheets
-  in `src/assets/`. Rules that cross component boundaries — the responsive bands — belong in the
+  in `src/styles/`. Rules that cross component boundaries — the responsive bands — belong in the
   shared stylesheet; scoped styles cannot express them.
 - **No copy in components.** Every user-visible string is a label from `commons.json`, passed in as
   a prop. A hardcoded word in an `.astro` file is a bug, not a shortcut.
@@ -36,11 +36,11 @@ system is built**; read this before writing code for **how to write it here**.
 
 ## Adding a feature
 
-1. **Data layer** — extend `src/data/plans/` and its type in `src/data/types.ts`. The three files
+1. **Data layer** — extend `src/data/` and its type in `src/data/types.ts`. The three files
    split by change frequency: new copy, colours or day labels go in `commons.json`; a new teacher or
    subject goes in `catalog.json`; only the week itself goes in that year's file — and never into a
    component. A type change must keep the archived years compiling too — they are all merged and
-   typed by `src/data/plans/index.ts`.
+   typed by `src/data/index.ts`.
 2. **Components** — add or extend components in `src/components/`.
 3. **Page** — mount the component in `src/pages/` where it belongs, or create a new page.
 4. **Build and verify** — run `npm run build` and check the output.
@@ -52,13 +52,13 @@ system is built**; read this before writing code for **how to write it here**.
 | --------------------------- | ---------------------------------------------------------------------- |
 | Page structure / layout     | [src/pages/index.astro](../../src/pages/index.astro)                   |
 | Data type definitions       | [src/data/types.ts](../../src/data/types.ts)                           |
-| A school year's week        | [src/data/plans/2026.json](../../src/data/plans/2026.json)             |
-| Shared copy, colours, bells | [src/data/plans/commons.json](../../src/data/plans/commons.json)       |
-| Teachers and subjects       | [src/data/plans/catalog.json](../../src/data/plans/catalog.json)       |
+| A school year's week        | [src/data/2026.json](../../src/data/2026.json)                         |
+| Shared copy, colours, bells | [src/data/commons.json](../../src/data/commons.json)                   |
+| Teachers and subjects       | [src/data/catalog.json](../../src/data/catalog.json)                   |
 | A component reading labels  | [src/components/WeekGrid.astro](../../src/components/WeekGrid.astro)   |
 | Build-time transform        | [src/utils/plan.ts](../../src/utils/plan.ts)                           |
-| Band-aware layout CSS       | [src/assets/plan.css](../../src/assets/plan.css)                       |
-| A paper-only override       | [src/assets/print.css](../../src/assets/print.css)                     |
+| Band-aware layout CSS       | [src/styles/plan.css](../../src/styles/plan.css)                       |
+| A paper-only override       | [src/styles/print.css](../../src/styles/print.css)                     |
 | Runtime (clock, day pick)   | the `<script>` in [src/pages/index.astro](../../src/pages/index.astro) |
 
 ## Keeping docs in sync

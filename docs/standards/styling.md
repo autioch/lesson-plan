@@ -52,7 +52,7 @@ construction. Three rules keep that true, and breaking any one of them breaks th
 ## Visual conventions
 
 - **Lesson colours are data, not decoration.** Exact hex from the `palette` in
-  `src/data/plans/commons.json`, full strength, never tokenized, tinted or made transparent, and
+  `src/data/commons.json`, full strength, never tokenized, tinted or made transparent, and
   never shown without the legend. A lesson type names a colour by `colorId`; a hex written anywhere
   else is a bug.
 - **Tile ink is fixed, not computed.** Every tile takes `--text-primary`, and the teacher line
@@ -77,7 +77,7 @@ construction. Three rules keep that true, and breaking any one of them breaks th
   those three numbers** — hand-picking a hex per colour is what breaks the set. Pale costs
   separability fastest: at a 70% mix the tightest pair falls to ΔE 3.6 and the palest tiles are only
   ΔE 12 from the page, which is where a tile stops reading as a tile.
-- **Everything else is a token** from `src/assets/tokens.css` — type scale, spacing ramp, radii,
+- **Everything else is a token** from `src/styles/tokens.css` — type scale, spacing ramp, radii,
   lines, surfaces, text ink, accent. No values from outside the ramp, and the only inline style on a
   cell is `--cell-bg`.
 - **Type scale** switches once, at 1024px: phone `17/20/24`, desk `20/24/30`. Meta is `14/17` under
@@ -92,7 +92,7 @@ construction. Three rules keep that true, and breaking any one of them breaks th
   the grid takes the top edge and keeps only a side inset and a gap under the last row. Bands A and
   C have the room and keep theirs.
 - **The legend names the colour, not its lessons.** Those are on screen beside it.
-- **Layout lives in `src/assets/plan.css`**, not in scoped component styles — the band rules cross
+- **Layout lives in `src/styles/plan.css`**, not in scoped component styles — the band rules cross
   component boundaries.
 - **Copy is never in CSS or markup.** Visible words come from `labels` in `commons.json`; CSS may
   show and hide them, never supply them (no `content:` strings).
