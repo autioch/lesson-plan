@@ -67,19 +67,21 @@ owned by [styling.md](../standards/styling.md#surfaces); the paper check is an
 
 **User:** the maintainer, once a year.
 **Goal:** turn the school's new PDF into the published plan.
-**Flow:** the bounded procedure in [importing-a-plan.md](../importing-a-plan.md) — read the PDF, build
-the year's JSON, move `ACTIVE_YEAR`, verify, PR.
-**Expected:** the previous year is kept untouched as a snapshot; only the active year changes.
+**Flow:** the checklist in the [README](../../README.md#publish-a-new-school-year), backed by the
+detail in [importing-a-plan.md](../importing-a-plan.md) — read the PDF, build the year's JSON, give
+last year its own page and point the home page at the new one, verify, PR.
+**Expected:** last year keeps its own page untouched as a snapshot; the home page moves to the new
+year.
 
 ## Product constraints
 
 - **One class, one week, static.** The site renders a single class's timetable, built and published
   once a term. No live editing, no server, no accounts — see
   [security.md](../standards/security.md).
-- **One published timetable.** Exactly one school year is live — the active one. Past years stay in
-  the repo as unpublished snapshots; there is no archive view, no year picker, and no way to reach a
-  past year from the page. This is a constraint, not a missing feature —
-  [importing-a-plan.md](../importing-a-plan.md#notes-for-agents).
+- **One timetable per page, no cross-links.** The home page renders the current school year; each
+  past year has its own page at its own URL, kept for comparison. There is no archive view, no year
+  picker, and no link between years on the page — a past year is reached by typing its URL. This is a
+  constraint, not a missing feature — [importing-a-plan.md](../importing-a-plan.md#notes-for-agents).
 - **Phone and paper are both binding.** The plan is read on a phone during the week and printed once
   a term. Both surfaces ship from one DOM; neither is secondary.
 - **Polish copy, no feature creep.** Every visible string is Polish and comes from the data. Present

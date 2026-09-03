@@ -1,13 +1,14 @@
 /**
- * Every school year the site has ever published, and which one is live. A year
- * is added, never edited in place; `commons.json` and `catalog.json`
- * are merged in here so a year file holds only its week — see `./types.ts`.
+ * Every school year the site has ever published, keyed by the September it
+ * starts. A year is added, never edited in place; `commons.json` and
+ * `catalog.json` are merged in here so a year file holds only its week — see
+ * `./types.ts`. Each page picks its own year out of `plans`.
  *
- * Every year is merged and typed, not just the active one, so a schema change
- * makes `astro check` name each archive file that needs fixing instead of
- * letting it rot unnoticed. An outlived archive is deleted on purpose.
+ * Every year is merged and typed, not just the current one, so a schema change
+ * makes `astro check` name each year file that needs fixing instead of letting
+ * it rot unnoticed. An outlived year is deleted on purpose.
  *
- * Adding a year: docs/importing-a-plan.md.
+ * Adding a year: README.md § Publish a new school year.
  */
 
 import type {

@@ -122,18 +122,18 @@ Durable docs stay current two ways:
 
 **Doc-sync map** — when you change… update these.
 
-| Change                             | Sync these durable docs                                             |
-| ---------------------------------- | ------------------------------------------------------------------- |
-| Data shape (JSON / types)          | `architecture.md`; this guide (Copy-from)                           |
-| User-visible copy or a colour      | `commons.json` only — no doc change, but never a component          |
-| A new teacher or subject           | `catalog.json` only — no doc change; append a row, never repurpose  |
-| A new school year published        | `docs/importing-a-plan.md` if the procedure itself changed          |
-| New component or changed structure | this guide (Copy-from); `architecture.md` (layout)                  |
-| New page or route                  | this guide (Copy-from); README.md if user-facing                    |
-| Build config or command            | this guide (command reference); CLAUDE.md if the gate story changes |
-| Styling / UI convention            | this guide (Conventions); [styling.md](styling.md)                  |
-| Product behavior / content         | README.md; any user-facing docs                                     |
-| Working method / process change    | CLAUDE.md (the routing table); `docs/workflow.md`                   |
+| Change                             | Sync these durable docs                                                 |
+| ---------------------------------- | ----------------------------------------------------------------------- |
+| Data shape (JSON / types)          | `architecture.md`; this guide (Copy-from)                               |
+| User-visible copy or a colour      | `commons.json` only — no doc change, but never a component              |
+| A new teacher or subject           | `catalog.json` only — no doc change; append a row, never repurpose      |
+| A new school year published        | `README.md` checklist / `docs/importing-a-plan.md` if the steps changed |
+| New component or changed structure | this guide (Copy-from); `architecture.md` (layout)                      |
+| New page or route                  | this guide (Copy-from); README.md if user-facing                        |
+| Build config or command            | this guide (command reference); CLAUDE.md if the gate story changes     |
+| Styling / UI convention            | this guide (Conventions); [styling.md](styling.md)                      |
+| Product behavior / content         | README.md; any user-facing docs                                         |
+| Working method / process change    | CLAUDE.md (the routing table); `docs/workflow.md`                       |
 
 The map is the single lookup both the per-commit sync and the retro reconcile use — keep it current
 when you add a new doc or code area.

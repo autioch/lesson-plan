@@ -1,16 +1,16 @@
 # Importing a new school year
 
-Once a year the school issues one PDF holding the timetable for **every** class. This turns the one
-class we care about into that year's plan file and publishes it. About half an hour, most of it
-checking rather than typing.
+The reference behind the **[Publish a new school year](../README.md#publish-a-new-school-year)**
+checklist in the README: what only the human can answer, how the school's PDF is read, and how the
+built page is checked. The README owns the ordered steps; this file owns the detail they defer to.
+About half an hour of work, most of it checking rather than typing.
 
 The rules the layout enforces: one file per school year in `src/data/`, named for the
 September it starts (`2026.json`), holding **only that year's week** — a single `lessons` key.
 Everything else lives once in the two shared files:
 [`commons.json`](../src/data/commons.json) for the fixtures and
 [`catalog.json`](../src/data/catalog.json) for the teachers and subjects. A published year is
-**never edited again**; only `ACTIVE_YEAR` in
-[`src/data/index.ts`](../src/data/index.ts) says what the site renders.
+**never edited again** — its page is a snapshot of the week that hung on the wall.
 
 ## Who does what
 
@@ -98,35 +98,27 @@ maps, so the extraction is exact, diacritics included.
 niem` in grade 8 is taught by KRadziłowska, so in 1b's `KRadziłowska / MWołejnio` the Spanish
   teacher is MWołejnio.
 
-## Building the file
+## Transcribing the data
 
-1. **Put the PDF at `src/data/<year>.pdf`** — committed beside the JSON it produced, so a
-   year's data can always be traced to its source.
-2. **Create `<year>.json` with a single `lessons` key.** Nothing to copy from last year — the shape
-   is one object, and everything shared across years lives in the shared files, not the year file.
-3. **Extend `catalog.json` first**, before any lesson — a teacher or subject the PDF names that is
-   not already there. **Append only.** Never edit a row to mean someone or something else, and never
-   delete one an archived year still references: an id quietly pointing at a different person or
-   colour repaints the plan and nothing fails. A teacher who left keeps their row. Teacher ids are
-   opaque (`t1`…) because names change; subject ids are readable slugs (`wf-ew`) because a subject's
-   identity does not. Two subjects that merely read alike ("Gimnastyka korekcyjna" and
-   "kompensacyjna") are two rows.
-4. **Then transcribe `lessons`** — `Day.id` → `Slot.id` → `{ lessonId, teacherId }`, the day and
-   slot ids from `commons.json`, the lesson and teacher ids from `catalog.json`. A free slot gets no
-   entry at all. A lesson that is scheduled but not attended is `ignored: true`, which renders as
-   free but records that the school put something there. Every one of those four keys is resolved at
-   build time, so a typo is a red build, not a lost lesson.
-5. **Only if the school moved something**, edit `commons.json`: bell times in `slots`, a new colour
-   in `palette`, a copy fix in `labels`. Like the catalog it is shared, so that edit re-renders
-   **every** published year — right for a corrected label, wrong for anything this year alone
-   decided. **Adding a bell means a new slot id, never renumbering the existing ones**; retiring one
-   means deleting its row and leaving its id dead. Every year's lessons point at those ids, so
-   renumbering would silently re-time the whole archive.
-6. **Register the year** in `src/data/index.ts`: import it, add it to `years`, move
-   `ACTIVE_YEAR`.
-7. **Verify** — below. **Flag every guess** to the human, and file the unresolved ones in
-   `owner-tasks.md`.
-8. **Commit** on a branch, PR, merge on green.
+The README checklist gives the order (write the year file → extend the catalog → register it →
+duplicate the page → verify). What each of those steps must get right:
+
+- **The year file is one `lessons` key.** `Day.id` → `Slot.id` → `{ lessonId, teacherId }`, the day
+  and slot ids from `commons.json`, the lesson and teacher ids from `catalog.json`. A free slot gets
+  no entry at all. A lesson that is scheduled but not attended is `ignored: true` — renders as free
+  but records that the school put something there. All four keys are resolved at build time, so a
+  typo is a red build, not a lost lesson. Nothing is copied from last year: the shape is one object,
+  and everything shared lives in the shared files.
+- **Extend `catalog.json` before writing a lesson that needs it**, and **append only** — a teacher
+  or subject the PDF names that is not already there gets a new row. The full discipline (never
+  repurpose or delete a row an archived year references; opaque teacher ids, readable subject ids)
+  is in
+  [architecture.md § Data modelling rules](standards/architecture.md#data-modelling-rules).
+- **Touch `commons.json` only if the school moved something** — bell times, a colour, a copy fix.
+  It is shared, so that edit re-renders **every** year: right for a corrected label, wrong for
+  anything this year alone decided. Adding a bell is a new slot id, never a renumber.
+- **Flag every guess** to the human, and file the unresolved ones in
+  [owner-tasks.md](owner-tasks.md) with the exact edit that resolves it.
 
 ## Verifying
 
@@ -148,8 +140,9 @@ colour it does not. Say what you compared — a green gate is not a verified tim
 ## Notes for agents
 
 - This is a [**Bounded**](workflow.md#bounded) change: branch, build, verify, close out.
-- Do not add a year picker, an archive view or a "past years" link. One published timetable is a
-  product constraint — [domain/overview.md](domain/overview.md#product-constraints).
-- Every archived year is imported by `index.ts` and type-checked. If a `LessonsPlan` change breaks
-  an old year, fix it or delete that year deliberately — never drop it from `plans` to silence the
-  error.
+- Each year is its own page at its own URL (`index.astro` for the current one, `2025.astro` for a
+  past one), reached directly — there is no picker, archive view or "past years" link on the page.
+  That absence is a product constraint — [domain/overview.md](domain/overview.md#product-constraints).
+- Every year is imported by `index.ts` and type-checked, not only the current one. If a `LessonsPlan`
+  change breaks an old year, fix it or delete that year deliberately — never drop it from `years` to
+  silence the error.

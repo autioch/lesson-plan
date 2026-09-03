@@ -60,7 +60,7 @@ Import aliases: none currently used.
 ### The component tree
 
 ```text
-index.astro          the page: reads the active year, composes, sequences the runtime scripts
+index.astro          the current-year page: reads its year, composes, sequences the runtime scripts
 ├─ DayTabs           day selection — band A only
 ├─ WeekGrid          the grid frame
 │  ├─ GridHead       the day-name band
@@ -129,10 +129,10 @@ change**, not by who uses them:
   needs to.
 - **`src/data/<year>.json`** — one year's week, named for the September it starts. One root
   key, `lessons`: `Day.id` → `Slot.id` → `{ lessonId, teacherId }`. A slot with no entry is free.
-- **`src/data/index.ts`** — merges commons and catalog into **every** year to build `plans`,
-  and names the live one in `ACTIVE_YEAR`. Only the active year reaches the page; the rest are merged
-  purely so `astro check` types them against `LessonsPlan` and a type change names every file it
-  breaks. Publishing a new year is one line here — see
+- **`src/data/index.ts`** — merges commons and catalog into **every** year to build `plans`, keyed
+  by the September the year starts. Each page picks its own year out of `plans`; every year is merged
+  and typed, not just the current one, so a `LessonsPlan` change names every file it breaks via
+  `astro check`. Registering a year is one import and one line here — see
   [importing-a-plan.md](../importing-a-plan.md).
 - **`src/data/types.ts`** — `PlanCommons`, `PlanCatalog`, `SchoolYear`, and the `LessonsPlan` they
   merge into; the checklist of what may be rendered, and where the lines between the files fall.
@@ -165,7 +165,7 @@ migrate; it is the discipline that keeps the files honest while they are hand-ed
   not resolve and on any `lessons` key that names no day or slot. A school timetable with a blank
   tile is worse than a red build.
 
-`src/pages/index.astro` reads the active year once and `src/utils/plan.ts` turns it into the render shape
+Each page reads its own year once and `src/utils/plan.ts` turns it into the render shape
 (shared row set, breaks, cells, legend). Components lay that out and compute nothing. A reference
 that does not resolve — an unknown `lessonId`, `colorId` or `teacherId` — throws and fails the
 build rather than rendering a blank tile.
