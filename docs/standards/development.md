@@ -7,14 +7,17 @@ system is built**; read this before writing code for **how to write it here**.
 
 ## Conventions
 
-- **Components are Astro files** — use `.astro` for page structure and `.astro` for UI components.
-  Keep files small and focused on one element or feature.
 - **Type safety:** use TypeScript where possible. Define types in `src/data/` for data shapes and
   pass them to components.
-- **One folder per component**, holding its implementation and any component-local styles.
-- **Styling:** use scoped styles inside `.astro` files with `<style>` tags, or shared stylesheets
-  in `src/styles/`. Rules that cross component boundaries — the responsive bands — belong in the
-  shared stylesheet; scoped styles cannot express them.
+- **One flat `.astro` file per component** in `src/components/`, no folder and no styles of its
+  own. **Split by reason to change, not by size**: extract when a piece changes for a reason its
+  container doesn't (a tile vs. the grid holding it), or when it is used twice (`Legend`, in the
+  sidebar and the sheet). A `.map()` is a shape, not a reason, and a component with one reason to
+  change and one use stays whole however long it gets. The tree:
+  [architecture.md](architecture.md#the-component-tree).
+- **Styling:** every rule lives in `src/styles/`; components carry no `<style>` block. The
+  responsive bands cross component boundaries and scoped styles cannot express them — see
+  [styling.md](styling.md#surfaces).
 - **No copy in components.** Every user-visible string is a label from `commons.json`, passed in as
   a prop. A hardcoded word in an `.astro` file is a bug, not a shortcut.
 - **No dates at build time.** Frontmatter and `src/utils/` must never call `new Date()`: the site is
@@ -48,18 +51,20 @@ system is built**; read this before writing code for **how to write it here**.
 
 **Copy from** — canonical examples for building blocks:
 
-| Building…                   | Copy the pattern from                                                  |
-| --------------------------- | ---------------------------------------------------------------------- |
-| Page structure / layout     | [src/pages/index.astro](../../src/pages/index.astro)                   |
-| Data type definitions       | [src/data/types.ts](../../src/data/types.ts)                           |
-| A school year's week        | [src/data/2026.json](../../src/data/2026.json)                         |
-| Shared copy, colours, bells | [src/data/commons.json](../../src/data/commons.json)                   |
-| Teachers and subjects       | [src/data/catalog.json](../../src/data/catalog.json)                   |
-| A component reading labels  | [src/components/WeekGrid.astro](../../src/components/WeekGrid.astro)   |
-| Build-time transform        | [src/utils/plan.ts](../../src/utils/plan.ts)                           |
-| Band-aware layout CSS       | [src/styles/plan.css](../../src/styles/plan.css)                       |
-| A paper-only override       | [src/styles/print.css](../../src/styles/print.css)                     |
-| Runtime (clock, day pick)   | the `<script>` in [src/pages/index.astro](../../src/pages/index.astro) |
+| Building…                    | Copy the pattern from                                                    |
+| ---------------------------- | ------------------------------------------------------------------------ |
+| Page structure / layout      | [src/pages/index.astro](../../src/pages/index.astro)                     |
+| Data type definitions        | [src/data/types.ts](../../src/data/types.ts)                             |
+| A school year's week         | [src/data/2026.json](../../src/data/2026.json)                           |
+| Shared copy, colours, bells  | [src/data/commons.json](../../src/data/commons.json)                     |
+| Teachers and subjects        | [src/data/catalog.json](../../src/data/catalog.json)                     |
+| A component reading labels   | [src/components/WeekRow.astro](../../src/components/WeekRow.astro)       |
+| A leaf component             | [src/components/LessonCell.astro](../../src/components/LessonCell.astro) |
+| A component composing others | [src/components/WeekGrid.astro](../../src/components/WeekGrid.astro)     |
+| Build-time transform         | [src/utils/plan.ts](../../src/utils/plan.ts)                             |
+| Band-aware layout CSS        | [src/styles/plan.css](../../src/styles/plan.css)                         |
+| A paper-only override        | [src/styles/print.css](../../src/styles/print.css)                       |
+| Runtime (clock, day pick)    | the `<script>` in [src/pages/index.astro](../../src/pages/index.astro)   |
 
 ## Keeping docs in sync
 

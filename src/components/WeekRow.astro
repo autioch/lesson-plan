@@ -1,0 +1,36 @@
+---
+/**
+ * One hour of the week: the time gutter, then one cell per day.
+ *
+ * The gutter is the row's anchor at every width — in band A it is the only
+ * thing that stays put while the days slide behind it, which is why it is
+ * opaque and sits above them in the stacking order.
+ *
+ * `breakText` is absent when the next hour follows directly, so the span is
+ * omitted rather than rendered empty; `src/utils/plan.ts` decides that, not
+ * this component.
+ */
+import type { Labels } from "../data/types";
+import type { PlanRow } from "../utils/plan";
+import LessonCell from "./LessonCell.astro";
+
+type Props = {
+  row: PlanRow;
+  labels: Labels;
+};
+
+const { row, labels } = Astro.props;
+---
+
+<div class="row">
+  <div class="row__time">
+    <span class="row__range">{row.range}</span>
+    {row.breakText && <span class="row__break">{row.breakText}</span>}
+  </div>
+
+  {
+    row.cells.map((cell, dayIndex) => (
+      <LessonCell cell={cell} dayIndex={dayIndex} labels={labels} />
+    ))
+  }
+</div>

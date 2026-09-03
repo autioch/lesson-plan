@@ -1,6 +1,7 @@
 ---
 import DayTabs from "../components/DayTabs.astro";
 import Legend from "../components/Legend.astro";
+import LegendSheet from "../components/LegendSheet.astro";
 import WeekGrid from "../components/WeekGrid.astro";
 import Layout from "../layouts/Layout.astro";
 
@@ -27,20 +28,7 @@ const { labels } = plan;
       <Legend groups={plan.legend} />
     </aside>
 
-    <button class="fab" type="button" id="legendButton" aria-expanded="false">
-      <span aria-hidden="true">?</span>
-      <span class="sr-only">{labels.legendTitle}</span>
-    </button>
-
-    <div class="sheet" id="legendSheet" hidden>
-      <div class="sheet__panel" role="dialog" aria-label={labels.legendTitle}>
-        <div class="sheet__head">
-          <span class="sheet__title">{labels.legendTitle}</span>
-          <span class="sheet__hint">{labels.legendHint}</span>
-        </div>
-        <Legend groups={plan.legend} />
-      </div>
-    </div>
+    <LegendSheet groups={plan.legend} labels={labels} />
   </div>
 </Layout>
 
