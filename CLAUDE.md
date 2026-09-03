@@ -89,9 +89,10 @@ again on `main`. Dev server: `npm run dev`. Full table:
 push once at close-out, open a lean PR, merge on green CI. Mechanics:
 [workflow.md § Committing](docs/workflow.md#committing).
 
-Pushing a branch and opening a PR need no approval — both are recoverable. **Merging** is the
-irreversible step and prompts, along with force-push, hard reset, rebase, and any release. That
-split is what `.claude/settings.json` encodes.
+Pushing a **feature branch** and opening a PR need no approval — both are recoverable. What prompts
+is what publishes: **merging**, and **`git push origin main`**, which fires the Pages deploy on the
+school's live plan. So do force-push, hard reset, rebase, and any release. That split is what
+`.claude/settings.json` encodes.
 
 ## Environment
 
