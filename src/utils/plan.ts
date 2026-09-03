@@ -20,9 +20,9 @@
  * **One name per concept, all the way through.** This file declares a type only
  * for what it actually derives — a row, a cell, the plan itself. Anything it
  * passes through keeps the data's own type and the data's own field names, so a
- * colour is `hex` and a legend caption is `legendTitle` in the JSON, here, and
- * in the component. Renaming a field on the way out buys nothing and costs
- * everyone the lookup.
+ * colour is `hex` and a legend caption is `name` in the JSON, here, and in the
+ * component. Renaming a field on the way out buys nothing and costs everyone
+ * the lookup.
  */
 
 import type { Day, Labels, LessonsPlan, PaletteColor } from "../data/types";
@@ -39,7 +39,7 @@ export type PlanCell =
       /** Full lesson name, as it is in the data. */
       name: string;
       /** Name shortened for narrow columns; equals `name` when nothing is shortened. */
-      short: string;
+      nameShort: string;
       /**
        * Teacher name, or "" when the record is a placeholder. The one field
        * here that is renamed on the way in: a cell flattens a lesson type and
@@ -145,7 +145,7 @@ export function buildPlan(data: LessonsPlan): Plan {
     return {
       empty: false,
       name: type.name,
-      short: type.short ?? type.name,
+      nameShort: type.nameShort ?? type.name,
       teacher: teacher.anonymous ? "" : teacher.name,
       hex: color.hex,
     };

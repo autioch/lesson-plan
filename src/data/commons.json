@@ -14,43 +14,43 @@
     {
       "id": "plain",
       "hex": "#ffffff",
-      "legendTitle": "Zwykła lekcja",
+      "name": "Zwykła lekcja",
       "inLegend": false
     },
     {
       "id": "lang",
       "hex": "#a7d8f8",
-      "legendTitle": "Język obcy",
+      "name": "Język obcy",
       "inLegend": true
     },
     {
       "id": "kit",
       "hex": "#dbf7bd",
-      "legendTitle": "Spakuj strój",
+      "name": "Spakuj strój",
       "inLegend": true
     },
     {
       "id": "pool",
       "hex": "#bff3ea",
-      "legendTitle": "Basen",
+      "name": "Basen",
       "inLegend": true
     },
     {
       "id": "creative",
       "hex": "#ffc7d8",
-      "legendTitle": "Zajęcia twórcze",
+      "name": "Zajęcia twórcze",
       "inLegend": true
     },
     {
       "id": "individual",
       "hex": "#eee0ff",
-      "legendTitle": "Zajęcia indywidualne i rytmika",
+      "name": "Zajęcia indywidualne i rytmika",
       "inLegend": true
     },
     {
       "id": "extra",
       "hex": "#ffe7a6",
-      "legendTitle": "Dodatkowe",
+      "name": "Dodatkowe",
       "inLegend": true
     }
   ],
@@ -115,31 +115,31 @@
     {
       "id": "mon",
       "name": "Poniedziałek",
-      "short": "Pn",
+      "nameShort": "Pn",
       "weekday": 1
     },
     {
       "id": "tue",
       "name": "Wtorek",
-      "short": "Wt",
+      "nameShort": "Wt",
       "weekday": 2
     },
     {
       "id": "wed",
       "name": "Środa",
-      "short": "Śr",
+      "nameShort": "Śr",
       "weekday": 3
     },
     {
       "id": "thu",
       "name": "Czwartek",
-      "short": "Cz",
+      "nameShort": "Cz",
       "weekday": 4
     },
     {
       "id": "fri",
       "name": "Piątek",
-      "short": "Pt",
+      "nameShort": "Pt",
       "weekday": 5
     }
   ]

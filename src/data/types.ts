@@ -42,7 +42,8 @@ export type Labels = {
 export type PaletteColor = {
   id: string;
   hex: string;
-  legendTitle: string;
+  /** The legend caption — what this colour tells the reader (e.g. "Basen"). */
+  name: string;
   inLegend: boolean;
 };
 
@@ -80,7 +81,7 @@ type LessonType = {
   id: string;
   name: string;
   /** Abbreviation for the narrow band; the full name is used when absent. */
-  short?: string;
+  nameShort?: string;
   colorId: string;
 };
 
@@ -105,7 +106,7 @@ export type Day = {
   /** Display only. */
   name: string;
   /** Two-letter label for the phone tabs. */
-  short: string;
+  nameShort: string;
   /** ISO weekday, 1 = Monday. Matched against the browser clock at runtime. */
   weekday: number;
 };

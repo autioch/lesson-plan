@@ -74,7 +74,7 @@
     {
       "id": "art",
       "name": "Zajęcia Twórcze",
-      "short": "Twórcze",
+      "nameShort": "Twórcze",
       "colorId": "creative"
     },
     {
@@ -100,7 +100,7 @@
     {
       "id": "dance",
       "name": "Dance 4 Friends",
-      "short": "Dance 4 F.",
+      "nameShort": "Dance 4 F.",
       "colorId": "extra"
     },
     {
@@ -126,25 +126,25 @@
     {
       "id": "games-cube",
       "name": "Akademia Gier CUBE",
-      "short": "Gry CUBE",
+      "nameShort": "Gry CUBE",
       "colorId": "extra"
     },
     {
       "id": "gym-compensatory",
       "name": "Gimnastyka kompensacyjna",
-      "short": "Gimnastyka",
+      "nameShort": "Gimnastyka",
       "colorId": "kit"
     },
     {
       "id": "gym-corrective",
       "name": "Gimnastyka korekcyjna",
-      "short": "Gimn. kor.",
+      "nameShort": "Gimn. kor.",
       "colorId": "kit"
     },
     {
       "id": "it",
       "name": "Informatyka",
-      "short": "Inform.",
+      "nameShort": "Inform.",
       "colorId": "plain"
     },
     {
@@ -155,7 +155,7 @@
     {
       "id": "religion-ethics",
       "name": "Religia/Etyka",
-      "short": "Religia",
+      "nameShort": "Religia",
       "colorId": "plain"
     },
     {
@@ -171,7 +171,7 @@
     {
       "id": "social-skills",
       "name": "Trening Umiejętności Społecznych",
-      "short": "TUS",
+      "nameShort": "TUS",
       "colorId": "extra"
     },
     {
