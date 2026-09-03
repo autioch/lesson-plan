@@ -6,7 +6,7 @@ import Layout from "../layouts/Layout.astro";
 
 /* After `Layout`, which pulls in `plan.css`: the print rules override the
  * screen ones at equal specificity, so they have to land last. */
-import "../assets/print.css";
+import "../styles/print.css";
 
 import { ACTIVE_YEAR, plans } from "../data";
 import { buildPlan } from "../utils/plan";

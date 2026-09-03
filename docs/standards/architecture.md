@@ -41,7 +41,7 @@ src/
 ├─ layouts/          # Page wrapper (shared head, structure)
 ├─ pages/            # Astro pages (one per route) and the page script
 ├─ utils/            # Pure build-time transforms (no rendering, no I/O, no clock)
-└─ assets/           # tokens.css, plan.css (screen + the bands paper shares), print.css (deltas)
+└─ styles/           # tokens.css, plan.css (screen + the bands paper shares), print.css (deltas)
 ```
 
 One route: `/`, the responsive plan built to `designs/`. It renders three screen bands and an
@@ -134,7 +134,7 @@ Static site; the only runtime state is which day a phone is showing.
 | The schedule itself                                | `src/data/<year>.json`                              |
 | Derived render shape                               | `src/utils/plan.ts`                                 |
 | Render logic and HTML structure                    | `src/components/`                                   |
-| Theme — type scale, spacing, surfaces, ink, motion | `src/assets/tokens.css`                             |
+| Theme — type scale, spacing, surfaces, ink, motion | `src/styles/tokens.css`                             |
 | Page routing                                       | `src/pages/`                                        |
 | Today, and the selected day (≤480px only)          | `data-day` on the page root, set by the page script |
 

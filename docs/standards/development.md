@@ -13,7 +13,7 @@ system is built**; read this before writing code for **how to write it here**.
   pass them to components.
 - **One folder per component**, holding its implementation and any component-local styles.
 - **Styling:** use scoped styles inside `.astro` files with `<style>` tags, or shared stylesheets
-  in `src/assets/`. Rules that cross component boundaries — the responsive bands — belong in the
+  in `src/styles/`. Rules that cross component boundaries — the responsive bands — belong in the
   shared stylesheet; scoped styles cannot express them.
 - **No copy in components.** Every user-visible string is a label from `commons.json`, passed in as
   a prop. A hardcoded word in an `.astro` file is a bug, not a shortcut.
@@ -57,8 +57,8 @@ system is built**; read this before writing code for **how to write it here**.
 | Teachers and subjects       | [src/data/catalog.json](../../src/data/catalog.json)                   |
 | A component reading labels  | [src/components/WeekGrid.astro](../../src/components/WeekGrid.astro)   |
 | Build-time transform        | [src/utils/plan.ts](../../src/utils/plan.ts)                           |
-| Band-aware layout CSS       | [src/assets/plan.css](../../src/assets/plan.css)                       |
-| A paper-only override       | [src/assets/print.css](../../src/assets/print.css)                     |
+| Band-aware layout CSS       | [src/styles/plan.css](../../src/styles/plan.css)                       |
+| A paper-only override       | [src/styles/print.css](../../src/styles/print.css)                     |
 | Runtime (clock, day pick)   | the `<script>` in [src/pages/index.astro](../../src/pages/index.astro) |
 
 ## Keeping docs in sync
