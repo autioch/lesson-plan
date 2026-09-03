@@ -18,7 +18,7 @@ const { groups } = Astro.props;
     groups.map((group) => (
       <li class="legend__item">
         <span class="legend__swatch" style={`background:${group.hex}`} />
-        <span class="legend__title">{group.legendTitle}</span>
+        <span class="legend__title">{group.name}</span>
       </li>
     ))
   }

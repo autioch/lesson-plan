@@ -52,9 +52,14 @@ system is built**; read this before writing code for **how to write it here**.
   `hex` in the component. **`src/utils/plan.ts` declares a type only for what it derives** — a row,
   a cell, the plan; anything it passes through keeps the data's type and the data's field names, so
   a pass-through needs no `.map()` at all. Rename only when a shape genuinely collides: a cell
-  flattens a lesson type and a teacher, so the teacher's `name` becomes `teacher` because `name` is
-  taken. Say why in the type. **Avoid names that are also HTML attributes** — `title` especially,
-  which already means a tooltip in `GridHead`; `legendTitle` stays long for that reason.
+  flattens a lesson type and a teacher, so the teacher's name becomes `teacher` because `name` is
+  taken. Say why in the type.
+- **A field names its content, not where it shows.** Every string a reader can see is `name`, or
+  `nameShort` for the abbreviated form — a day, a lesson type, a palette colour all use them, and it
+  makes no difference whether the value lands in a text node, a `title`, an `aria-label` or an
+  `<option>`. That is why `name` is safe where `title` was not: `name` describes the content, `title`
+  named a presentation slot and is a global HTML attribute, so a field called `title` collides the
+  moment it meets an element. Never name a data field after an HTML attribute.
 - **Data is read-only:** JSON files in `src/data/` are the source of record. Transformations are
   pure functions in TypeScript modules, never mutations.
 - **Props are closed:** variant / option props are enums or string literals; content is free-form.

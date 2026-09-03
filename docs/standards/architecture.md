@@ -71,7 +71,7 @@ index.astro          the page: reads the active year, composes, sequences the ru
 ```
 
 **Split by reason to change**, not by size. `LessonCell` changes when a tile does — colour, the
-name/short pair, the teacher line; `WeekGrid` changes when the grid does. `Legend` is its own file
+name/nameShort pair, the teacher line; `WeekGrid` changes when the grid does. `Legend` is its own file
 because it renders twice. Components with one reason to change and one use stay whole: a `.map()` is
 a shape, not a responsibility.
 
@@ -118,11 +118,11 @@ one of them, and passes it through one transform. **The three files are split by
 change**, not by who uses them:
 
 - **`src/data/commons.json`** — the school's fixtures, effectively frozen: `locale`, `labels`
-  (every fixed string), `palette` (`{ id, hex, legendTitle, inLegend }` — the only place a colour is
-  written), `slots` (the bell day: `id`, `start`, `duration`), `days` (`id`, `name`, `short`,
+  (every fixed string), `palette` (`{ id, hex, name, inLegend }` — the only place a colour is
+  written), `slots` (the bell day: `id`, `start`, `duration`), `days` (`id`, `name`, `nameShort`,
   `weekday`).
 - **`src/data/catalog.json`** — the people and subjects the years draw on, append-only:
-  `teachers` (`id`, `name`, optional `anonymous`) and `lessonTypes` (`id`, `name`, optional `short`,
+  `teachers` (`id`, `name`, optional `anonymous`) and `lessonTypes` (`id`, `name`, optional `nameShort`,
   `colorId`). A row is added when a new one appears and edited only to correct it; a teacher who
   leaves keeps their row and the lessons simply stop referencing it. Rows no year references are
   inert — `buildPlan` renders what the lessons point at, so nothing flags a retired row and nothing
@@ -173,7 +173,7 @@ build rather than rendering a blank tile.
 **The transform derives; it does not rename.** `PlanRow` and `PlanCell` exist because a time range,
 a break and a flattened tile are genuinely computed. Days and legend colours are not: `Plan.days` is
 `Day[]` and `Plan.legend` is `PaletteColor[]`, both straight from `src/data/types.ts`, so the legend
-is a `filter` with no `map` behind it and a component reads `hex` and `legendTitle` — the names the
+is a `filter` with no `map` behind it and a component reads `hex` and `name` — the names the
 JSON uses. A pass-through row carries its `id` unread, which is the deliberate trade: `Plan` is a
 build-time value that never reaches the browser, so the cost is nil, and a projection whose only job
 is to strip fields nobody looks at is itself code with no reason to exist. See
