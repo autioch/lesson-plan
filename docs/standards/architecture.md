@@ -90,9 +90,26 @@ then arms motion — the starting day must land before `plan--ready`, or every l
 Monday. A module that wired itself up on import would lose that guarantee, which is why none of
 them do.
 
-Selectors and ids cross from the components with nothing enforcing them: `.tab`, `.dayhead`,
-`.plan`, `.grid`, `#legendButton`, `#legendSheet`. Rename one in a component and the matching script
-goes quiet — no error, no failed build. Each module names the ones it depends on in its header.
+**Scripts find elements by `js-` hooks, never by a styling class.** The full set, and nothing else
+crosses the line:
+
+| Hook                                   | On                 | Read by                        |
+| -------------------------------------- | ------------------ | ------------------------------ |
+| `js-plan`                              | the page root      | `day-select.ts`, `index.astro` |
+| `js-day-tabs`                          | the tablist        | `today.ts` (the today label)   |
+| `js-day-tab`                           | each day tab       | `today.ts`, `day-select.ts`    |
+| `js-day-head`                          | each day-name cell | `today.ts`                     |
+| `js-swipe-area`                        | the grid           | `day-select.ts`                |
+| `js-legend-button` / `js-legend-sheet` | the "?" pair       | `legend-sheet.ts`              |
+
+A hook is named for the **job**, not the element — `js-swipe-area` sits on `.grid` and says why.
+Traffic the other way is not a hook: `tab--today`, `dayhead--today`, `plan--ready`, `data-day` and
+`aria-selected` are written by a script and read by CSS or assistive tech, so they keep the reader's
+naming. See [development.md](development.md#conventions) for the rule.
+
+**Nothing enforces the hooks.** Drop one in a component and the matching script goes quiet — no
+error, no failed build, and the gate stays green. The prefix makes the dependency greppable, which
+is the only guarantee on offer; each component exposing a hook names it in its header.
 
 ## Data loading & composition
 

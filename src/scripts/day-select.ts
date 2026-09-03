@@ -8,6 +8,10 @@
  * CSS does the rest — all five days stay laid out and each is offset by
  * `(its day − the current day) × 100%` — so nothing here knows that changing
  * the day animates anything at all.
+ *
+ * Hooks: `.js-plan` (page root), `.js-swipe-area` (the surface a swipe is
+ * measured on), `.js-day-tab`. What it writes — `data-day`, `aria-selected` —
+ * is read by CSS and by assistive tech, so those keep their own names.
  */
 
 /** Horizontal travel, in px, before a pointer gesture counts as a swipe. */
@@ -18,9 +22,11 @@ const SWIPE_MIN = 36;
  * motion is armed, so the starting day lands rather than sliding in.
  */
 export function initDaySelect(initialIndex: number): void {
-  const plan = document.querySelector<HTMLElement>(".plan");
-  const grid = document.querySelector<HTMLElement>(".grid");
-  const tabs = Array.from(document.querySelectorAll<HTMLElement>(".tab"));
+  const plan = document.querySelector<HTMLElement>(".js-plan");
+  const swipeArea = document.querySelector<HTMLElement>(".js-swipe-area");
+  const tabs = Array.from(
+    document.querySelectorAll<HTMLElement>(".js-day-tab"),
+  );
   const lastDayIndex = tabs.length - 1;
 
   /** Out-of-range is ignored, which is what stops swipe wrapping Friday to Monday. */
@@ -47,10 +53,10 @@ export function initDaySelect(initialIndex: number): void {
   const phonePortrait = window.matchMedia("(max-width: 480px)");
   let swipeStartX: number | null = null;
 
-  grid?.addEventListener("pointerdown", (event) => {
+  swipeArea?.addEventListener("pointerdown", (event) => {
     swipeStartX = phonePortrait.matches ? event.clientX : null;
   });
-  grid?.addEventListener("pointerup", (event) => {
+  swipeArea?.addEventListener("pointerup", (event) => {
     if (swipeStartX === null || !phonePortrait.matches) return;
     const dx = event.clientX - swipeStartX;
     swipeStartX = null;

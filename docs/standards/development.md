@@ -25,6 +25,19 @@ system is built**; read this before writing code for **how to write it here**.
 - **Runtime code lives in `src/scripts/`**, one module per concern, each exporting an entry point
   the page calls. Modules never wire themselves up on import — the page owns the load order, and
   motion depends on it. See [architecture.md](architecture.md#the-runtime-scripts).
+- **A script finds elements by a `js-` class, never by a styling one.** `js-day-tab`, `js-plan`,
+  `js-swipe-area` — one per element a module queries, named for the **job the script wants**, not
+  for the element. That is the whole point of the duplicate class: `js-swipe-area` says why the hook
+  is on `.grid`, and grep answers "does anything script this?" in a way `.grid` never could. The
+  hooks are listed in [architecture.md](architecture.md#the-runtime-scripts).
+  - **A `js-` class is never styled and never carries state.** No CSS rule may select one; adding a
+    modifier to it (`js-day-tab--today`) puts styling back on the hook and defeats it.
+  - **The other direction keeps its own names.** What a script _writes_ for CSS or assistive tech to
+    read — `tab--today`, `plan--ready`, `data-day`, `aria-selected` — is a contract with the reader,
+    so those stay BEM modifiers and ARIA. The prefix marks how JS **finds** an element, not
+    everything JS touches.
+  - **Nothing enforces this.** Removing a hook keeps the gate green and breaks the page silently, so
+    a component that exposes one says so in its header.
 - **Layout is never a build-time prop.** This is a static site: frontmatter cannot know the
   viewport, so anything that varies by width is decided in CSS. See
   [styling.md](styling.md#surfaces).

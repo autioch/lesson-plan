@@ -94,6 +94,10 @@ construction. Three rules keep that true, and breaking any one of them breaks th
 - **The legend names the colour, not its lessons.** Those are on screen beside it.
 - **Layout lives in `src/styles/plan.css`**, not in scoped component styles — the band rules cross
   component boundaries.
+- **Never select a `js-` class.** Those are script hooks and carry no styling; a rule that reaches
+  for one welds the two together again. State a script hands to CSS is a normal modifier
+  (`tab--today`, `plan--ready`) — see
+  [development.md](development.md#conventions).
 - **Copy is never in CSS or markup.** Visible words come from `labels` in `commons.json`; CSS may
   show and hide them, never supply them (no `content:` strings).
 - **Semantic HTML**: heading levels, real buttons, `aria-selected` on the day tabs.

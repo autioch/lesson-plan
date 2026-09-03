@@ -10,14 +10,18 @@
  * Paper never gets here: `print.css` takes the mark back off, because a sheet
  * that hangs all term would be wrong by Tuesday.
  *
- * The `.tab` and `.dayhead` selectors belong to `DayTabs.astro` and
- * `GridHead.astro`. Nothing imports them across that line, so a class rename
- * there goes unnoticed until the mark stops appearing.
+ * Hooks: `.js-day-tab` and `.js-day-tabs` from `DayTabs.astro`, `.js-day-head`
+ * from `GridHead.astro`. Nothing imports them across that line, so a hook
+ * dropped there goes unnoticed until the mark stops appearing — the `js-`
+ * prefix is what makes the dependency greppable, not what enforces it.
+ *
+ * The marks it writes — `tab--today`, `dayhead--today` — are the other
+ * direction: CSS reads those, so they are BEM modifiers and stay that way.
  */
 
 /** The tabs, in week order — the same list both functions below count against. */
 function dayTabs(): HTMLElement[] {
-  return Array.from(document.querySelectorAll<HTMLElement>(".tab"));
+  return Array.from(document.querySelectorAll<HTMLElement>(".js-day-tab"));
 }
 
 /**
@@ -47,7 +51,7 @@ export function markToday(index: number): void {
   /* The suffix is copy, so it comes from the data via a data attribute on the
    * tablist rather than being written here. */
   const todayAria =
-    document.querySelector<HTMLElement>(".tabs")?.dataset.todayAria;
+    document.querySelector<HTMLElement>(".js-day-tabs")?.dataset.todayAria;
   if (todayAria) {
     tab.setAttribute(
       "aria-label",
@@ -55,6 +59,6 @@ export function markToday(index: number): void {
     );
   }
 
-  const dayHeads = document.querySelectorAll<HTMLElement>(".dayhead");
+  const dayHeads = document.querySelectorAll<HTMLElement>(".js-day-head");
   dayHeads[index]?.classList.add("dayhead--today");
 }

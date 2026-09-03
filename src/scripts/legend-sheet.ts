@@ -8,13 +8,13 @@
  * that attribute via `allow-discrete` and `@starting-style`, so where neither
  * is supported the sheet still opens, just in one frame.
  *
- * The two ids come from `src/components/LegendSheet.astro`. Nothing imports
- * them across that line — rename one there and the button stops working with
- * no error anywhere.
+ * Hooks: `.js-legend-button` and `.js-legend-sheet` from
+ * `src/components/LegendSheet.astro`. Nothing imports them across that line —
+ * drop one there and the button stops working with no error anywhere.
  */
 export function initLegendSheet(): void {
-  const button = document.getElementById("legendButton");
-  const sheet = document.getElementById("legendSheet");
+  const button = document.querySelector<HTMLElement>(".js-legend-button");
+  const sheet = document.querySelector<HTMLElement>(".js-legend-sheet");
   if (!button || !sheet) return;
 
   /* An arrow declared after the guard, not a hoisted function: hoisting would
