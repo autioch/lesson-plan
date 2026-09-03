@@ -173,14 +173,22 @@ The same ending for Bounded and Feature:
 
 - **Branch per unit of work**, cut from `main` before the first commit of a Bounded or Feature path.
   Direct and Sync commit straight to `main`.
-- **During work, plain git, no push.** Commit freely; never leave the tree broken. The pre-commit
-  hook formats staged files.
+- **During work, plain git, no push.** Commit freely; never leave the tree broken. Nothing formats
+  for you — run `npm run fix` (or the full `npm run verify`) yourself.
 - **Close-out: push once**, open a **lean PR** (the diff-scoped review surface + audit trail, not a
-  report), wait for **green CI**, merge, delete the branch, return to trunk.
+  report), wait for **green CI**, merge, return to trunk.
+- **Squash is the only merge method**, and the branch is deleted on merge — both enforced by repo
+  settings, so there is no button to pick wrong. The squash commit takes the **PR title and body**
+  verbatim: write them as the history entry you want, because that is what lands on `main`.
+- **Merging is the approval step.** `gh pr merge --squash --auto` queues it to land the moment CI
+  goes green; still ask before queuing it, the same as merging by hand.
 - **Red CI → fix-forward on the same branch.** A flake → re-run it; a real failure → fix the cause
   and re-push. The work isn't closed until the green merge, so a CI failure never reopens anything.
 - **You are the gate locally** — there are no git hooks. Run `npm run verify` yourself before you
   push; CI re-runs it on the PR and on `main` as the authority.
+- **`main` carries a ruleset**: the CI check is required, deletion and force-push are blocked. The
+  repo admin bypasses all three, which is what keeps the Direct and Sync paths able to push straight
+  to `main` — CI only runs on pull requests, so a gated push would never clear.
 - Conventional Commits subjects.
 
 ## Handing off
