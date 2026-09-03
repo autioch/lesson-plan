@@ -32,7 +32,7 @@ const { cell, dayIndex, labels } = Astro.props;
       <span class="cell__free">{labels.freeSlot}</span>
     </div>
   ) : (
-    <div class="cell" data-day-index={dayIndex} style={`--cell-bg:${cell.color}`}>
+    <div class="cell" data-day-index={dayIndex} style={`--cell-bg:${cell.hex}`}>
       <span class="cell__name">{cell.name}</span>
       <span class="cell__short">{cell.short}</span>
       {cell.teacher && <span class="cell__teacher">{cell.teacher}</span>}

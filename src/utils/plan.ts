@@ -16,9 +16,16 @@
  *
  * Nothing here is built for a shape the data does not have. Every field below
  * is read by a component; every branch is one the current plan reaches.
+ *
+ * **One name per concept, all the way through.** This file declares a type only
+ * for what it actually derives — a row, a cell, the plan itself. Anything it
+ * passes through keeps the data's own type and the data's own field names, so a
+ * colour is `hex` and a legend caption is `legendTitle` in the JSON, here, and
+ * in the component. Renaming a field on the way out buys nothing and costs
+ * everyone the lookup.
  */
 
-import type { Labels, LessonsPlan } from "../data/types";
+import type { Day, Labels, LessonsPlan, PaletteColor } from "../data/types";
 
 /**
  * One slot on one day: a lesson, or nothing at all. An empty cell carries no
@@ -33,10 +40,14 @@ export type PlanCell =
       name: string;
       /** Name shortened for narrow columns; equals `name` when nothing is shortened. */
       short: string;
-      /** Teacher name, or "" when the record is a placeholder. */
+      /**
+       * Teacher name, or "" when the record is a placeholder. The one field
+       * here that is renamed on the way in: a cell flattens a lesson type and
+       * a teacher, and `name` is already the lesson's.
+       */
       teacher: string;
-      /** Exact hex from the palette. */
-      color: string;
+      /** Exact hex from the palette — same field name as `PaletteColor.hex`. */
+      hex: string;
     };
 
 export type PlanRow = {
@@ -48,25 +59,14 @@ export type PlanRow = {
   cells: PlanCell[];
 };
 
-export type PlanDay = {
-  name: string;
-  short: string;
-  /** ISO weekday, 1 = Monday — what the page script matches the clock against. */
-  weekday: number;
-};
-
-export type LegendGroup = {
-  color: string;
-  /** What the color means. The lessons carrying it are on screen already. */
-  title: string;
-};
-
 export type Plan = {
   locale: string;
   labels: Labels;
-  days: PlanDay[];
+  /** The week, straight from the data — nothing here is derived. */
+  days: Day[];
   rows: PlanRow[];
-  legend: LegendGroup[];
+  /** The palette rows worth showing, in palette order. Filtered, not reshaped. */
+  legend: PaletteColor[];
 };
 
 /** Shared: every free slot renders the same way, and none of them is mutated. */
@@ -147,7 +147,7 @@ export function buildPlan(data: LessonsPlan): Plan {
       name: type.name,
       short: type.short ?? type.name,
       teacher: teacher.anonymous ? "" : teacher.name,
-      color: color.hex,
+      hex: color.hex,
     };
   }
 
@@ -186,23 +186,17 @@ export function buildPlan(data: LessonsPlan): Plan {
    * palette hexes are unique, so a hex names exactly one palette entry. */
   const usedColors = new Set(
     rows.flatMap((row) =>
-      row.cells.flatMap((cell) => (cell.empty ? [] : [cell.color])),
+      row.cells.flatMap((cell) => (cell.empty ? [] : [cell.hex])),
     ),
   );
-
-  const legend: LegendGroup[] = data.palette
-    .filter((color) => color.inLegend && usedColors.has(color.hex))
-    .map((color) => ({ color: color.hex, title: color.legendTitle }));
 
   return {
     locale: data.locale,
     labels: data.labels,
-    days: data.days.map((day) => ({
-      name: day.name,
-      short: day.short,
-      weekday: day.weekday,
-    })),
+    days: data.days,
     rows,
-    legend,
+    legend: data.palette.filter(
+      (color) => color.inLegend && usedColors.has(color.hex),
+    ),
   };
 }

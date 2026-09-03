@@ -48,6 +48,13 @@ system is built**; read this before writing code for **how to write it here**.
   with the data that needs it. **`knip` does not catch this class** — it sees unused files, exports
   and dependencies, not an unread property on a type or an unreachable arm of a conditional. Finding
   those is a manual pass against the real data.
+- **One name per concept, JSON to DOM.** A colour is `hex` in `commons.json`, `hex` on a cell, and
+  `hex` in the component. **`src/utils/plan.ts` declares a type only for what it derives** — a row,
+  a cell, the plan; anything it passes through keeps the data's type and the data's field names, so
+  a pass-through needs no `.map()` at all. Rename only when a shape genuinely collides: a cell
+  flattens a lesson type and a teacher, so the teacher's `name` becomes `teacher` because `name` is
+  taken. Say why in the type. **Avoid names that are also HTML attributes** — `title` especially,
+  which already means a tooltip in `GridHead`; `legendTitle` stays long for that reason.
 - **Data is read-only:** JSON files in `src/data/` are the source of record. Transformations are
   pure functions in TypeScript modules, never mutations.
 - **Props are closed:** variant / option props are enums or string literals; content is free-form.

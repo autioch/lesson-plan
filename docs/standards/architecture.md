@@ -170,6 +170,15 @@ migrate; it is the discipline that keeps the files honest while they are hand-ed
 that does not resolve — an unknown `lessonId`, `colorId` or `teacherId` — throws and fails the
 build rather than rendering a blank tile.
 
+**The transform derives; it does not rename.** `PlanRow` and `PlanCell` exist because a time range,
+a break and a flattened tile are genuinely computed. Days and legend colours are not: `Plan.days` is
+`Day[]` and `Plan.legend` is `PaletteColor[]`, both straight from `src/data/types.ts`, so the legend
+is a `filter` with no `map` behind it and a component reads `hex` and `legendTitle` — the names the
+JSON uses. A pass-through row carries its `id` unread, which is the deliberate trade: `Plan` is a
+build-time value that never reaches the browser, so the cost is nil, and a projection whose only job
+is to strip fields nobody looks at is itself code with no reason to exist. See
+[development.md](development.md#conventions).
+
 ## Today
 
 The site is built once a term, so a weekday baked into the HTML would be wrong the next morning.

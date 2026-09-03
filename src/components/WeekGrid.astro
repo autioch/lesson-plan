@@ -15,13 +15,13 @@
  * Exposes the `js-swipe-area` hook: the grid is what a swipe is measured on in
  * band A. Nothing here knows that — the hook names the job, not the element.
  */
-import type { Labels } from "../data/types";
-import type { PlanDay, PlanRow } from "../utils/plan";
+import type { Day, Labels } from "../data/types";
+import type { PlanRow } from "../utils/plan";
 import GridHead from "./GridHead.astro";
 import WeekRow from "./WeekRow.astro";
 
 type Props = {
-  days: PlanDay[];
+  days: Day[];
   rows: PlanRow[];
   labels: Labels;
 };

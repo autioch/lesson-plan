@@ -14,11 +14,10 @@
  * Exposes the `js-day-head` hook, counted in week order: the script marks the
  * one at today's index, so the days must stay in the order the data gives them.
  */
-import type { Labels } from "../data/types";
-import type { PlanDay } from "../utils/plan";
+import type { Day, Labels } from "../data/types";
 
 type Props = {
-  days: PlanDay[];
+  days: Day[];
   labels: Labels;
 };
 
