@@ -12,12 +12,12 @@ This is a static site generated at build time. No runtime layers in the traditio
 Read:   JSON files → component rendering → static HTML
 ```
 
-| Layer               | Does                                                                                            | Must not                                                 |
-| ------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| **JSON files**      | Source of record for everything displayed: schedule, palette, day names, and every fixed string | Hold HTML, rendering logic, or component state           |
-| **Data processing** | Transform JSON into the shape components need; computed fields (derived times, timetable grids) | Be intermingled with component rendering; read the clock |
-| **Components**      | Render headers, cells, and document structure; read the processed data                          | Load or transform JSON directly; hold logic or copy      |
-| **Page script**     | The two runtime facts: which weekday it is, and which day the phone shows                       | Hold data, copy, or layout decisions                     |
+| Layer               | Does                                                                                                             | Must not                                                 |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| **JSON files**      | Source of record for everything displayed: schedule, palette, day names, and every fixed string                  | Hold HTML, rendering logic, or component state           |
+| **Data processing** | Transform JSON into the shape components need; computed fields (derived times, timetable grids)                  | Be intermingled with component rendering; read the clock |
+| **Components**      | Render headers, cells, and document structure; read the processed data                                           | Load or transform JSON directly; hold logic or copy      |
+| **Page script**     | The two runtime facts — which weekday it is, which day the phone shows — and arming motion once they are applied | Hold data, copy, or layout decisions                     |
 
 Core rules:
 
@@ -127,16 +127,16 @@ off shows Monday, unmarked.
 
 Static site; the only runtime state is which day a phone is showing.
 
-| Data                                            | Owner                                               |
-| ----------------------------------------------- | --------------------------------------------------- |
-| Palette, copy, bell times, day names            | `src/data/plans/commons.json`                       |
-| Teachers, lesson types                          | `src/data/plans/catalog.json`                       |
-| The schedule itself                             | `src/data/plans/<year>.json`                        |
-| Derived render shape                            | `src/utils/plan.ts`                                 |
-| Render logic and HTML structure                 | `src/components/`                                   |
-| Theme — type scale, spacing, surfaces, text ink | `src/assets/tokens.css`                             |
-| Page routing                                    | `src/pages/`                                        |
-| Today, and the selected day (≤480px only)       | `data-day` on the page root, set by the page script |
+| Data                                               | Owner                                               |
+| -------------------------------------------------- | --------------------------------------------------- |
+| Palette, copy, bell times, day names               | `src/data/plans/commons.json`                       |
+| Teachers, lesson types                             | `src/data/plans/catalog.json`                       |
+| The schedule itself                                | `src/data/plans/<year>.json`                        |
+| Derived render shape                               | `src/utils/plan.ts`                                 |
+| Render logic and HTML structure                    | `src/components/`                                   |
+| Theme — type scale, spacing, surfaces, ink, motion | `src/assets/tokens.css`                             |
+| Page routing                                       | `src/pages/`                                        |
+| Today, and the selected day (≤480px only)          | `data-day` on the page root, set by the page script |
 
 ## Design goals
 

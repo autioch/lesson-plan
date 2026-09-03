@@ -43,6 +43,7 @@ construction. Three rules keep that true, and breaking any one of them breaks th
 - **Touch targets ≥ 44 × 44px** — day tabs and the legend button.
 - **Line height ≥ 1.3** for anything that can wrap.
 - **WCAG AA**: 4.5:1 body text, 3:1 large text and UI.
+- **`prefers-reduced-motion` is honoured** — see [Motion](#motion).
 - **No state carried by colour alone.** The viewed day has a bar and its full name, today has the
   word DZIŚ and a wider tab, an empty slot says "wolne".
 - **A full day fits the screen without scrolling.** Rows divide the viewport height.
@@ -90,6 +91,36 @@ construction. Three rules keep that true, and breaking any one of them breaks th
   show and hide them, never supply them (no `content:` strings).
 - **Semantic HTML**: heading levels, real buttons, `aria-selected` on the day tabs.
 
+## Motion
+
+Three things move, all of them on the phone, and each is feedback on something the reader just did:
+the day tab widening into the full day name, the day itself sliding in when it changes, and the
+legend sheet coming up from the bottom edge. Nothing else animates. **Paper never does** — the print
+block sets no transition and none of the rules below reach it.
+
+- **Durations and easing are tokens** — `--dur-quick` for a control settling into its new state,
+  `--dur-slide` for a day arriving, `--ease-out` for both. A hand-written `ms` anywhere else is a
+  bug, and the durations are also the whole reduced-motion switch, so nothing may opt out of them.
+- **`prefers-reduced-motion: reduce` zeroes the two durations** in `tokens.css` and that is the
+  entire implementation — every transition reads them, and a 0s transition still lands on the same
+  end state, so no rule needs a reduced-motion twin.
+- **All five days stay laid out** in band A. They stack in the row's single content column, each
+  offset by `(its day − the current day) × 100%`, and the four you are not on are
+  `visibility: hidden`, which still keeps them out of the accessibility tree — the job that
+  `display: none` did here before — while leaving them somewhere to slide from. Hiding is **delayed
+  by the slide duration**, so the day you are leaving is on screen while it leaves. The hours column
+  is opaque and sits above them: it is what a day disappears behind on the left, and `.row`'s
+  `overflow: hidden` is what clips the right.
+- **The sheet animates off the `hidden` attribute**, which stays the only place its open state
+  lives — the script sets it and knows nothing about animation. That needs `allow-discrete` on
+  `display` (so it stays displayed while it fades) and `@starting-style` (so it has a state to
+  arrive from). **Nest the `@starting-style`**: as a top-level block it reaches the sheet, whose own
+  `display` changes, but not the panel inside it, which is only newly rendered because its parent
+  is. Both are progressive enhancement — without them `hidden` still hides the sheet, in one frame.
+- **Motion is off until the page script has set the day.** `plan--ready` is added after a forced
+  layout read, so the clock being applied on load lands rather than sliding in from Monday. The
+  forced read is deliberate: waiting a frame would not happen at all in a background tab.
+
 ## Building new UI
 
 1. Read the design spec and the token file before writing CSS. Extend the scale, never hand-roll a
@@ -97,12 +128,20 @@ construction. Three rules keep that true, and breaking any one of them breaks th
 2. Decide layout in CSS. This is a static site: a build-time prop cannot know the viewport, so a
    layout that depends on width must never be chosen in `.astro` frontmatter.
 3. Verify on all three bands plus print. Resizing the dev server in a browser is the check.
+   Anything that moves is verified with reduced motion on as well — see [Motion](#motion).
 4. Keep the CSS small; no runtime layout work.
 
 ## Commands
 
 No separate style build — CSS is bundled by Astro. Verify with `npm run dev` at 412 × 915, 915 × 412
 and 1440 × 900.
+
+**Motion is checked on the timeline, not by eye.** `document.getAnimations()` returns the running
+transitions; setting each one's `currentTime` steps them frame by frame, so the geometry mid-slide
+can be measured rather than watched — which is also the only way to check it in a browser pane that
+is not on screen, since a hidden page freezes every transition at time 0. Reduced motion is checked
+by injecting `:root { --dur-quick: 0s; --dur-slide: 0s }`: the pass is **no animation created at
+all** and every state landing directly.
 
 **Print is checked at 1122 × 794** — A4 landscape in CSS pixels — with the `@media print` rules
 forced on: collect every `document.styleSheets` rule whose `media.mediaText` is exactly `print` and
