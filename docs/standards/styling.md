@@ -124,9 +124,11 @@ block sets no transition and none of the rules below reach it.
   arrive from). **Nest the `@starting-style`**: as a top-level block it reaches the sheet, whose own
   `display` changes, but not the panel inside it, which is only newly rendered because its parent
   is. Both are progressive enhancement — without them `hidden` still hides the sheet, in one frame.
-- **Motion is off until the page script has set the day.** `plan--ready` is added after a forced
-  layout read, so the clock being applied on load lands rather than sliding in from Monday. The
-  forced read is deliberate: waiting a frame would not happen at all in a background tab.
+- **Motion is off until the starting day is set.** `index.astro`'s `<script>` adds `plan--ready`
+  after a forced layout read, so the clock being applied on load lands rather than sliding in from
+  Monday. The forced read is deliberate: waiting a frame would not happen at all in a background
+  tab. This is why the page sequences `src/scripts/` rather than letting the modules self-wire —
+  see [architecture.md](architecture.md#the-runtime-scripts).
 
 ## Building new UI
 

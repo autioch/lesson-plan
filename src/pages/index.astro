@@ -33,63 +33,23 @@ const { labels } = plan;
 </Layout>
 
 <script>
-  /* Today is never baked in. The page is built once a term, so the weekday is
-   * read from the browser clock on load and matched against the `data-weekday`
-   * the data carries — the marks are applied here or not at all. Everything
-   * else is the one interaction the design allows: picking a day, which only
-   * exists on a phone in portrait.
+  /* The load sequence — the page owns the order, `src/scripts/` owns the work.
+   *
+   * Two runtime facts reach the page here, and neither may be baked into the
+   * build: which weekday it is, and which day a phone is showing. Both are
+   * applied before motion is armed on the last lines, and that order is the
+   * whole reason this stays a sequence rather than three independent modules
+   * wiring themselves up.
    */
-  const plan = document.querySelector<HTMLElement>(".plan");
-  const tabList = document.querySelector<HTMLElement>(".tabs");
-  const tabs = Array.from(document.querySelectorAll<HTMLElement>(".tab"));
-  const dayHeads = Array.from(document.querySelectorAll<HTMLElement>(".dayhead"));
-  const grid = document.querySelector<HTMLElement>(".grid");
-  const legendButton = document.getElementById("legendButton");
-  const legendSheet = document.getElementById("legendSheet");
+  import { findTodayIndex, markToday } from "../scripts/today";
+  import { initDaySelect } from "../scripts/day-select";
+  import { initLegendSheet } from "../scripts/legend-sheet";
 
-  const SWIPE_MIN = 36;
-  const lastDayIndex = tabs.length - 1;
-
-  /* getDay() is 0 for Sunday; the data uses ISO weekdays, 1 = Monday. */
-  const isoWeekday = new Date().getDay() || 7;
-  /* Saturday and Sunday have no column: the plan stays on Monday, unmarked. */
-  const todayIndex = tabs.findIndex(
-    (tab) => Number(tab.dataset.weekday) === isoWeekday,
-  );
-
-  function markToday() {
-    if (todayIndex < 0) return;
-    const todayAria = tabList?.dataset.todayAria;
-
-    const tab = tabs[todayIndex];
-    tab.classList.add("tab--today");
-    if (todayAria) {
-      tab.setAttribute("aria-label", `${tab.getAttribute("aria-label")} (${todayAria})`);
-    }
-
-    dayHeads[todayIndex]?.classList.add("dayhead--today");
-  }
-
-  function selectDay(index: number) {
-    if (!plan || index < 0 || index > lastDayIndex) return;
-    plan.dataset.day = String(index);
-    tabs.forEach((tab, i) =>
-      tab.setAttribute("aria-selected", String(i === index)),
-    );
-  }
-
-  function currentDay(): number {
-    return Number(plan?.dataset.day ?? 0);
-  }
-
-  function setLegendOpen(open: boolean) {
-    if (!legendSheet || !legendButton) return;
-    legendSheet.hidden = !open;
-    legendButton.setAttribute("aria-expanded", String(open));
-  }
-
-  markToday();
-  selectDay(todayIndex < 0 ? 0 : todayIndex);
+  const todayIndex = findTodayIndex();
+  markToday(todayIndex);
+  /* No column for today means the weekend: open on Monday. */
+  initDaySelect(todayIndex < 0 ? 0 : todayIndex);
+  initLegendSheet();
 
   /* Only now is motion allowed. The day set above is the clock being applied,
    * not a day being picked, and it would otherwise slide in from Monday on
@@ -97,34 +57,7 @@ const { labels } = plan;
    * `transition: none`, so enabling motion on the next line has nothing left
    * to animate — and unlike waiting a frame, it does not depend on the tab
    * being on screen to happen at all. */
+  const plan = document.querySelector<HTMLElement>(".plan");
   plan?.getBoundingClientRect();
   plan?.classList.add("plan--ready");
-
-  tabs.forEach((tab, index) =>
-    tab.addEventListener("click", () => selectDay(index)),
-  );
-
-  legendButton?.addEventListener("click", () =>
-    setLegendOpen(legendSheet?.hidden ?? true),
-  );
-  legendSheet?.addEventListener("click", () => setLegendOpen(false));
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") setLegendOpen(false);
-  });
-
-  /* Swipe changes the day by one and does not wrap from Friday to Monday. It
-   * exists only where a day is selectable at all — the phone in portrait. */
-  const phonePortrait = window.matchMedia("(max-width: 480px)");
-  let swipeStartX: number | null = null;
-
-  grid?.addEventListener("pointerdown", (event) => {
-    swipeStartX = phonePortrait.matches ? event.clientX : null;
-  });
-  grid?.addEventListener("pointerup", (event) => {
-    if (swipeStartX === null || !phonePortrait.matches) return;
-    const dx = event.clientX - swipeStartX;
-    swipeStartX = null;
-    if (Math.abs(dx) < SWIPE_MIN) return;
-    selectDay(currentDay() + (dx < 0 ? 1 : -1));
-  });
 </script>

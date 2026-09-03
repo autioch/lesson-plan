@@ -21,7 +21,10 @@ system is built**; read this before writing code for **how to write it here**.
 - **No copy in components.** Every user-visible string is a label from `commons.json`, passed in as
   a prop. A hardcoded word in an `.astro` file is a bug, not a shortcut.
 - **No dates at build time.** Frontmatter and `src/utils/` must never call `new Date()`: the site is
-  generated once a term. Anything that depends on the day belongs in the page script.
+  generated once a term. The clock is read in exactly one place, `src/scripts/today.ts`.
+- **Runtime code lives in `src/scripts/`**, one module per concern, each exporting an entry point
+  the page calls. Modules never wire themselves up on import — the page owns the load order, and
+  motion depends on it. See [architecture.md](architecture.md#the-runtime-scripts).
 - **Layout is never a build-time prop.** This is a static site: frontmatter cannot know the
   viewport, so anything that varies by width is decided in CSS. See
   [styling.md](styling.md#surfaces).
@@ -64,7 +67,8 @@ system is built**; read this before writing code for **how to write it here**.
 | Build-time transform         | [src/utils/plan.ts](../../src/utils/plan.ts)                             |
 | Band-aware layout CSS        | [src/styles/plan.css](../../src/styles/plan.css)                         |
 | A paper-only override        | [src/styles/print.css](../../src/styles/print.css)                       |
-| Runtime (clock, day pick)    | the `<script>` in [src/pages/index.astro](../../src/pages/index.astro)   |
+| A runtime browser module     | [src/scripts/day-select.ts](../../src/scripts/day-select.ts)             |
+| The load sequence            | the `<script>` in [src/pages/index.astro](../../src/pages/index.astro)   |
 
 ## Keeping docs in sync
 

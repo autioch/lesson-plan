@@ -12,12 +12,12 @@ This is a static site generated at build time. No runtime layers in the traditio
 Read:   JSON files → component rendering → static HTML
 ```
 
-| Layer               | Does                                                                                                             | Must not                                                 |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| **JSON files**      | Source of record for everything displayed: schedule, palette, day names, and every fixed string                  | Hold HTML, rendering logic, or component state           |
-| **Data processing** | Transform JSON into the shape components need; computed fields (derived times, timetable grids)                  | Be intermingled with component rendering; read the clock |
-| **Components**      | Render headers, cells, and document structure; read the processed data                                           | Load or transform JSON directly; hold logic or copy      |
-| **Page script**     | The two runtime facts — which weekday it is, which day the phone shows — and arming motion once they are applied | Hold data, copy, or layout decisions                     |
+| Layer               | Does                                                                                                                                                          | Must not                                                 |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| **JSON files**      | Source of record for everything displayed: schedule, palette, day names, and every fixed string                                                               | Hold HTML, rendering logic, or component state           |
+| **Data processing** | Transform JSON into the shape components need; computed fields (derived times, timetable grids)                                                               | Be intermingled with component rendering; read the clock |
+| **Components**      | Render headers, cells, and document structure; read the processed data                                                                                        | Load or transform JSON directly; hold logic or copy      |
+| **Runtime scripts** | The two runtime facts — which weekday it is, which day the phone shows — plus the legend sheet. The page sequences them and arms motion once they are applied | Hold data, copy, or layout decisions                     |
 
 Core rules:
 
@@ -39,7 +39,8 @@ src/
 ├─ components/       # Astro components, split by reason to change (see below)
 ├─ data/             # the plan JSON (two shared files + one per school year), its types, the merge
 ├─ layouts/          # Page wrapper (shared head, structure)
-├─ pages/            # Astro pages (one per route) and the page script
+├─ pages/            # Astro pages (one per route); the page owns the load sequence
+├─ scripts/          # Runtime browser modules — the only code allowed to read the clock
 ├─ utils/            # Pure build-time transforms (no rendering, no I/O, no clock)
 └─ styles/           # tokens.css, plan.css (screen + the bands paper shares), print.css (deltas)
 ```
@@ -59,7 +60,7 @@ Import aliases: none currently used.
 ### The component tree
 
 ```text
-index.astro          the page: reads the active year, composes, owns the runtime script
+index.astro          the page: reads the active year, composes, sequences the runtime scripts
 ├─ DayTabs           day selection — band A only
 ├─ WeekGrid          the grid frame
 │  ├─ GridHead       the day-name band
@@ -77,6 +78,21 @@ a shape, not a responsibility.
 Astro components emit no wrapper element, so this tree produces the same flat DOM the CSS targets —
 every rule in `plan.css` is a plain class selector and none of them depends on the component
 boundaries above.
+
+### The runtime scripts
+
+`src/scripts/` holds the browser modules, split the same way: `today.ts` (the clock and its marks),
+`day-select.ts` (tabs, swipe, `data-day`), `legend-sheet.ts` (the "?" sheet). Each queries its own
+elements and exports one entry point.
+
+**The page owns the order, not the modules.** `index.astro`'s `<script>` calls them in sequence and
+then arms motion — the starting day must land before `plan--ready`, or every load slides in from
+Monday. A module that wired itself up on import would lose that guarantee, which is why none of
+them do.
+
+Selectors and ids cross from the components with nothing enforcing them: `.tab`, `.dayhead`,
+`.plan`, `.grid`, `#legendButton`, `#legendSheet`. Rename one in a component and the matching script
+goes quiet — no error, no failed build. Each module names the ones it depends on in its header.
 
 ## Data loading & composition
 
@@ -141,24 +157,24 @@ build rather than rendering a blank tile.
 
 The site is built once a term, so a weekday baked into the HTML would be wrong the next morning.
 Nothing in `src/utils/` may read the clock: the build emits no today marks and opens on Monday.
-The page script in `index.astro` reads `new Date()`, matches it against the `data-weekday` each day
-carries from the data, and applies the marks and the initial day selection. A page with JavaScript
-off shows Monday, unmarked.
+`src/scripts/today.ts` is the one module that calls `new Date()`. It matches the clock against the
+`data-weekday` each day carries from the data and applies the marks; `index.astro` passes the same
+index to `initDaySelect` as the opening day. A page with JavaScript off shows Monday, unmarked.
 
 ## State ownership
 
 Static site; the only runtime state is which day a phone is showing.
 
-| Data                                               | Owner                                               |
-| -------------------------------------------------- | --------------------------------------------------- |
-| Palette, copy, bell times, day names               | `src/data/commons.json`                             |
-| Teachers, lesson types                             | `src/data/catalog.json`                             |
-| The schedule itself                                | `src/data/<year>.json`                              |
-| Derived render shape                               | `src/utils/plan.ts`                                 |
-| Render logic and HTML structure                    | `src/components/`                                   |
-| Theme — type scale, spacing, surfaces, ink, motion | `src/styles/tokens.css`                             |
-| Page routing                                       | `src/pages/`                                        |
-| Today, and the selected day (≤480px only)          | `data-day` on the page root, set by the page script |
+| Data                                               | Owner                                              |
+| -------------------------------------------------- | -------------------------------------------------- |
+| Palette, copy, bell times, day names               | `src/data/commons.json`                            |
+| Teachers, lesson types                             | `src/data/catalog.json`                            |
+| The schedule itself                                | `src/data/<year>.json`                             |
+| Derived render shape                               | `src/utils/plan.ts`                                |
+| Render logic and HTML structure                    | `src/components/`                                  |
+| Theme — type scale, spacing, surfaces, ink, motion | `src/styles/tokens.css`                            |
+| Page routing                                       | `src/pages/`                                       |
+| Today, and the selected day (≤480px only)          | `data-day` on the page root, set by `src/scripts/` |
 
 ## Design goals
 
