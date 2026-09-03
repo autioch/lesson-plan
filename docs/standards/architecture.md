@@ -36,7 +36,7 @@ Core rules:
 
 ```text
 src/
-├─ components/       # Astro components (DayTabs, WeekGrid, Legend)
+├─ components/       # Astro components, split by reason to change (see below)
 ├─ data/             # the plan JSON (two shared files + one per school year), its types, the merge
 ├─ layouts/          # Page wrapper (shared head, structure)
 ├─ pages/            # Astro pages (one per route) and the page script
@@ -55,6 +55,28 @@ prefix hand-written asset URLs with `asset()`. Anything referencing an absolute 
 404s in production while working fine locally.
 
 Import aliases: none currently used.
+
+### The component tree
+
+```text
+index.astro          the page: reads the active year, composes, owns the runtime script
+├─ DayTabs           day selection — band A only
+├─ WeekGrid          the grid frame
+│  ├─ GridHead       the day-name band
+│  └─ WeekRow        one hour: the time gutter, then the days
+│     └─ LessonCell  one slot — a lesson tile, or the free slot in its place
+├─ Legend            the colour list (sidebar, band C and paper)
+└─ LegendSheet       the "?" button and its sheet (bands A and B) — wraps Legend
+```
+
+**Split by reason to change**, not by size. `LessonCell` changes when a tile does — colour, the
+name/short pair, the teacher line; `WeekGrid` changes when the grid does. `Legend` is its own file
+because it renders twice. Components with one reason to change and one use stay whole: a `.map()` is
+a shape, not a responsibility.
+
+Astro components emit no wrapper element, so this tree produces the same flat DOM the CSS targets —
+every rule in `plan.css` is a plain class selector and none of them depends on the component
+boundaries above.
 
 ## Data loading & composition
 

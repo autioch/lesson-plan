@@ -1,0 +1,41 @@
+---
+/**
+ * One slot on one day — a lesson tile, or the free slot in its place.
+ *
+ * The empty/filled branch is the whole component: absence is a fact in the
+ * data (a slot with no lesson has no row at all), so there is no half-filled
+ * state to render and no placeholder to get wrong.
+ *
+ * A filled tile carries both names — `cell__name` and `cell__short` — and CSS
+ * picks one per band; the build never chooses. `--cell-bg` is the single inline
+ * style the styling rules allow, because a lesson colour is data and must reach
+ * the tile at full strength, not through a token.
+ *
+ * `data-day-index` is what band A's day switching reads. It is on every cell,
+ * filled or free, so a free slot slides with its day like any other.
+ */
+import type { Labels } from "../data/types";
+import type { PlanCell } from "../utils/plan";
+
+type Props = {
+  cell: PlanCell;
+  dayIndex: number;
+  labels: Labels;
+};
+
+const { cell, dayIndex, labels } = Astro.props;
+---
+
+{
+  cell.empty ? (
+    <div class="cell cell--empty" data-day-index={dayIndex}>
+      <span class="cell__free">{labels.freeSlot}</span>
+    </div>
+  ) : (
+    <div class="cell" data-day-index={dayIndex} style={`--cell-bg:${cell.color}`}>
+      <span class="cell__name">{cell.name}</span>
+      <span class="cell__short">{cell.short}</span>
+      {cell.teacher && <span class="cell__teacher">{cell.teacher}</span>}
+    </div>
+  )
+}

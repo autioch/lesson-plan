@@ -1,0 +1,42 @@
+---
+/**
+ * The legend where there is no room for a column: the "?" button and the sheet
+ * it opens, bands A and B only. From 1024px the legend is a fixed sidebar
+ * instead and this pair is hidden — same `Legend` list either way, never a
+ * second copy of the markup.
+ *
+ * Open state lives in one place, the sheet's `hidden` attribute. The page
+ * script sets it and knows nothing about animation; CSS does the rest via
+ * `allow-discrete` and `@starting-style`, so without either the sheet still
+ * opens, just in one frame.
+ *
+ * `legendButton` and `legendSheet` are the ids the page script in
+ * `src/pages/index.astro` queries. Renaming one here breaks the button there
+ * silently — there is no import between them.
+ */
+import type { Labels } from "../data/types";
+import type { LegendGroup } from "../utils/plan";
+import Legend from "./Legend.astro";
+
+type Props = {
+  groups: LegendGroup[];
+  labels: Labels;
+};
+
+const { groups, labels } = Astro.props;
+---
+
+<button class="fab" type="button" id="legendButton" aria-expanded="false">
+  <span aria-hidden="true">?</span>
+  <span class="sr-only">{labels.legendTitle}</span>
+</button>
+
+<div class="sheet" id="legendSheet" hidden>
+  <div class="sheet__panel" role="dialog" aria-label={labels.legendTitle}>
+    <div class="sheet__head">
+      <span class="sheet__title">{labels.legendTitle}</span>
+      <span class="sheet__hint">{labels.legendHint}</span>
+    </div>
+    <Legend groups={groups} />
+  </div>
+</div>
