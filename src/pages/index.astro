@@ -103,6 +103,15 @@ const { labels } = plan;
   markToday();
   selectDay(todayIndex < 0 ? 0 : todayIndex);
 
+  /* Only now is motion allowed. The day set above is the clock being applied,
+   * not a day being picked, and it would otherwise slide in from Monday on
+   * every load. Reading the layout settles that day while the CSS still says
+   * `transition: none`, so enabling motion on the next line has nothing left
+   * to animate — and unlike waiting a frame, it does not depend on the tab
+   * being on screen to happen at all. */
+  plan?.getBoundingClientRect();
+  plan?.classList.add("plan--ready");
+
   tabs.forEach((tab, index) =>
     tab.addEventListener("click", () => selectDay(index)),
   );

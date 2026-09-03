@@ -80,6 +80,27 @@
 
   /* Layout — time gutter per band (spec §3). */
   --gutter: 152px;
+
+  /* Motion. Two durations, because there are two kinds of movement here: a
+   * control settling into its new state under your finger, and a day sliding
+   * in from off screen. Both are feedback on something you just did — long
+   * enough to be followed, short enough that nobody waits for them. The easing
+   * leaves fast and arrives slow, which is what makes a slide read as the day
+   * arriving rather than the page redrawing. */
+  --dur-quick: 160ms;
+  --dur-slide: 240ms;
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Motion is an accessibility setting before it is a design one: some people
+ * get sick from it. Zeroing the durations is the whole switch — every
+ * transition on the page reads them, and a 0s transition still lands on the
+ * same end state, so nothing needs a second rule to fall back to. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-quick: 0s;
+    --dur-slide: 0s;
+  }
 }
 
 /* Band B — phone landscape and tablet. Same type scale, wider gutter: the

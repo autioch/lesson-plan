@@ -28,6 +28,9 @@ system is built**; read this before writing code for **how to write it here**.
 - **Reuse shared components** from `src/components/` instead of duplicating HTML. **A surface is not
   a reason to duplicate one** — screen and paper render the same tree, and the difference is CSS.
   See [styling.md](styling.md#surfaces).
+- **Motion is tokenized and optional.** Durations and easing come from `tokens.css`; a hand-written
+  `ms` is a bug, because zeroing those tokens is how `prefers-reduced-motion` is honoured. See
+  [styling.md](styling.md#motion).
 - **Docs and code travel together.** A change to data shape, a new component, or a layout change
   updates this doc in the same commit — never a tree where docs contradict code.
 

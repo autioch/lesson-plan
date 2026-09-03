@@ -100,6 +100,15 @@ body {
   white-space: nowrap;
   overflow: hidden;
   cursor: pointer;
+  /* The three things selection changes, and the width is the one that carries
+   * it: `flex-grow` is a number, so it interpolates and the tab widens into
+   * place instead of jumping. The label swaps to the full day name on the
+   * first frame and is revealed by the growing tab — `overflow: hidden` above
+   * is what turns that into a wipe rather than a reflow. */
+  transition:
+    flex-grow var(--dur-quick) var(--ease-out),
+    color var(--dur-quick) var(--ease-out),
+    box-shadow var(--dur-quick) var(--ease-out);
 }
 
 /* Today is wider than the rest, and wider again when it is also the day being
@@ -307,21 +316,46 @@ body {
     padding-bottom: var(--space-16);
   }
 
+  /* The row is the clipping frame the days slide through. */
   .row {
     grid-template-columns: var(--gutter) 1fr;
     gap: 0;
+    overflow: hidden;
     border-bottom: var(--border-width-thin) solid var(--line-subtle);
   }
 
+  /* Opaque and above the cells, so a day leaving to the left passes *under*
+   * the hours instead of across them. The row clips the right-hand side and
+   * anything past its left edge; this covers the strip in between, which is
+   * the only part of the row that isn't the day column. */
   .row__time {
+    grid-column: 1;
+    grid-row: 1;
+    z-index: 1;
     padding: 0 var(--space-12);
+    background: var(--surface-raised);
   }
 
-  /* Only the selected day's cell is in the row; the other four stay in the DOM
-   * so no layout decision has to be made at build time. */
+  /* One day is on screen and the other four are off to either side of it,
+   * ordered as the week is — so changing the day slides, and swiping follows
+   * the finger's direction with no rule of its own.
+   *
+   * They stack in the row's single content column rather than taking columns
+   * of their own; the offset is the only thing that separates them. Hiding the
+   * four is `visibility`, not `display`: it still takes them out of the
+   * accessibility tree, which is the job `display: none` was doing here, but
+   * it leaves them laid out so they have somewhere to slide from. The delay on
+   * the way out is what keeps the day you are leaving on screen for exactly as
+   * long as it takes to leave. */
   .cell {
-    display: none;
+    grid-column: 2;
+    grid-row: 1;
     padding: 0 var(--space-16);
+    visibility: hidden;
+    transform: translateX(calc((var(--cell-day) - var(--day)) * 100%));
+    transition:
+      transform var(--dur-slide) var(--ease-out),
+      visibility 0s linear var(--dur-slide);
   }
 
   .plan[data-day="0"] .cell[data-day-index="0"],
@@ -329,7 +363,62 @@ body {
   .plan[data-day="2"] .cell[data-day-index="2"],
   .plan[data-day="3"] .cell[data-day-index="3"],
   .plan[data-day="4"] .cell[data-day-index="4"] {
-    display: flex;
+    visibility: visible;
+    transition:
+      transform var(--dur-slide) var(--ease-out),
+      visibility 0s;
+  }
+
+  /* The two numbers the offset is subtracted from. `data-day` and
+   * `data-day-index` already carry them, but an attribute value is a string
+   * CSS cannot do arithmetic on, so each is mapped to a custom property once
+   * here and the transform above is written once instead of twenty-five
+   * times. */
+  .plan[data-day="0"] {
+    --day: 0;
+  }
+
+  .plan[data-day="1"] {
+    --day: 1;
+  }
+
+  .plan[data-day="2"] {
+    --day: 2;
+  }
+
+  .plan[data-day="3"] {
+    --day: 3;
+  }
+
+  .plan[data-day="4"] {
+    --day: 4;
+  }
+
+  .cell[data-day-index="0"] {
+    --cell-day: 0;
+  }
+
+  .cell[data-day-index="1"] {
+    --cell-day: 1;
+  }
+
+  .cell[data-day-index="2"] {
+    --cell-day: 2;
+  }
+
+  .cell[data-day-index="3"] {
+    --cell-day: 3;
+  }
+
+  .cell[data-day-index="4"] {
+    --cell-day: 4;
+  }
+
+  /* Until the script has read the clock and put the plan on today, the day on
+   * screen is a correction rather than a choice: it must land, not slide. */
+  .plan:not(.plan--ready) .cell,
+  .plan:not(.plan--ready) .tab {
+    transition: none;
   }
 
   .cell__name {
@@ -537,10 +626,39 @@ body {
   flex-direction: column;
   justify-content: flex-end;
   background: var(--scrim-modal);
+  opacity: 1;
+  /* `hidden` stays the one place the sheet's state lives — the script sets it
+   * and nothing else needs to know. Animating that takes two things the browser
+   * only does when asked: `allow-discrete` keeps the element displayed until
+   * the fade has finished, and `@starting-style` gives it a state to come from,
+   * which an element that was `display: none` a moment ago otherwise has no
+   * way to have.
+   *
+   * `@starting-style` is nested rather than written as one block at the end on
+   * purpose — as a top-level block it applies to the sheet, whose own `display`
+   * changes, but not to the panel inside it, which is only newly rendered
+   * because its parent is. Nested, both take it.
+   *
+   * Progressive enhancement: without either, `hidden` still hides the sheet and
+   * it appears and goes in one frame — exactly what it did before. */
+  transition:
+    opacity var(--dur-quick) var(--ease-out),
+    display var(--dur-quick) allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+  }
 }
 
 .sheet[hidden] {
   display: none;
+  opacity: 0;
+}
+
+/* The panel is the half you watch: it comes up from the edge it is attached
+ * to, and on the way out goes back down the same way. */
+.sheet[hidden] .sheet__panel {
+  transform: translateY(100%);
 }
 
 .sheet__panel {
@@ -553,6 +671,12 @@ body {
   background: var(--surface-raised);
   border-top-left-radius: var(--radius-lg);
   border-top-right-radius: var(--radius-lg);
+  transform: translateY(0);
+  transition: transform var(--dur-quick) var(--ease-out);
+
+  @starting-style {
+    transform: translateY(100%);
+  }
 }
 
 .sheet__head {
