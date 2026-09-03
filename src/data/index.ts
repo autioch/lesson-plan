@@ -9,7 +9,7 @@
  * What the years share is merged in here, so a year file holds only its week:
  * `commons.json` for the fixtures — copy, palette, bell times, the days — and
  * `catalog.json` for the teachers and subjects every year draws on. See
- * `../types.ts` for where the lines fall.
+ * `./types.ts` for where the lines fall.
  *
  * Every year is merged and typed, not just the active one, so `astro check`
  * types them all against `LessonsPlan`. That is deliberate: when the type
@@ -25,7 +25,7 @@ import type {
   PlanCatalog,
   PlanCommons,
   SchoolYear,
-} from "../types";
+} from "./types";
 
 import commonsData from "./commons.json";
 import catalogData from "./catalog.json";

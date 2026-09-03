@@ -4,13 +4,13 @@ Once a year the school issues one PDF holding the timetable for **every** class.
 class we care about into that year's plan file and publishes it. About half an hour, most of it
 checking rather than typing.
 
-The rules the layout enforces: one file per school year in `src/data/plans/`, named for the
+The rules the layout enforces: one file per school year in `src/data/`, named for the
 September it starts (`2026.json`), holding **only that year's week** — a single `lessons` key.
 Everything else lives once in the two shared files:
-[`commons.json`](../src/data/plans/commons.json) for the fixtures and
-[`catalog.json`](../src/data/plans/catalog.json) for the teachers and subjects. A published year is
+[`commons.json`](../src/data/commons.json) for the fixtures and
+[`catalog.json`](../src/data/catalog.json) for the teachers and subjects. A published year is
 **never edited again**; only `ACTIVE_YEAR` in
-[`src/data/plans/index.ts`](../src/data/plans/index.ts) says what the site renders.
+[`src/data/index.ts`](../src/data/index.ts) says what the site renders.
 
 ## Who does what
 
@@ -50,13 +50,13 @@ resolves it — not in a commit message, where it dies.
 grid. Node built-ins only; nothing to install.
 
 ```bash
-node scripts/read-plan-pdf.mjs src/data/plans/2026.pdf
+node scripts/read-plan-pdf.mjs src/data/2026.pdf
 ```
 
 That lists the classes and their page numbers. Then, for one class:
 
 ```bash
-node scripts/read-plan-pdf.mjs src/data/plans/2026.pdf 1b
+node scripts/read-plan-pdf.mjs src/data/2026.pdf 1b
 ```
 
 It prints each day's slots with the teacher, subject and room exactly as drawn, and a paste-ready
@@ -100,7 +100,7 @@ niem` in grade 8 is taught by KRadziłowska, so in 1b's `KRadziłowska / MWołej
 
 ## Building the file
 
-1. **Put the PDF at `src/data/plans/<year>.pdf`** — committed beside the JSON it produced, so a
+1. **Put the PDF at `src/data/<year>.pdf`** — committed beside the JSON it produced, so a
    year's data can always be traced to its source.
 2. **Create `<year>.json` with a single `lessons` key.** Nothing to copy from last year — the shape
    is one object, and everything a year used to restate now lives in the shared files.
@@ -122,7 +122,7 @@ niem` in grade 8 is taught by KRadziłowska, so in 1b's `KRadziłowska / MWołej
    decided. **Adding a bell means a new slot id, never renumbering the existing ones**; retiring one
    means deleting its row and leaving its id dead. Every year's lessons point at those ids, so
    renumbering would silently re-time the whole archive.
-6. **Register the year** in `src/data/plans/index.ts`: import it, add it to `years`, move
+6. **Register the year** in `src/data/index.ts`: import it, add it to `years`, move
    `ACTIVE_YEAR`.
 7. **Verify** — below. **Flag every guess** to the human, and file the unresolved ones in
    `owner-tasks.md`.

@@ -52,7 +52,7 @@ construction. Three rules keep that true, and breaking any one of them breaks th
 ## Visual conventions
 
 - **Lesson colours are data, not decoration.** Exact hex from the `palette` in
-  `src/data/plans/commons.json`, full strength, never tokenized, tinted or made transparent, and
+  `src/data/commons.json`, full strength, never tokenized, tinted or made transparent, and
   never shown without the legend. A lesson type names a colour by `colorId`; a hex written anywhere
   else is a bug.
 - **Tile ink is fixed, not computed.** Every tile takes `--text-primary`, and the teacher line

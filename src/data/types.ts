@@ -10,8 +10,8 @@
  * of the week — and effectively frozen. `catalog.json` is reference data, the
  * people and the subjects: it grows as new ones appear and is never rewritten.
  * `<year>.json` is one year's facts, its week, and is never edited once
- * published. `plans/index.ts` merges the three into one `LessonsPlan`, which is
- * what the transform and the components see.
+ * published. `index.ts` merges the three into one `LessonsPlan`, which is what
+ * the transform and the components see.
  *
  * Two files are shared, so an edit to either reaches back into published years.
  * That is the point for a correction — a misspelled teacher lands in every year
