@@ -20,6 +20,11 @@ Manual steps only the repo owner can do. Delete a line once it's done.
   `https://api.githubcopilot.com/mcp/` and reads the token from that environment variable. Without
   it the server fails to connect and PR work falls back to the `gh` CLI. Scope it to this
   repository; it only needs to read and write pull requests.
+- **Normalize the main checkout's line endings once.** `D:\repos\lesson-plan` still holds files
+  checked out as CRLF from before [.gitattributes](../.gitattributes) existed; only this worktree was
+  refreshed. Nothing is broken — `git status` reads clean either way — but the working copy does not
+  yet match the LF the file now promises. On a **clean** tree, run
+  `git rm --cached -r . && git reset --hard`. It commits nothing; it only rewrites on-disk endings.
 - **Decide on the Astro upgrade.** `npm audit` reports 13 advisories against `astro@5.13.5`. Almost
   all are server-side (SSR, middleware, server islands, image endpoint) and cannot apply to a static
   GitHub Pages build with no server — but two hit the **dev server** on your own machine: arbitrary
