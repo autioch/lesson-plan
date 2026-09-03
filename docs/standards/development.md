@@ -124,6 +124,12 @@ Configs: [eslint.config.mjs](../../eslint.config.mjs),
 [prettier.config.mjs](../../prettier.config.mjs), [knip.json](../../knip.json). `designs/` is
 excluded from all of them — it is a verbatim design snapshot, not our code.
 
+[.gitattributes](../../.gitattributes) pins text files to **LF** in both the index and the working
+copy, because Git for Windows sets `core.autocrlf=true` system-wide and the gate writes LF — left to
+disagree, `npm run verify` leaves untouched files listed as modified with an empty diff. Fix that
+class of problem in the attributes file, which travels with the clone, never in one machine's
+`core.autocrlf`.
+
 Node is pinned in [.nvmrc](../../.nvmrc); both workflows read it, so local and CI never drift.
 
 ## Agent tooling
