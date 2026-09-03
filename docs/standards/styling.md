@@ -27,8 +27,9 @@ construction. Three rules keep that true, and breaking any one of them breaks th
   (`@media (min-width: 1024px), print`); the bands paper must never take are scoped to `screen`. A
   width query left unscoped lets the **print dialog's margin setting** pick the band — a non-zero
   margin narrows the page box under 1024px and strips the teacher names off the sheet.
-- **Paper has its own scale**, last block in `tokens.css`: one size, 16px = 12pt, the school's floor.
-  The desk scale's 20/17 does not fit a full row set and a legend on 210mm.
+- **Paper has its own scale**, last block in `tokens.css`: one size, 16px = 12pt, the school's floor,
+  with the teacher line the single exception. The desk scale's 20/17 does not fit a full row set and
+  a legend on 210mm.
 - **`print.css` holds deltas only** — the page box, the legend moving under the grid, the "today"
   mark coming off, and the ink. Anything it restates from `plan.css` is drift waiting to happen.
 
@@ -59,8 +60,10 @@ construction. Three rules keep that true, and breaking any one of them breaks th
   palette's contrast a **hard entry condition** rather than something code compensates for.
 - **The teacher line is the quiet one** — `--fs-2xs` and `--text-on-tile-weak`, because it answers
   "who", looked up once a term, not "what", read every morning. `--fs-2xs` is the one step that does
-  **not** scale with the band: 14px is the meta floor, so the desk scale leaves it alone and only
-  paper lifts it, to hold 12pt. How pale the ink can go is set by the **blue**, the darkest tint —
+  **not** scale with the surface — a flat 14px everywhere, paper included. It is the one line allowed
+  under the sheet's 12pt floor: at 12pt it comes out the size of the lesson name above it, and paper
+  has no other step left to tell the two apart. How pale the ink can go is set by the **blue**, the
+  darkest tint —
   5.4:1 today, and it stays above 4.5:1 across the whole usable mix range, which is the point of not
   reaching for `--text-secondary` here.
 - **The palette is six colours plus plain white**, and adding a seventh is a decision, not an edit.

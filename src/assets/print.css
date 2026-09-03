@@ -86,15 +86,16 @@
    * genuinely needs a second line.
    *
    * The floor is derived from the scale rather than measured off it, so it
-   * follows the scale if that ever moves: two lines, the gap between them, and
-   * the tile's own padding top and bottom — `*` sets `border-box`, so the
-   * padding has to be inside the number. The tighter padding is the same
+   * follows the scale if that ever moves: the name's line, the teacher's line —
+   * a step smaller, the one thing paper does not flatten — the gap between
+   * them, and the tile's own padding top and bottom. `*` sets `border-box`, so
+   * the padding has to be inside the number. The tighter padding is the same
    * eleven-rows-on-210mm squeeze as the header above. */
   .cell {
     padding: var(--space-4) var(--space-8);
     min-height: calc(
-      2 * var(--lh-body-min) * var(--fs-sm) + var(--space-4) + 2 *
-        var(--space-4)
+      var(--lh-body-min) * var(--fs-sm) + var(--lh-body-min) * var(--fs-2xs) +
+        var(--space-4) + 2 * var(--space-4)
     );
   }
 
