@@ -1,7 +1,8 @@
 # Security & Data
 
-The rules for keeping data safe and controlling access. Lean-kit assumptions don't apply to a static
-site — rewrite this to match your real model.
+The rules for keeping data safe and controlling access, for what this site actually is: a static,
+public, read-only page built from committed JSON. [architecture.md](architecture.md) owns the
+layering; this doc owns the trust boundary.
 
 ## Trust model
 
