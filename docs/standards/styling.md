@@ -28,7 +28,7 @@ construction. Three rules keep that true, and breaking any one of them breaks th
   width query left unscoped lets the **print dialog's margin setting** pick the band — a non-zero
   margin narrows the page box under 1024px and strips the teacher names off the sheet.
 - **Paper has its own scale**, last block in `tokens.css`: one size, 16px = 12pt, the school's floor.
-  The desk scale's 20/17 does not fit eleven rows and a legend on 210mm.
+  The desk scale's 20/17 does not fit a full row set and a legend on 210mm.
 - **`print.css` holds deltas only** — the page box, the legend moving under the grid, the "today"
   mark coming off, and the ink. Anything it restates from `plan.css` is drift waiting to happen.
 

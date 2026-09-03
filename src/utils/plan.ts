@@ -130,14 +130,27 @@ export function buildPlan(data: LessonsPlan): Plan {
 
   const usedColorIds = new Set<string>();
 
-  const lastSlot = data.slots.length - 1;
+  /* Row set: the span from the first slot this week uses to the last. A slot
+   * nobody uses *inside* that span still gets its own row — an empty hour is
+   * the truth, and dropping it would fold two free slots into one and overstate
+   * the break on the row above. Unused slots outside the span are trimmed: they
+   * are the school day running wider than this class's week, not gaps in it,
+   * and an empty band above and below the plan is noise on every surface. The
+   * grid is therefore a different height each year, by design. */
+  const usedSlots = data.slots.flatMap((slot, slotIndex) =>
+    data.days.some((_, dayIndex) => lessonAt(dayIndex, slot.id))
+      ? [slotIndex]
+      : [],
+  );
 
-  /* Row set: the whole bell day, every year. A slot nobody uses still gets its
-   * own row — an empty hour is the truth, and dropping it would fold two free
-   * slots into one and overstate the break on the row above. Trimming the
-   * unused ends as well would make the grid a different height each year and
-   * hide that the school day runs wider than this class's week. */
-  const rows: PlanRow[] = data.slots.map((slot, slotIndex) => {
+  const firstSlot = usedSlots[0] ?? -1;
+  const lastSlot = usedSlots[usedSlots.length - 1] ?? -1;
+
+  const spanSlots =
+    firstSlot < 0 ? [] : data.slots.slice(firstSlot, lastSlot + 1);
+
+  const rows: PlanRow[] = spanSlots.map((slot, offset) => {
+    const slotIndex = firstSlot + offset;
     const start = toMinutes(slot.start);
     const end = start + slot.duration;
     const gap =
