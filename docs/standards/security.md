@@ -14,6 +14,15 @@ only at browse time**.
 and no per-user views. If the site moves behind auth (e.g., school intranet), apply network-level
 controls, not code controls.
 
+**Discoverability, not access:** every page ships `<meta name="robots" content="noindex, nofollow,
+noarchive">` (in [Layout.astro](../../src/layouts/Layout.astro)), so it stays out of search results
+and compliant answer engines — reachable by direct link only. This **hides** the schedule; it does
+**not** protect it. Anyone with the URL still reads everything. AI training crawlers (ClaudeBot,
+GPTBot, CCBot, PerplexityBot, Google-Extended) obey `robots.txt`, not the meta tag — and for a
+GitHub Pages project site, the only `robots.txt` they read is the one at the **domain root**
+(`autioch.github.io/robots.txt`), which lives in the user's root Pages repo, not this one. To block
+those crawlers, disallow `/lesson-plan/` there.
+
 ## Data ownership
 
 - **JSON source files** are the source of record. They are version-controlled and committed to git.
