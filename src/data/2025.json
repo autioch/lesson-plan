@@ -36,7 +36,7 @@
         "teacherId": "t1"
       },
       "s3": {
-        "lessonId": "wf-ew",
+        "lessonId": "wf",
         "teacherId": "t1"
       },
       "s4": {
@@ -79,7 +79,7 @@
         "teacherId": "t7"
       },
       "s6": {
-        "lessonId": "religion-ethics",
+        "lessonId": "ethics",
         "teacherId": "t6"
       },
       "s7": {
@@ -148,7 +148,7 @@
       },
       "s8": {
         "lessonId": "games-cube",
-        "teacherId": "t1"
+        "teacherId": "t9"
       }
     }
   }

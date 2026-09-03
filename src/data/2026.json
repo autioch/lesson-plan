@@ -25,9 +25,9 @@
         "lessonId": "education",
         "teacherId": "t1"
       },
-      "s8": {
-        "lessonId": "it",
-        "teacherId": "t13"
+      "s9": {
+        "lessonId": "acrobatics",
+        "teacherId": "t9"
       }
     },
     "tue": {
@@ -84,6 +84,10 @@
       "s7": {
         "lessonId": "club",
         "teacherId": "t1"
+      },
+      "s9": {
+        "lessonId": "hand",
+        "teacherId": "t15"
       }
     },
     "thu": {
@@ -118,11 +122,11 @@
     },
     "fri": {
       "s2": {
-        "lessonId": "education",
-        "teacherId": "t1"
+        "lessonId": "it",
+        "teacherId": "t13"
       },
       "s3": {
-        "lessonId": "wf-ew",
+        "lessonId": "wf",
         "teacherId": "t1"
       },
       "s4": {

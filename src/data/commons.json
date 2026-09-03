@@ -6,7 +6,7 @@
     "todayAria": "dziś",
     "freeSlot": "wolne",
     "dayTabsLabel": "Dzień tygodnia",
-    "legendTitle": "Legenda kolorów",
+    "legendTitle": "Rodzaje lekcji",
     "legendHint": "dotknij, aby zamknąć",
     "breakMinutes": "+{value}min przerwy"
   },
@@ -14,7 +14,7 @@
     {
       "id": "plain",
       "hex": "#ffffff",
-      "name": "Zwykła lekcja",
+      "name": "Zwykłe",
       "inLegend": false
     },
     {
@@ -26,7 +26,7 @@
     {
       "id": "kit",
       "hex": "#dbf7bd",
-      "name": "Spakuj strój",
+      "name": "Sportowe",
       "inLegend": true
     },
     {
@@ -38,13 +38,13 @@
     {
       "id": "creative",
       "hex": "#ffc7d8",
-      "name": "Zajęcia twórcze",
+      "name": "Twórcze",
       "inLegend": true
     },
     {
-      "id": "individual",
+      "id": "special",
       "hex": "#eee0ff",
-      "name": "Zajęcia indywidualne i rytmika",
+      "name": "Specjalne",
       "inLegend": true
     },
     {

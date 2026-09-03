@@ -2,7 +2,7 @@
   "teachers": [
     {
       "id": "t1",
-      "name": "MSkrzypczak"
+      "name": "Małgorzata Skrzypczak"
     },
     {
       "id": "t2",
@@ -10,19 +10,19 @@
     },
     {
       "id": "t3",
-      "name": "IGruszka"
+      "name": "Izabela Gruszka"
     },
     {
       "id": "t4",
-      "name": "ESzymańska"
+      "name": "Edyta Szymańska"
     },
     {
       "id": "t5",
-      "name": "AKozłowska"
+      "name": "Alicja Kozłowska"
     },
     {
       "id": "t6",
-      "name": "ABartkowski"
+      "name": "Andrzej Bartkowski"
     },
     {
       "id": "t7",
@@ -35,29 +35,32 @@
     },
     {
       "id": "t9",
-      "name": "<extra>",
-      "anonymous": true
+      "name": "???"
     },
     {
       "id": "t10",
-      "name": "APiskorska/PŁuczak"
+      "name": "Patrycja Łuczak"
     },
     {
       "id": "t11",
-      "name": "KOrdza"
+      "name": "Katarzyna Ordza-Woźniak"
     },
     {
       "id": "t12",
-      "name": "MWołejnio"
+      "name": "Monika Wołejnio"
     },
     {
       "id": "t13",
-      "name": "JProniewski"
+      "name": "Janusz Proniewski"
     },
     {
       "id": "t14",
       "name": "Instruktor szachy",
       "anonymous": true
+    },
+    {
+      "id": "t15",
+      "name": "Weronika Ciślak"
     }
   ],
   "lessonTypes": [
@@ -85,17 +88,17 @@
     {
       "id": "chess",
       "name": "Szachy",
-      "colorId": "extra"
+      "colorId": "special"
     },
     {
       "id": "choir",
       "name": "Kółko muzyczne \"Chórek\"",
-      "colorId": "plain"
+      "colorId": "special"
     },
     {
       "id": "club",
       "name": "Kółko",
-      "colorId": "plain"
+      "colorId": "creative"
     },
     {
       "id": "dance",
@@ -119,11 +122,6 @@
       "colorId": "plain"
     },
     {
-      "id": "ethics-club",
-      "name": "Kółko etyczno-filozoficzne",
-      "colorId": "plain"
-    },
-    {
       "id": "games-cube",
       "name": "Akademia Gier CUBE",
       "nameShort": "Gry CUBE",
@@ -131,21 +129,21 @@
     },
     {
       "id": "gym-compensatory",
-      "name": "Gimnastyka kompensacyjna",
+      "name": "Gimnastyka",
       "nameShort": "Gimnastyka",
       "colorId": "kit"
     },
     {
       "id": "gym-corrective",
       "name": "Gimnastyka korekcyjna",
-      "nameShort": "Gimn. kor.",
+      "nameShort": "Gimnastyka",
       "colorId": "kit"
     },
     {
       "id": "it",
       "name": "Informatyka",
       "nameShort": "Inform.",
-      "colorId": "plain"
+      "colorId": "special"
     },
     {
       "id": "pool",
@@ -153,15 +151,9 @@
       "colorId": "pool"
     },
     {
-      "id": "religion-ethics",
-      "name": "Religia/Etyka",
-      "nameShort": "Religia",
-      "colorId": "plain"
-    },
-    {
       "id": "rhythmics",
       "name": "Rytmika",
-      "colorId": "individual"
+      "colorId": "special"
     },
     {
       "id": "robotics",
@@ -182,7 +174,7 @@
     {
       "id": "speech-therapy",
       "name": "Logopedia",
-      "colorId": "individual"
+      "colorId": "special"
     },
     {
       "id": "wf",
@@ -190,9 +182,14 @@
       "colorId": "kit"
     },
     {
-      "id": "wf-ew",
+      "id": "wf",
       "name": "W/F ew",
       "colorId": "kit"
+    },
+    {
+      "id": "hand",
+      "name": "Terapia ręki",
+      "colorId": "special"
     }
   ]
 }

@@ -1,7 +1,6 @@
 /**
  * Every school year the site has ever published, and which one is live. A year
- * is added, never edited in place; only `ACTIVE_YEAR` moves, and that one line
- * is the whole "publish next year" change. `commons.json` and `catalog.json`
+ * is added, never edited in place; `commons.json` and `catalog.json`
  * are merged in here so a year file holds only its week — see `./types.ts`.
  *
  * Every year is merged and typed, not just the active one, so a schema change
@@ -38,6 +37,3 @@ export const plans: Record<string, LessonsPlan> = Object.fromEntries(
     { ...commons, ...catalog, ...data },
   ]),
 );
-
-/** The year the site renders. The only line that moves in September. */
-export const ACTIVE_YEAR = "2026";
