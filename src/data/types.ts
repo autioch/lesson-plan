@@ -117,7 +117,11 @@ export type PlanCommons = {
   locale: string;
   labels: Labels;
   palette: PaletteColor[];
-  /** The bell day, in order. Every slot renders, used or not. */
+  /**
+   * The bell day, in order. A year renders the span from the first slot its
+   * week uses to the last — unused slots inside it keep their row, unused ends
+   * are trimmed — so the same bell day yields a different grid height per year.
+   */
   slots: Slot[];
   /** The week, in order. */
   days: Day[];
