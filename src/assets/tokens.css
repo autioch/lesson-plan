@@ -21,10 +21,14 @@
   --fs-xs: 14px;
 
   /* The teacher line, and only that. It is the one thing on a tile you look up
-   * rather than read, so it stays at the 14px meta floor on every screen band
+   * rather than read, so it stays at the 14px meta floor on every surface
    * instead of riding `--fs-xs` up to 17px on the desk scale — which is why it
-   * is a step of its own and why the desk block below does not redefine it.
-   * Paper does, because 14px is 10.5pt and the sheet's floor is 12pt. */
+   * is a step of its own and why neither block below redefines it.
+   *
+   * Paper included, and that one is a decision rather than an omission: the
+   * sheet's 12pt floor is for the text the plan is read for, and a teacher line
+   * set at it comes out the same size as the lesson name above it, which reads
+   * flat. 14px is 10.5pt — the one line on the sheet allowed under the floor. */
   --fs-2xs: 14px;
 
   --font-sans:
@@ -127,9 +131,13 @@
  * "scale" half, `print.css` the layout half. It comes last so it wins over the
  * desk block whether or not the page box is wide enough to match it.
  *
- * One size for everything: 16px is 12pt, the floor the school set for the
- * printed sheet, and 11 rows plus a legend only fit 210mm at that floor — the
- * desk scale's 20/17 spills onto a second page.
+ * One size for everything the sheet is read for: 16px is 12pt, the floor the
+ * school set for the printed plan, and 11 rows plus a legend only fit 210mm at
+ * that floor — the desk scale's 20/17 spills onto a second page. `--fs-2xs`,
+ * the teacher line, is the one step this block leaves alone: flattened to 16px
+ * with the rest it came out as loud as the lesson name it sits under, and on
+ * paper size is most of the hierarchy — weight and a grey are all that is left
+ * once the screen's four steps become one.
  */
 @media print {
   :root {
@@ -137,7 +145,6 @@
     --fs-md: 16px;
     --fs-sm: 16px;
     --fs-xs: 16px;
-    --fs-2xs: 16px;
 
     /* Toner is not a screen. A 6%-black hairline does not survive the print
      * pipeline, so the rules and borders take a solid grey instead. */
