@@ -179,7 +179,10 @@ body {
 .grid__head {
   display: none; /* band A has tabs instead */
   grid-template-columns: var(--gutter) repeat(5, 1fr);
-  gap: var(--space-4);
+  /* The rows' gap, not a spacing step: the head shares their column template,
+   * so anything else makes each day name a few pixels narrower than the column
+   * it names and the two drift apart across the week. */
+  gap: 1px;
   background: var(--surface-base);
   border-bottom: var(--border-width-thin) solid var(--line-subtle);
 }
@@ -433,10 +436,15 @@ body {
     display: none;
   }
 
-  /* The header band runs edge to edge, so the padding lives on its contents
-   * and on the rows — both keep the same gutter, so the columns still line up. */
+  /* The header band runs edge to edge: it is pulled back out over the grid's
+   * side padding and pads the same amount in again, so the day names still sit
+   * over their columns. Both halves are needed — with only the padding the band
+   * was inset by the grid *and* its contents inset a second time, which is what
+   * used to leave the day names sitting a few pixels off their columns.
+   * `print.css` restates the pair against the page box's own 28pt inset. */
   .grid__head {
     display: grid;
+    margin: 0 calc(-1 * var(--space-16));
     padding: var(--space-8) var(--space-16);
   }
 
@@ -474,6 +482,22 @@ body {
  * A4 sheet has the room for both, and a printed plan without teachers is a
  * worse sheet than a printed plan with a tight column. */
 @media screen and (min-width: 481px) and (max-width: 1023px) {
+  /* A phone on its side is 412px tall with the browser's own bar on top of
+   * that, so the frame around the grid is height the rows would rather have.
+   * The header band takes the top edge outright and the rows keep only the side
+   * inset that holds the hours off the screen edge and a gap under the last
+   * row — 32px back, a tenth of the height the rows divide. Band C is roomy and
+   * keeps its frame; this is the band that cannot afford one. */
+  .grid {
+    padding: 0 var(--space-16) var(--space-8);
+  }
+
+  /* `.dayhead`'s own 30px is the band's height here — the padding above and
+   * below it was the last of the frame. */
+  .grid__head {
+    padding: 0 var(--space-16);
+  }
+
   .row__time {
     flex-direction: row;
     align-items: center;

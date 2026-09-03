@@ -82,8 +82,12 @@ construction. Three rules keep that true, and breaking any one of them breaks th
 - **Weight is a signal, not a default.** Bold is reserved for the hours, the day being viewed and
   today; lesson names in the week grid are medium, so the colour does the work.
 - **Headers sit on `--surface-base`** (day tabs, day names) — a band, not a first row of content.
-  Rules that let you track a row or column are `--overlay-tint`, drawn in the gaps so a lesson
-  colour is never overprinted.
+  The day-name band **bleeds to the edges** of the area it heads and carries the rows' own gap and
+  side inset, so each name sits over its column. Rules that let you track a row or column are
+  `--overlay-tint`, drawn in the gaps so a lesson colour is never overprinted.
+- **Band B carries no frame.** A phone on its side has ~412px of height minus the browser's bar, so
+  the grid takes the top edge and keeps only a side inset and a gap under the last row. Bands A and
+  C have the room and keep theirs.
 - **The legend names the colour, not its lessons.** Those are on screen beside it.
 - **Layout lives in `src/assets/plan.css`**, not in scoped component styles — the band rules cross
   component boundaries.
