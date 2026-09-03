@@ -41,6 +41,13 @@ system is built**; read this before writing code for **how to write it here**.
 - **Layout is never a build-time prop.** This is a static site: frontmatter cannot know the
   viewport, so anything that varies by width is decided in CSS. See
   [styling.md](styling.md#surfaces).
+- **Only what the app actually uses.** No field a component never reads, no branch the current data
+  never reaches, no label nothing renders — and nothing kept "for later" or left behind from a shape
+  the plan used to have. Speculative code is not free here: it reads as a requirement, and the next
+  person has to prove it is dead before touching it. If the plan grows a case, add the branch then,
+  with the data that needs it. **`knip` does not catch this class** — it sees unused files, exports
+  and dependencies, not an unread property on a type or an unreachable arm of a conditional. Finding
+  those is a manual pass against the real data.
 - **Data is read-only:** JSON files in `src/data/` are the source of record. Transformations are
   pure functions in TypeScript modules, never mutations.
 - **Props are closed:** variant / option props are enums or string literals; content is free-form.

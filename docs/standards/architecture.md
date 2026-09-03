@@ -27,7 +27,7 @@ Core rules:
   no logic beyond layout and markup decisions, and no copy of their own — every visible string is a
   label from the data.
 - **Nothing user-visible lives outside the plan data.** Colours, day names and abbreviations, page
-  title, "DZIŚ", "wolne", the legend titles and the break templates are all data. Code holds
+  title, "DZIŚ", "wolne", the legend titles and the break template are all data. Code holds
   structure; CSS holds theme.
 - **The build never reads the clock.** The site is generated once a term, so "today" is a runtime
   fact — see [Today](#today).

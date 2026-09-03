@@ -30,9 +30,8 @@ export type Labels = {
   dayTabsLabel: string;
   legendTitle: string;
   legendHint: string;
-  /** `{value}` is replaced with the gap length. */
+  /** `{value}` is replaced with the gap in minutes. */
   breakMinutes: string;
-  breakHours: string;
 };
 
 /**
