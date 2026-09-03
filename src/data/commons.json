@@ -8,8 +8,7 @@
     "dayTabsLabel": "Dzień tygodnia",
     "legendTitle": "Legenda kolorów",
     "legendHint": "dotknij, aby zamknąć",
-    "breakMinutes": "+{value}min przerwy",
-    "breakHours": "+{value}h przerwy"
+    "breakMinutes": "+{value}min przerwy"
   },
   "palette": [
     {
