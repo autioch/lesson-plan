@@ -298,9 +298,8 @@
      * content prints atomically on one sheet. No clipping for content
      * within the authored box: .fit-box is calc-sized to exactly the
      * scaled footprint. (Content that bleeds past content-width/height
-     * is clipped at the footprint — fit mode's contract; it previously
-     * painted beyond it at print.) Print-only, so the screen rendering
-     * keeps visible overflow for editor affordances.
+     * is clipped at the footprint — fit mode's contract.) Print-only, so
+     * the screen rendering keeps visible overflow for editor affordances.
      * The export path injects the same rule into frozen copies
      * (print-eval.ts om-print-fit-contain). The .fit-mode scope is
      * load-bearing: .fit-box wraps slotted content in EVERY mode, and an

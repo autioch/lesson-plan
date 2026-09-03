@@ -18,6 +18,3 @@ date: 2026-09-02T00:00:00Z
 | 3c Laptop | plan-data.js, live page grid at autioch.github.io/lesson-plan |
 | 3d Wydruk A4 | plan-data.js |
 | Specyfikacja | Przekazanie deweloperom.dc.html |
-
-## Sync history
-- 2026-09-01T10:12:00Z — odczyt danych lekcji i układu strony; zbudowane trzy układy telefonu + widok tygodnia.

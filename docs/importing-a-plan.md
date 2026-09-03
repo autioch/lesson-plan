@@ -103,7 +103,7 @@ niem` in grade 8 is taught by KRadziłowska, so in 1b's `KRadziłowska / MWołej
 1. **Put the PDF at `src/data/<year>.pdf`** — committed beside the JSON it produced, so a
    year's data can always be traced to its source.
 2. **Create `<year>.json` with a single `lessons` key.** Nothing to copy from last year — the shape
-   is one object, and everything a year used to restate now lives in the shared files.
+   is one object, and everything shared across years lives in the shared files, not the year file.
 3. **Extend `catalog.json` first**, before any lesson — a teacher or subject the PDF names that is
    not already there. **Append only.** Never edit a row to mean someone or something else, and never
    delete one an archived year still references: an id quietly pointing at a different person or
