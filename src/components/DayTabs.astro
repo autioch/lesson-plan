@@ -14,11 +14,10 @@
  * day is viewed. The viewed day takes the full name and a 3px bar; the rest take
  * the two-letter short.
  */
-import type { Labels } from "../data/types";
-import type { PlanDay } from "../utils/plan";
+import type { Day, Labels } from "../data/types";
 
 type Props = {
-  days: PlanDay[];
+  days: Day[];
   labels: Labels;
 }
 

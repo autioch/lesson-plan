@@ -39,7 +39,7 @@ export type Labels = {
  * `legendTitle` says what the colour means; a colour that asks nothing of the
  * family (plain white) sits out of the legend with `inLegend: false`.
  */
-type PaletteColor = {
+export type PaletteColor = {
   id: string;
   hex: string;
   legendTitle: string;
@@ -96,7 +96,7 @@ type Lesson = {
   ignored?: boolean;
 };
 
-type Day = {
+export type Day = {
   /**
    * Readable, unlike a slot's — a day's identity cannot change, so there is
    * nothing here to rot.

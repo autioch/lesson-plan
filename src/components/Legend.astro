@@ -4,10 +4,10 @@
  * sidebar from 1024px and the bottom sheet below it. A lesson colour never
  * appears without it.
  */
-import type { LegendGroup } from "../utils/plan";
+import type { PaletteColor } from "../data/types";
 
 type Props = {
-  groups: LegendGroup[];
+  groups: PaletteColor[];
 }
 
 const { groups } = Astro.props;
@@ -17,8 +17,8 @@ const { groups } = Astro.props;
   {
     groups.map((group) => (
       <li class="legend__item">
-        <span class="legend__swatch" style={`background:${group.color}`} />
-        <span class="legend__title">{group.title}</span>
+        <span class="legend__swatch" style={`background:${group.hex}`} />
+        <span class="legend__title">{group.legendTitle}</span>
       </li>
     ))
   }

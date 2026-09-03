@@ -15,12 +15,11 @@
  * `aria-controls` would need one back — that is an open a11y gap, tracked
  * separately.
  */
-import type { Labels } from "../data/types";
-import type { LegendGroup } from "../utils/plan";
+import type { Labels, PaletteColor } from "../data/types";
 import Legend from "./Legend.astro";
 
 type Props = {
-  groups: LegendGroup[];
+  groups: PaletteColor[];
   labels: Labels;
 };
 
