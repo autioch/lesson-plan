@@ -1,11 +1,18 @@
 {
   "permissions": {
+    "defaultMode": "acceptEdits",
     "allow": [
       "Bash(git *)",
       "Bash(npm *)",
       "Bash(npx *)",
       "Bash(node *)",
       "Bash(gh *)",
+
+      "PowerShell(git *)",
+      "PowerShell(npm *)",
+      "PowerShell(npx *)",
+      "PowerShell(node *)",
+      "PowerShell(gh *)",
 
       "Bash(ls *)",
       "Bash(cat *)",
@@ -45,14 +52,23 @@
       "mcp__github__issue_read",
       "mcp__github__list_issues",
       "mcp__github__search_issues",
-      "mcp__github__search_code"
+      "mcp__github__search_code",
+      "mcp__github__create_pull_request"
     ],
     "ask": [
-      "Bash(git push *)",
-      "Bash(gh pr create *)",
+      "Bash(git push --force *)",
+      "Bash(git push --force-with-lease *)",
+      "Bash(git reset --hard *)",
+      "Bash(git rebase *)",
       "Bash(gh pr merge *)",
       "Bash(gh release *)",
-      "Bash(npm publish *)"
+      "Bash(npm publish *)",
+      "PowerShell(git push --force *)",
+      "PowerShell(git reset --hard *)",
+      "PowerShell(gh pr merge *)",
+      "PowerShell(gh release *)",
+      "PowerShell(npm publish *)",
+      "mcp__github__merge_pull_request"
     ]
   }
 }

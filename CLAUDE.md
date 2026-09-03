@@ -20,8 +20,10 @@ Stack: **Astro · TypeScript · JSON**.
 - **Decide vs. ask — by reversibility × blast radius.** Don't stop on every unknown. **Reversible,
   low-blast** (naming, layout, a local refactor): pick the sensible default, act, note it. **Always
   ask** when it's **irreversible or high-blast** — data/schema migration, auth or security, deleting
-  or overwriting user data, anything **leaving the machine** (push, deploy, send, publish), or money.
-  A recurring ask becomes a codified default or an automated check, not a standing prompt.
+  or overwriting user data, anything that **publishes or can't be retracted** (a merge to `main`, a
+  deploy, a release, a send), or money. Pushing a feature branch and opening a PR are recoverable and
+  don't need asking. A recurring ask becomes a codified default or an automated check, not a standing
+  prompt.
 - **Trust these instructions.** When a detail is missing, search **narrowly** for that one thing —
   don't re-explore the repo. The "Read first" column is the whole reading list for a path.
 - **Ask with options.** When you do stop, offer multiple choice with your recommendation first, and
@@ -85,3 +87,28 @@ again on `main`. Dev server: `npm run dev`. Full table:
 **One branch per unit of work**, cut from `main` before the first commit of a **Bounded** or
 **Feature** path; **Direct** and **Sync** commit straight to `main`. Commit often with plain git,
 push once at close-out, open a lean PR, merge on green CI. Mechanics:
+[workflow.md § Committing](docs/workflow.md#committing).
+
+Pushing a branch and opening a PR need no approval — both are recoverable. **Merging** is the
+irreversible step and prompts, along with force-push, hard reset, rebase, and any release. That
+split is what `.claude/settings.json` encodes.
+
+## Environment
+
+No secrets, no runtime config. The plan data is committed JSON under `src/data/plans/` — the
+published output is a static build, so a bad data edit is caught by the gate and the visual check,
+not by a runtime guard.
+
+- **`GITHUB_PAT`** — the only environment variable, read by `.mcp.json` for the GitHub MCP server.
+  Not needed to build or run the site.
+
+## Gotchas
+
+- **Shell: run git and npm through the Bash tool, not PowerShell.** PowerShell 5.1 wraps a native
+  command's stderr as error records and reports false failures — `astro check`, `eslint`, and `git`
+  all write to stderr on success. Use PowerShell only for genuinely Windows-specific needs
+  (`$env:VAR`, `$null`).
+- **Chain commands sparingly.** A permission rule matches a single command, so `cd x && npm run
+verify` is not covered by the `npm` grant and will prompt. Run the two as separate calls.
+- **The gate is manual.** There are no git hooks in this repo — nothing runs `npm run verify` for
+  you before a commit or a push. Run it yourself; CI is the backstop, not the first check.
