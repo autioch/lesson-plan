@@ -8,25 +8,6 @@
       "WebSearch",
       "mcp__github",
       "mcp__Claude_Browser"
-    ],
-    "ask": [
-      "Bash(git push origin main)",
-      "Bash(git push origin main *)",
-      "Bash(git push --force *)",
-      "Bash(git push --force-with-lease *)",
-      "Bash(git reset --hard *)",
-      "Bash(git rebase *)",
-      "Bash(gh pr merge *)",
-      "Bash(gh release *)",
-      "Bash(npm publish *)",
-      "PowerShell(git push origin main)",
-      "PowerShell(git push origin main *)",
-      "PowerShell(git push --force *)",
-      "PowerShell(git reset --hard *)",
-      "PowerShell(gh pr merge *)",
-      "PowerShell(gh release *)",
-      "PowerShell(npm publish *)",
-      "mcp__github__merge_pull_request"
     ]
   }
 }

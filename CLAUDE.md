@@ -89,13 +89,12 @@ again on `main`. Dev server: `npm run dev`. Full table:
 push once at close-out, open a lean PR, merge on green CI. Mechanics:
 [workflow.md § Committing](docs/workflow.md#committing).
 
-**Commands and the dev preview run unprompted.** `.claude/settings.json` allows `Bash`, `PowerShell`
-and the browser preview tools wholesale — this is a static frontend with no secrets and every commit
-on GitHub, so the routine blast radius is a `git checkout`. Starting `npm run dev` and driving it to
-verify a change is the job, not a decision. What still stops is what **publishes**: **merging**, and
-**`git push origin main`**,
-which fires the Pages deploy on the school's live plan — plus force-push, hard reset, rebase, and any
-release. `ask` outranks `allow`, which is what makes that hold.
+**Nothing prompts.** `.claude/settings.json` allows `Bash`, `PowerShell`, the browser preview tools
+and the GitHub MCP server wholesale, with an empty `ask` list — deploying, merging and releasing
+included. This is a static frontend with no secrets, every commit is on GitHub, and the site rebuilds
+from the tree, so anything shipped wrong is a revert away. **The gate, the PR and the commit message
+are the whole safety story** — there is no dialog behind them. Run `npm run verify` before every
+commit and wait for green CI before every merge; a prompt will not stop you.
 
 ## Environment
 
@@ -112,9 +111,8 @@ not by a runtime guard.
   command's stderr as error records and reports false failures — `astro check`, `eslint`, and `git`
   all write to stderr on success. Use PowerShell only for genuinely Windows-specific needs
   (`$env:VAR`, `$null`).
-- **Never chain a guarded command behind `&&`.** A permission rule matches a command string, and
-  `Bash` is now allowed wholesale, so `git rm --cached -r . && git reset --hard` runs **without the
-  prompt** that `git reset --hard` alone would raise. Run anything in the `ask` list of
-  [`.claude/settings.json`](.claude/settings.json) as its own call.
+- **Run a destructive git command as its own call.** `git reset --hard`, a force-push or a rebase
+  chained behind `&&` scrolls past in a combined result — and nothing prompts, so a bad one is only
+  caught by reading what it printed.
 - **The gate is manual.** There are no git hooks in this repo — nothing runs `npm run verify` for
   you before a commit or a push. Run it yourself; CI is the backstop, not the first check.

@@ -180,13 +180,13 @@ The same ending for Bounded and Feature:
 - **Squash is the only merge method**, and the branch is deleted on merge — both enforced by repo
   settings, so there is no button to pick wrong. The squash commit takes the **PR title and body**
   verbatim: write them as the history entry you want, because that is what lands on `main`.
-- **Merging is the approval step.** Ask, then wait for green — `gh pr checks <n> --watch` — then
-  `gh pr merge <n> --squash --delete-branch`. **`--auto` does not gate you**: the ruleset bypass
-  below leaves nothing blocking the PR, so auto-merge finds it already mergeable and lands it
-  immediately rather than queuing behind CI.
-- **Direct and Sync push with the explicit `git push origin main`**, never a bare `git push`. That
-  push fires the Pages deploy, so it prompts — and a permission rule matches a command string, not
-  the checked-out branch, so only the explicit form can be guarded.
+- **Green CI is the approval step** — nothing prompts on merge, so waiting is the whole check. Watch
+  it with `gh pr checks <n> --watch`, then `gh pr merge <n> --squash --delete-branch`. **`--auto`
+  does not gate you**: the ruleset bypass below leaves nothing blocking the PR, so auto-merge finds
+  it already mergeable and lands it immediately rather than queuing behind CI.
+- **Direct and Sync push with the explicit `git push origin main`**, never a bare `git push` — that
+  push fires the Pages deploy on the school's live plan, and naming the ref is how you confirm you
+  meant `main` and not whatever happens to be checked out.
 - **Red CI → fix-forward on the same branch.** A flake → re-run it; a real failure → fix the cause
   and re-push. The work isn't closed until the green merge, so a CI failure never reopens anything.
 - **You are the gate locally** — there are no git hooks. Run `npm run verify` yourself before you
