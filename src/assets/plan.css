@@ -8,6 +8,13 @@
  *   ≥1024px     whole week, full names, fixed legend column
  *
  * Every band renders the same DOM. Nothing here is decided at build time.
+ *
+ * Paper is the fourth surface and shares this DOM too — it takes band C's
+ * layout, so every block band C needs also lists `print`, and the bands it
+ * must never take are scoped to `screen`. Without that, the page box's width
+ * would pick the band and a non-zero margin in the print dialog would silently
+ * drop the sheet to band B's short names. The paper-only deltas — the page box,
+ * the legend under the grid, no "today" — live in `print.css`.
  */
 
 @import "./tokens.css";
@@ -270,8 +277,10 @@ body {
   display: none;
 }
 
+/* Quieter than the rest of the tile on purpose — it answers "who", which you
+ * look up once a term, not "what", which you read every morning. */
 .cell__teacher {
-  font-size: var(--fs-xs);
+  font-size: var(--fs-2xs);
   line-height: var(--lh-body-min);
   overflow-wrap: anywhere;
   color: var(--text-on-tile-weak);
@@ -284,7 +293,7 @@ body {
 
 /* === Band A — phone portrait, one day ==================================== */
 
-@media (max-width: 480px) {
+@media screen and (max-width: 480px) {
   /* Only band A swipes, so only band A gives up text selection for it. */
   .plan {
     touch-action: pan-y;
@@ -328,9 +337,9 @@ body {
   }
 }
 
-/* === Bands B and C — the whole week ====================================== */
+/* === Bands B and C — the whole week, and paper =========================== */
 
-@media (min-width: 481px) {
+@media (min-width: 481px), print {
   .tabs {
     display: none;
   }
@@ -372,8 +381,10 @@ body {
 }
 
 /* Band B only — a column fits one line, so names are shortened, the teacher
- * drops to nothing and the break text moves beside the hours. */
-@media (min-width: 481px) and (max-width: 1023px) {
+ * drops to nothing and the break text moves beside the hours. Screen only: an
+ * A4 sheet has the room for both, and a printed plan without teachers is a
+ * worse sheet than a printed plan with a tight column. */
+@media screen and (min-width: 481px) and (max-width: 1023px) {
   .row__time {
     flex-direction: row;
     align-items: center;
@@ -399,9 +410,9 @@ body {
   }
 }
 
-/* === Band C — laptop, week plus fixed legend ============================= */
+/* === Band C — laptop, week plus fixed legend; and paper ================== */
 
-@media (min-width: 1024px) {
+@media (min-width: 1024px), print {
   .plan {
     flex-direction: row;
   }
@@ -429,7 +440,8 @@ body {
 
 /* === Legend ============================================================== */
 
-/* Band C only: below 1024px the legend lives in the bottom sheet instead. */
+/* Band C and paper: below 1024px the legend lives in the bottom sheet instead.
+ * On paper it is the same list, moved under the grid by `print.css`. */
 .legend-side {
   display: none;
   flex-direction: column;
@@ -441,7 +453,7 @@ body {
   border-left: var(--border-width-thin) solid var(--line-subtle);
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1024px), print {
   .legend-side {
     display: flex;
   }
@@ -561,7 +573,9 @@ body {
   color: var(--text-secondary);
 }
 
-@media (min-width: 1024px) {
+/* Neither exists where the legend is always on screen — nor on paper, where
+ * nothing is tappable at all. */
+@media (min-width: 1024px), print {
   .fab,
   .sheet {
     display: none;

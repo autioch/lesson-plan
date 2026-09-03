@@ -25,7 +25,9 @@ system is built**; read this before writing code for **how to write it here**.
 - **Data is read-only:** JSON files in `src/data/` are the source of record. Transformations are
   pure functions in TypeScript modules, never mutations.
 - **Props are closed:** variant / option props are enums or string literals; content is free-form.
-- **Reuse shared components** from `src/components/` instead of duplicating HTML.
+- **Reuse shared components** from `src/components/` instead of duplicating HTML. **A surface is not
+  a reason to duplicate one** — screen and paper render the same tree, and the difference is CSS.
+  See [styling.md](styling.md#surfaces).
 - **Docs and code travel together.** A change to data shape, a new component, or a layout change
   updates this doc in the same commit — never a tree where docs contradict code.
 
@@ -53,6 +55,7 @@ system is built**; read this before writing code for **how to write it here**.
 | A component reading labels  | [src/components/WeekGrid.astro](../../src/components/WeekGrid.astro)   |
 | Build-time transform        | [src/utils/plan.ts](../../src/utils/plan.ts)                           |
 | Band-aware layout CSS       | [src/assets/plan.css](../../src/assets/plan.css)                       |
+| A paper-only override       | [src/assets/print.css](../../src/assets/print.css)                     |
 | Runtime (clock, day pick)   | the `<script>` in [src/pages/index.astro](../../src/pages/index.astro) |
 
 ## Keeping docs in sync
@@ -124,11 +127,13 @@ Node is pinned in [.nvmrc](../../.nvmrc); both workflows read it, so local and C
 
 Permissions live in two files, split by what belongs to the repo and what belongs to a machine:
 
-- **[.claude/settings.json](../../.claude/settings.json)** — tracked. Generic `Bash(cmd:*)` prefix
-  rules for the toolchain this repo actually uses: git's local operations, npm/npx, `node`, and the
-  small shell tools. **Add a rule here in its generic form** rather than letting a prompt append a
-  one-off literal — a literal for a command with a path or a session id in it can never match twice,
-  which is how an allowlist grows to ninety dead entries.
+- **[.claude/settings.json](../../.claude/settings.json)** — tracked. Generic prefix rules for the
+  toolchain this repo actually uses: git, npm/npx, `node`, `gh`, the small shell tools, and the
+  read-only GitHub MCP tools. **The wildcard form is `Bash(git *)` — a space, not `Bash(git:*)`.**
+  The colon form parses as valid JSON, saves without complaint and matches nothing, so the symptom is
+  an allowlist that looks right and prompts anyway. **Add a rule in its generic form** rather than
+  letting a prompt append a one-off literal — a literal for a command with a path or a session id in
+  it can never match twice, which is how an allowlist grows to ninety dead entries.
 - **[.claude/settings.local.json](../../.claude/settings.local.json)** — gitignored. Only what is
   true of one machine: enabled MCP servers, absolute scratchpad paths.
 
@@ -148,6 +153,15 @@ a control.
 **A newly created `settings.json` is not picked up mid-session** — the watcher only sees edits to a
 file that existed at session start. Symptom: prompts for commands the tracked file already allows,
 and duplicates of those rules appearing in `settings.local.json`. Restart the session.
+
+**Two things defeat the allowlist no matter what is in it**, and both are on the caller, not the
+config:
+
+- **Shell substitutions.** A command containing `$(…)` or `$?` cannot be matched against a prefix
+  rule, so it prompts even when its bare form is allowed, then records a literal that can never match
+  again. Read a value in one call and pass it in the next.
+- **Chains.** In `a && b; c | d`, every part must be allowed or the whole line prompts. Prefer one
+  command per call; the failing fragment is then obvious instead of hidden in a chain.
 
 [.mcp.json](../../.mcp.json) declares GitHub's hosted MCP server, so PRs, issues and checks are
 read and written through it rather than by shelling out to `gh`. It authenticates with a

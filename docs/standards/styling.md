@@ -19,12 +19,27 @@ Bands are chosen by **width only**. A phone in landscape is 915px wide and lands
 orientation queries are never needed and must not be added — they misfire on tablets. Reference
 canvas for band A is 412 × 915.
 
+**All four surfaces render one DOM.** Paper is not a second markup tree — it takes band C's layout
+and adds only its own deltas, so a change to the week grid reaches the printed sheet by
+construction. Three rules keep that true, and breaking any one of them breaks the sheet silently:
+
+- **Paper is band C, never band B.** The two blocks band C needs also list `print`
+  (`@media (min-width: 1024px), print`); the bands paper must never take are scoped to `screen`. A
+  width query left unscoped lets the **print dialog's margin setting** pick the band — a non-zero
+  margin narrows the page box under 1024px and strips the teacher names off the sheet.
+- **Paper has its own scale**, last block in `tokens.css`: one size, 16px = 12pt, the school's floor.
+  The desk scale's 20/17 does not fit eleven rows and a legend on 210mm.
+- **`print.css` holds deltas only** — the page box, the legend moving under the grid, the "today"
+  mark coming off, and the ink. Anything it restates from `plan.css` is drift waiting to happen.
+
 **Unsupported:** old browsers (no polyfills, no IE).
 
 ## Floors — non-negotiable
 
 - **px, not rem.** These are floors, not preferences.
-- **Text ≥ 17px.** 14px only for meta: end time, break text, teacher name. Nothing smaller.
+- **Text ≥ 17px.** 14px only for meta: end time, break text, teacher name. Nothing smaller — the
+  teacher line already sits on that floor at every width, so "make it smaller" has nowhere left to
+  go on a phone.
 - **Touch targets ≥ 44 × 44px** — day tabs and the legend button.
 - **Line height ≥ 1.3** for anything that can wrap.
 - **WCAG AA**: 4.5:1 body text, 3:1 large text and UI.
@@ -41,14 +56,28 @@ canvas for band A is 412 × 915.
 - **Tile ink is fixed, not computed.** Every tile takes `--text-primary`, and the teacher line
   `--text-on-tile-weak`. There is no luminance switch and no light-ink variant — which makes the
   palette's contrast a **hard entry condition** rather than something code compensates for.
+- **The teacher line is the quiet one** — `--fs-2xs` and `--text-on-tile-weak`, because it answers
+  "who", looked up once a term, not "what", read every morning. `--fs-2xs` is the one step that does
+  **not** scale with the band: 14px is the meta floor, so the desk scale leaves it alone and only
+  paper lifts it, to hold 12pt. How pale the ink can go is set by the **blue**, the darkest tint —
+  5.4:1 today, and it stays above 4.5:1 across the whole usable mix range, which is the point of not
+  reaching for `--text-secondary` here.
 - **The palette is six colours plus plain white**, and adding a seventh is a decision, not an edit.
   Each one must clear 4.5:1 at 14px against **both** ink tokens — check the new colour by hand,
   nothing enforces it — and stay separable from the other five under red-green colour blindness. A
   lesson that asks nothing of the family (Kółko, Religia/Etyka) is plain white.
+- **The six are tints, not colours** — each is its saturated base mixed 50% with white, so a tile
+  reads as tinted paper and the lesson name keeps the emphasis. Measured at that mix: worst ink
+  contrast **7.5:1**, tightest pair **ΔE 6.1** (pool/creative under deuteranopia), and every tile at
+  least **ΔE 19** from the white page. To make them quieter or stronger, **move the mix and re-check
+  those three numbers** — hand-picking a hex per colour is what breaks the set. Pale costs
+  separability fastest: at a 70% mix the tightest pair falls to ΔE 3.6 and the palest tiles are only
+  ΔE 12 from the page, which is where a tile stops reading as a tile.
 - **Everything else is a token** from `src/assets/tokens.css` — type scale, spacing ramp, radii,
   lines, surfaces, text ink, accent. No values from outside the ramp, and the only inline style on a
   cell is `--cell-bg`.
-- **Type scale** switches once, at 1024px: phone `17/20/24`, desk `20/24/30`.
+- **Type scale** switches once, at 1024px: phone `17/20/24`, desk `20/24/30`. Meta is `14/17` under
+  those, and the teacher step below it is a flat `14` at both.
 - **Weight is a signal, not a default.** Bold is reserved for the hours, the day being viewed and
   today; lesson names in the week grid are medium, so the colour does the work.
 - **Headers sit on `--surface-base`** (day tabs, day names) — a band, not a first row of content.
@@ -73,4 +102,12 @@ canvas for band A is 412 × 915.
 ## Commands
 
 No separate style build — CSS is bundled by Astro. Verify with `npm run dev` at 412 × 915, 915 × 412
-and 1440 × 900, and in the browser's print preview.
+and 1440 × 900.
+
+**Print is checked at 1122 × 794** — A4 landscape in CSS pixels — with the `@media print` rules
+forced on: collect every `document.styleSheets` rule whose `media.mediaText` is exactly `print` and
+append their bodies as a plain `<style>`. That reproduces the print cascade in the same order the
+bundle emits it, so `.plan` can be measured against 297 × 210mm and cells checked for clipping
+(`scrollHeight > clientHeight`). It does **not** reproduce `@page`, paper colour management, or the
+print dialog's own margins — **the browser's print preview is still the authority**, and a real
+print to PDF with "Background graphics" on is what closes a print change out.
