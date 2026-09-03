@@ -7,6 +7,9 @@
  * `tab--today` and the aria suffix once it has read the clock. Until then Monday
  * is selected, which is also what a page without JavaScript shows.
  *
+ * Exposes the `js-day-tabs` and `js-day-tab` hooks. `tab--today` goes the other
+ * way — the script writes it and CSS reads it, so it stays a BEM modifier.
+ *
  * Today always reads the today label and takes a wider tab, even when another
  * day is viewed. The viewed day takes the full name and a 3px bar; the rest take
  * the two-letter short.
@@ -23,7 +26,7 @@ const { days, labels } = Astro.props;
 ---
 
 <div
-  class="tabs"
+  class="tabs js-day-tabs"
   role="tablist"
   aria-label={labels.dayTabsLabel}
   data-today-aria={labels.todayAria}
@@ -31,10 +34,9 @@ const { days, labels } = Astro.props;
   {
     days.map((day, index) => (
       <button
-        class="tab"
+        class="tab js-day-tab"
         type="button"
         role="tab"
-        data-day-index={index}
         data-weekday={day.weekday}
         aria-selected={index === 0 ? "true" : "false"}
         aria-label={day.name}

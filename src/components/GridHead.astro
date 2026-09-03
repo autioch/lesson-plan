@@ -10,6 +10,9 @@
  * No day is marked today here. The site is built once a term, so the page
  * script adds `dayhead--today` after it has read the clock — the band ships
  * unmarked and stays that way on paper.
+ *
+ * Exposes the `js-day-head` hook, counted in week order: the script marks the
+ * one at today's index, so the days must stay in the order the data gives them.
  */
 import type { Labels } from "../data/types";
 import type { PlanDay } from "../utils/plan";
@@ -26,7 +29,7 @@ const { days, labels } = Astro.props;
   <span class="grid__corner"></span>
   {
     days.map((day) => (
-      <span class="dayhead" data-weekday={day.weekday} title={day.name}>
+      <span class="dayhead js-day-head" title={day.name}>
         <span class="dayhead__name">{day.name}</span>
         <span class="dayhead__today">{labels.today}</span>
       </span>

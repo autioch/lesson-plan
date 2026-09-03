@@ -10,9 +10,10 @@
  * `allow-discrete` and `@starting-style`, so without either the sheet still
  * opens, just in one frame.
  *
- * `legendButton` and `legendSheet` are the ids the page script in
- * `src/pages/index.astro` queries. Renaming one here breaks the button there
- * silently — there is no import between them.
+ * Exposes the `js-legend-button` and `js-legend-sheet` hooks. Neither element
+ * carries an id: nothing referenced them, and the script is the only caller.
+ * `aria-controls` would need one back — that is an open a11y gap, tracked
+ * separately.
  */
 import type { Labels } from "../data/types";
 import type { LegendGroup } from "../utils/plan";
@@ -26,12 +27,12 @@ type Props = {
 const { groups, labels } = Astro.props;
 ---
 
-<button class="fab" type="button" id="legendButton" aria-expanded="false">
+<button class="fab js-legend-button" type="button" aria-expanded="false">
   <span aria-hidden="true">?</span>
   <span class="sr-only">{labels.legendTitle}</span>
 </button>
 
-<div class="sheet" id="legendSheet" hidden>
+<div class="sheet js-legend-sheet" hidden>
   <div class="sheet__panel" role="dialog" aria-label={labels.legendTitle}>
     <div class="sheet__head">
       <span class="sheet__title">{labels.legendTitle}</span>

@@ -17,7 +17,7 @@ const { labels } = plan;
 ---
 
 <Layout title={labels.pageTitle} locale={plan.locale}>
-  <div class="plan" data-day="0">
+  <div class="plan js-plan" data-day="0">
     <div class="plan__main">
       <DayTabs days={plan.days} labels={labels} />
       <WeekGrid days={plan.days} rows={plan.rows} labels={labels} />
@@ -57,7 +57,7 @@ const { labels } = plan;
    * `transition: none`, so enabling motion on the next line has nothing left
    * to animate — and unlike waiting a frame, it does not depend on the tab
    * being on screen to happen at all. */
-  const plan = document.querySelector<HTMLElement>(".plan");
+  const plan = document.querySelector<HTMLElement>(".js-plan");
   plan?.getBoundingClientRect();
   plan?.classList.add("plan--ready");
 </script>

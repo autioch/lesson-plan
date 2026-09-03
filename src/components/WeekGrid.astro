@@ -11,6 +11,9 @@
  * - ≥1024px: the same five columns with full names and teachers.
  *
  * Paper is band C at its own scale, from this same tree.
+ *
+ * Exposes the `js-swipe-area` hook: the grid is what a swipe is measured on in
+ * band A. Nothing here knows that — the hook names the job, not the element.
  */
 import type { Labels } from "../data/types";
 import type { PlanDay, PlanRow } from "../utils/plan";
@@ -26,7 +29,7 @@ type Props = {
 const { days, rows, labels } = Astro.props;
 ---
 
-<div class="grid">
+<div class="grid js-swipe-area">
   <GridHead days={days} labels={labels} />
 
   <div class="rows">
