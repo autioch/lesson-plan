@@ -89,10 +89,11 @@ again on `main`. Dev server: `npm run dev`. Full table:
 push once at close-out, open a lean PR, merge on green CI. Mechanics:
 [workflow.md § Committing](docs/workflow.md#committing).
 
-Pushing a **feature branch** and opening a PR need no approval — both are recoverable. What prompts
-is what publishes: **merging**, and **`git push origin main`**, which fires the Pages deploy on the
-school's live plan. So do force-push, hard reset, rebase, and any release. That split is what
-`.claude/settings.json` encodes.
+**Commands run unprompted.** `.claude/settings.json` allows `Bash` and `PowerShell` wholesale — this
+is a static frontend with no secrets and every commit on GitHub, so the routine blast radius is a
+`git checkout`. What still stops is what **publishes**: **merging**, and **`git push origin main`**,
+which fires the Pages deploy on the school's live plan — plus force-push, hard reset, rebase, and any
+release. `ask` outranks `allow`, which is what makes that hold.
 
 ## Environment
 
@@ -109,7 +110,9 @@ not by a runtime guard.
   command's stderr as error records and reports false failures — `astro check`, `eslint`, and `git`
   all write to stderr on success. Use PowerShell only for genuinely Windows-specific needs
   (`$env:VAR`, `$null`).
-- **Chain commands sparingly.** A permission rule matches a single command, so `cd x && npm run
-verify` is not covered by the `npm` grant and will prompt. Run the two as separate calls.
+- **Never chain a guarded command behind `&&`.** A permission rule matches a command string, and
+  `Bash` is now allowed wholesale, so `git rm --cached -r . && git reset --hard` runs **without the
+  prompt** that `git reset --hard` alone would raise. Run anything in the `ask` list of
+  [`.claude/settings.json`](.claude/settings.json) as its own call.
 - **The gate is manual.** There are no git hooks in this repo — nothing runs `npm run verify` for
   you before a commit or a push. Run it yourself; CI is the backstop, not the first check.
