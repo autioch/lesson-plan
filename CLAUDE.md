@@ -89,9 +89,11 @@ again on `main`. Dev server: `npm run dev`. Full table:
 push once at close-out, open a lean PR, merge on green CI. Mechanics:
 [workflow.md § Committing](docs/workflow.md#committing).
 
-**Commands run unprompted.** `.claude/settings.json` allows `Bash` and `PowerShell` wholesale — this
-is a static frontend with no secrets and every commit on GitHub, so the routine blast radius is a
-`git checkout`. What still stops is what **publishes**: **merging**, and **`git push origin main`**,
+**Commands and the dev preview run unprompted.** `.claude/settings.json` allows `Bash`, `PowerShell`
+and the browser preview tools wholesale — this is a static frontend with no secrets and every commit
+on GitHub, so the routine blast radius is a `git checkout`. Starting `npm run dev` and driving it to
+verify a change is the job, not a decision. What still stops is what **publishes**: **merging**, and
+**`git push origin main`**,
 which fires the Pages deploy on the school's live plan — plus force-push, hard reset, rebase, and any
 release. `ask` outranks `allow`, which is what makes that hold.
 

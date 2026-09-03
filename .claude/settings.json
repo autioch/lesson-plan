@@ -1,7 +1,14 @@
 {
   "permissions": {
     "defaultMode": "acceptEdits",
-    "allow": ["Bash", "PowerShell", "WebFetch", "WebSearch", "mcp__github"],
+    "allow": [
+      "Bash",
+      "PowerShell",
+      "WebFetch",
+      "WebSearch",
+      "mcp__github",
+      "mcp__Claude_Browser"
+    ],
     "ask": [
       "Bash(git push origin main)",
       "Bash(git push origin main *)",
