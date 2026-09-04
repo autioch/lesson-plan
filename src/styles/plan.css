@@ -332,7 +332,7 @@ body {
     grid-column: 1;
     grid-row: 1;
     z-index: 1;
-    padding: 0 var(--space-12);
+    padding: 0 var(--space-8);
     background: var(--surface-raised);
   }
 
@@ -472,16 +472,20 @@ body {
 @media screen and (min-width: 481px) and (max-width: 1023px) {
   /* A phone on its side is only 412px tall, so the frame around the grid is
    * height the rows would rather have. The header takes the top edge outright
-   * and the rows keep only the side inset plus a gap under the last row. Band C
-   * is roomy and keeps its frame; this is the band that cannot afford one. */
+   * and the rows keep only a thin side inset plus a gap under the last row. The
+   * inset is 4px, not 16 — just enough to keep the hours and tiles off the edge
+   * on the band that cannot spare width. Band C is roomy and keeps its 16. */
   .grid {
-    padding: 0 var(--space-16) var(--space-8);
+    padding: 0 var(--space-4) var(--space-8);
   }
 
   /* `.dayhead`'s own 30px is the band's height here — the padding above and
-   * below it was the last of the frame. */
+   * below it was the last of the frame. The negative margin still bleeds the
+   * header band to the edge; it and the padding track the grid's 4px inset so
+   * each day name stays over its column. */
   .grid__head {
-    padding: 0 var(--space-16);
+    margin: 0 calc(-1 * var(--space-4));
+    padding: 0 var(--space-4);
   }
 
   .row__time {

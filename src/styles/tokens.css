@@ -76,8 +76,9 @@
   --control-min-size: 44px;
   --control-size: 44px;
 
-  /* Layout — time gutter per band (spec §3). */
-  --gutter: 152px;
+  /* Layout — time gutter per band (spec §3). Band A trims its own padding
+   * (plan.css) so the gutter holds the 133px break line on tighter insets. */
+  --gutter: 144px;
 
   /* Two durations for two kinds of movement: a control settling under your
    * finger, and a day sliding in from off screen. The easing leaves fast and
@@ -102,7 +103,7 @@
  * band C whatever its page box measures, so a width query must not reach it. */
 @media screen and (min-width: 481px) {
   :root {
-    --gutter: 244px;
+    --gutter: 220px;
   }
 }
 
