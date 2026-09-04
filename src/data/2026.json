@@ -1,6 +1,10 @@
 {
   "lessons": {
     "mon": {
+      "s1": {
+        "lessonId": "spanish-extra",
+        "teacherId": "t12"
+      },
       "s2": {
         "lessonId": "spanish",
         "teacherId": "t12"
