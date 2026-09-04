@@ -172,6 +172,11 @@
       "colorId": "lang"
     },
     {
+      "id": "spanish-extra",
+      "name": "Hiszpański kółko",
+      "colorId": "lang"
+    },
+    {
       "id": "speech-therapy",
       "name": "Logopedia",
       "colorId": "special"
