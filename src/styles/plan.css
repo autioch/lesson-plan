@@ -328,12 +328,19 @@ body {
    * the hours instead of across them. The row clips the right-hand side and
    * anything past its left edge; this covers the strip in between, which is
    * the only part of the row that isn't the day column. */
+  /* The hours column carries the seam between it and the day. Without it the
+   * boundary only shows where a lesson tile is coloured and vanishes over the
+   * white cells (`wolne`, a white lesson), reading as a broken line. It sits on
+   * the opaque hours column — the edge a day slides behind — so it stays put
+   * through the swipe and never overprints a lesson colour, matching the row
+   * separators' `--line-subtle`. */
   .row__time {
     grid-column: 1;
     grid-row: 1;
     z-index: 1;
     padding: 0 var(--space-8);
     background: var(--surface-raised);
+    border-right: var(--border-width-thin) solid var(--line-subtle);
   }
 
   /* All five days stack in the row's one content column, separated only by the
