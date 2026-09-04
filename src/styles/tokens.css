@@ -103,7 +103,7 @@
  * band C whatever its page box measures, so a width query must not reach it. */
 @media screen and (min-width: 481px) {
   :root {
-    --gutter: 244px;
+    --gutter: 220px;
   }
 }
 
