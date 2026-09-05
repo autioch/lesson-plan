@@ -19,11 +19,32 @@ import "../styles/plan.css";
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
-    <link rel="icon" type="image/svg+xml" href={asset("favicon.svg")} />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href={`${asset("favicon.svg")}?v=2`}
+    />
+    <link rel="manifest" href={asset("manifest.webmanifest")} />
+    <meta name="theme-color" content="#4a86b8" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
   <body>
     <slot />
+    <script>
+      /* Register the offline worker after load so it never competes with the
+       * first paint. Scope and script both sit under the GitHub Pages base
+       * path; BASE_URL carries it, normalised to a single trailing slash. */
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+          navigator.serviceWorker
+            .register(`${base}sw.js`, { scope: base })
+            .catch(() => {
+              /* Offline caching is an enhancement; the page works without it. */
+            });
+        });
+      }
+    </script>
   </body>
 </html>
