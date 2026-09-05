@@ -119,8 +119,9 @@ naming. See [development.md](development.md#conventions) for the rule.
 `public/sw.js` is a service worker registered from `Layout.astro`. It exists so a schedule people
 check on phones in a low-signal building stays readable offline. It caches at runtime — nothing is
 precached — so the cache fills from what a visitor loads while online. Its strategy is fixed by what
-the request is: a **page navigation** is network-first with a short timeout (a reload on a live
-connection gets the freshly published plan; offline falls back to the last page seen), a hashed
+the request is: a **page navigation** is network-first with a short timeout, its fetch bypassing the
+HTTP cache so any online load — reload or re-open — gets the freshly published plan while offline
+falls back to the last page seen; a hashed
 `/_astro/` asset is cache-first (the content hash means a cached copy is never stale), and everything
 else same-origin is stale-while-revalidate. The `CACHE` constant is bumped only when the worker's own
 logic changes; the rest of the file's rationale lives in its header. The web manifest beside it makes

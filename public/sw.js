@@ -5,10 +5,11 @@
  *
  * Strategy, by what the request is:
  *   - a page navigation -> network-first with a short timeout, cache fallback.
- *     A reload on a real connection gets the freshly published plan and updates
- *     the cache; on a poor or dead one it falls back to the last page seen.
- *     That is the "reload fetches the new one, offline still shows the old one"
- *     the request asks for.
+ *     The network fetch bypasses the HTTP cache (see navigationFirst), so any
+ *     load on a real connection — a reload or a re-open — gets the freshly
+ *     published plan and updates our cache; on a poor or dead one it falls back
+ *     to the last page seen. That is the "online fetches the new one, offline
+ *     still shows the old one" the request asks for.
  *   - a hashed /_astro/ asset -> cache-first. The filename carries a content
  *     hash, so a cached copy can never be stale and a new build ships new names.
  *   - anything else same-origin (favicon, manifest) -> stale-while-revalidate:
@@ -62,7 +63,17 @@ self.addEventListener("fetch", (event) => {
 async function navigationFirst(request) {
   const cache = await caches.open(CACHE);
   try {
-    const fresh = await withTimeout(fetch(request), NAV_TIMEOUT_MS);
+    // Bypass the browser's HTTP cache. GitHub Pages serves pages with a short
+    // max-age, so a plain fetch could be answered from that cache and miss a
+    // just-published plan — "network-first" only means "fresh when online" if
+    // it reaches the origin. A reload already bypasses it; this extends the
+    // same freshness to a re-open, which matters in the weeks a plan changes
+    // often. The offline fallback below is our own cache, not the HTTP one, so
+    // it is untouched by this.
+    const fresh = await withTimeout(
+      fetch(request, { cache: "no-store" }),
+      NAV_TIMEOUT_MS,
+    );
     if (fresh.ok) cache.put(request, fresh.clone());
     return fresh;
   } catch {
