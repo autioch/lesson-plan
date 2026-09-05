@@ -12,6 +12,10 @@ This is a static site generated at build time. No runtime layers in the traditio
 Read:   JSON files → component rendering → static HTML
 ```
 
+A service worker caches that static output for offline use — see
+[Offline caching](#offline-caching). It changes nothing above: the build is still the source of the
+pages it serves.
+
 | Layer               | Does                                                                                                                                                          | Must not                                                 |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
 | **JSON files**      | Source of record for everything displayed: schedule, palette, day names, and every fixed string                                                               | Hold HTML, rendering logic, or component state           |
@@ -44,6 +48,9 @@ src/
 ├─ utils/            # Pure build-time transforms (no rendering, no I/O, no clock)
 └─ styles/           # tokens.css, plan.css (screen + the bands paper shares), print.css (deltas)
 ```
+
+`public/` holds the files copied verbatim into the build root: the `favicon.svg`, the web app
+manifest, and `sw.js`, the offline service worker (see [Offline caching](#offline-caching)).
 
 One route: `/`, the responsive plan built to `designs/`. It renders three screen bands and an
 A4-landscape print sheet **from one DOM** — there is no second markup tree for paper, and adding one
@@ -106,6 +113,18 @@ A hook is named for the **job**, not the element — `js-swipe-area` sits on `.g
 Traffic the other way is not a hook: `tab--today`, `dayhead--today`, `plan--ready`, `data-day` and
 `aria-selected` are written by a script and read by CSS or assistive tech, so they keep the reader's
 naming. See [development.md](development.md#conventions) for the rule.
+
+### Offline caching
+
+`public/sw.js` is a service worker registered from `Layout.astro`. It exists so a schedule people
+check on phones in a low-signal building stays readable offline. It caches at runtime — nothing is
+precached — so the cache fills from what a visitor loads while online. Its strategy is fixed by what
+the request is: a **page navigation** is network-first with a short timeout (a reload on a live
+connection gets the freshly published plan; offline falls back to the last page seen), a hashed
+`/_astro/` asset is cache-first (the content hash means a cached copy is never stale), and everything
+else same-origin is stale-while-revalidate. The `CACHE` constant is bumped only when the worker's own
+logic changes; the rest of the file's rationale lives in its header. The web manifest beside it makes
+the site installable.
 
 **Nothing enforces the hooks.** Drop one in a component and the matching script goes quiet — no
 error, no failed build, and the gate stays green. The prefix makes the dependency greppable, which
@@ -189,7 +208,8 @@ index to `initDaySelect` as the opening day. A page with JavaScript off shows Mo
 
 ## State ownership
 
-Static site; the only runtime state is which day a phone is showing.
+Static site; the only in-page runtime state is which day a phone is showing. The service worker also
+keeps a runtime cache of the built output for offline use — see [Offline caching](#offline-caching).
 
 | Data                                               | Owner                                              |
 | -------------------------------------------------- | -------------------------------------------------- |
