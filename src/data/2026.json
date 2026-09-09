@@ -29,9 +29,21 @@
         "lessonId": "education",
         "teacherId": "t1"
       },
+      "s8": {
+        "lessonId": "it",
+        "teacherId": "t13"
+      },
       "s9": {
-        "lessonId": "acrobatics",
-        "teacherId": "t9"
+        "lessonId": "mon_14_55",
+        "teacherId": "t7"
+      },
+      "s10": {
+        "lessonId": "mon_15_45",
+        "teacherId": "t7"
+      },
+      "s11": {
+        "lessonId": "mon_16_45",
+        "teacherId": "t7"
       }
     },
     "tue": {
@@ -62,6 +74,14 @@
       "s8": {
         "lessonId": "english",
         "teacherId": "t10"
+      },
+      "s9": {
+        "lessonId": "tue_14_55",
+        "teacherId": "t7"
+      },
+      "s10": {
+        "lessonId": "tue_15_45",
+        "teacherId": "t7"
       }
     },
     "wed": {
@@ -89,9 +109,21 @@
         "lessonId": "club",
         "teacherId": "t1"
       },
+      "s8": {
+        "lessonId": "wed_14_05",
+        "teacherId": "t7"
+      },
       "s9": {
-        "lessonId": "hand",
-        "teacherId": "t15"
+        "lessonId": "wed_14_55",
+        "teacherId": "t7"
+      },
+      "s10": {
+        "lessonId": "wed_15_45",
+        "teacherId": "t7"
+      },
+      "s11": {
+        "lessonId": "wed_16_45",
+        "teacherId": "t7"
       }
     },
     "thu": {
@@ -122,12 +154,20 @@
       "s8": {
         "lessonId": "education",
         "teacherId": "t1"
+      },
+      "s9": {
+        "lessonId": "thu_14_55",
+        "teacherId": "t7"
+      },
+      "s10": {
+        "lessonId": "thu_15_45",
+        "teacherId": "t7"
       }
     },
     "fri": {
       "s2": {
-        "lessonId": "it",
-        "teacherId": "t13"
+        "lessonId": "education",
+        "teacherId": "t1"
       },
       "s3": {
         "lessonId": "wf",
@@ -152,6 +192,10 @@
       "s8": {
         "lessonId": "english",
         "teacherId": "t10"
+      },
+      "s9": {
+        "lessonId": "fri_14_55",
+        "teacherId": "t7"
       }
     }
   }
