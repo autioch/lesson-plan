@@ -98,12 +98,13 @@
     {
       "id": "club",
       "name": "Kółko \"Uczniowski Miszmasz\"",
+      "nameShort": "Kółko",
       "colorId": "creative"
     },
     {
       "id": "dance",
       "name": "Dance 4 Friends",
-      "nameShort": "Dance 4 F.",
+      "nameShort": "Dance4F",
       "colorId": "extra"
     },
     {
@@ -123,14 +124,12 @@
     },
     {
       "id": "cube",
-      "name": "CUBE",
-      "nameShort": "CUBE",
+      "name": "? CUBE",
       "colorId": "extra"
     },
     {
       "id": "gym-compensatory",
       "name": "Gimnastyka",
-      "nameShort": "Gimnastyka",
       "colorId": "kit"
     },
     {
@@ -142,7 +141,6 @@
     {
       "id": "it",
       "name": "Informatyka",
-      "nameShort": "Inform.",
       "colorId": "special"
     },
     {
@@ -169,11 +167,13 @@
     {
       "id": "spanish",
       "name": "Hiszpański",
+      "nameShort": "Hiszpański",
       "colorId": "lang"
     },
     {
       "id": "spanish-extra",
       "name": "Hiszpański kółko",
+      "nameShort": "Hiszp. kółko",
       "colorId": "lang"
     },
     {
@@ -193,7 +193,7 @@
     },
     {
       "id": "hand",
-      "name": "- Terapia ręki",
+      "name": "? Terapia ręki",
       "colorId": "special"
     },
     {
@@ -203,17 +203,19 @@
     },
     {
       "id": "aikido2",
-      "name": "- Aikido",
+      "name": "? Aikido",
       "colorId": "extra"
     },
     {
       "id": "3d",
-      "name": "+ Projektowanie 3D",
+      "name": "? Projektowanie 3D",
+      "nameShort": "? Projekt 3D",
       "colorId": "extra"
     },
     {
       "id": "hajdasz",
-      "name": "Hajdasz",
+      "name": "Tańce Hajdasz",
+      "nameShort": "Hajdasz",
       "colorId": "extra"
     }
   ]
