@@ -34,15 +34,7 @@
         "teacherId": "t13"
       },
       "s9": {
-        "lessonId": "mon_14_55",
-        "teacherId": "t7"
-      },
-      "s10": {
-        "lessonId": "mon_15_45",
-        "teacherId": "t7"
-      },
-      "s11": {
-        "lessonId": "mon_16_45",
+        "lessonId": "acrobatics",
         "teacherId": "t7"
       }
     },
@@ -74,14 +66,6 @@
       "s8": {
         "lessonId": "english",
         "teacherId": "t10"
-      },
-      "s9": {
-        "lessonId": "tue_14_55",
-        "teacherId": "t7"
-      },
-      "s10": {
-        "lessonId": "tue_15_45",
-        "teacherId": "t7"
       }
     },
     "wed": {
@@ -114,15 +98,11 @@
         "teacherId": "t7"
       },
       "s9": {
-        "lessonId": "wed_14_55",
+        "lessonId": "hand",
         "teacherId": "t7"
       },
       "s10": {
-        "lessonId": "wed_15_45",
-        "teacherId": "t7"
-      },
-      "s11": {
-        "lessonId": "wed_16_45",
+        "lessonId": "aikido2",
         "teacherId": "t7"
       }
     },
@@ -156,7 +136,7 @@
         "teacherId": "t1"
       },
       "s9": {
-        "lessonId": "thu_14_55",
+        "lessonId": "3d",
         "teacherId": "t7"
       },
       "s10": {
@@ -194,7 +174,7 @@
         "teacherId": "t10"
       },
       "s9": {
-        "lessonId": "fri_14_55",
+        "lessonId": "cube",
         "teacherId": "t7"
       }
     }

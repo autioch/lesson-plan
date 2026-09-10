@@ -122,9 +122,9 @@
       "colorId": "plain"
     },
     {
-      "id": "games-cube",
-      "name": "Akademia Gier CUBE",
-      "nameShort": "Gry CUBE",
+      "id": "cube",
+      "name": "CUBE",
+      "nameShort": "CUBE",
       "colorId": "extra"
     },
     {
@@ -193,33 +193,8 @@
     },
     {
       "id": "hand",
-      "name": "Terapia ręki",
+      "name": "- Terapia ręki",
       "colorId": "special"
-    },
-    {
-      "id": "mon_14_55",
-      "name": "? Akrobatyka / ukulele / Kółko plastyczne",
-      "colorId": "extra"
-    },
-    {
-      "id": "mon_15_45",
-      "name": "? Akrobatyka",
-      "colorId": "extra"
-    },
-    {
-      "id": "mon_16_45",
-      "name": "? Lekkoatletyka",
-      "colorId": "extra"
-    },
-    {
-      "id": "tue_14_55",
-      "name": "? Joga / Kółko plastyczne",
-      "colorId": "extra"
-    },
-    {
-      "id": "tue_15_45",
-      "name": "? Joga / Projektowanie 3d",
-      "colorId": "extra"
     },
     {
       "id": "minecraft",
@@ -227,33 +202,18 @@
       "colorId": "extra"
     },
     {
-      "id": "wed_14_55",
-      "name": "? Zespół wokalny \"Wesołe Nutki\"  / Terapia ręki",
+      "id": "aikido2",
+      "name": "- Aikido",
       "colorId": "extra"
     },
     {
-      "id": "wed_15_45",
-      "name": "? Aikido",
-      "colorId": "extra"
-    },
-    {
-      "id": "wed_16_45",
-      "name": "? Aikido",
-      "colorId": "extra"
-    },
-    {
-      "id": "thu_14_55",
-      "name": "? Robotyka / Arteterapia / Projektowanie 3D",
+      "id": "3d",
+      "name": "+ Projektowanie 3D",
       "colorId": "extra"
     },
     {
       "id": "hajdasz",
       "name": "Hajdasz",
-      "colorId": "extra"
-    },
-    {
-      "id": "fri_14_55",
-      "name": "? CUBE / Szachy / Projektowanie 3D",
       "colorId": "extra"
     }
   ]

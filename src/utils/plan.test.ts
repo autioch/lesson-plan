@@ -28,7 +28,7 @@ function makePlan(): LessonsPlan {
       pageTitle: "Plan",
       today: "DZIŚ",
       todayAria: "dziś",
-      freeSlot: "wolne",
+      freeSlot: "",
       dayTabsLabel: "Dzień",
       legendTitle: "Legenda",
       legendHint: "hint",
