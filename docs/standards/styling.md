@@ -33,6 +33,14 @@ construction. Three rules keep that true, and breaking any one of them breaks th
 - **`print.css` holds deltas only** — the page box, the legend moving under the grid, the "today"
   mark coming off, and the ink. Anything it restates from `plan.css` is drift waiting to happen.
 
+**Standalone install.** The site installs as a PWA, so the shell also has to survive the notch and
+home indicator. Height is `100svh` (not `dvh` — the page never scrolls, so the small viewport is the
+stable one and the tall chrome-hidden height never misfires on first paint). The top safe-area inset
+is padded onto the `.tabs` band and the bottom inset onto `.plan`, both with `env(safe-area-inset-*)`
+(0 in a normal tab); `html`/`body` carry `--surface-raised` so no safe-area strip falls back to the
+webview's black. The installed status bar takes the manifest/`theme-color` — `--surface-base`, the
+header band's colour.
+
 **Unsupported:** old browsers (no polyfills, no IE).
 
 ## Floors — non-negotiable
