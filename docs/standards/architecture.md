@@ -49,7 +49,9 @@ src/
 └─ styles/           # tokens.css, plan.css (screen + the bands paper shares), print.css (deltas)
 ```
 
-`public/` holds the files copied verbatim into the build root: the `favicon.svg`, the web app
+`public/` holds the files copied verbatim into the build root: the `favicon.svg` (the browser-tab
+icon), the PNG install icons the manifest points at (`icon-192`, `icon-512`, `icon-maskable-512`, and
+`apple-touch-icon` — baked flat because a themed SVG rasterises to a blank launcher tile), the web app
 manifest, and `sw.js`, the offline service worker (see [Offline caching](#offline-caching)).
 
 One route: `/`, the responsive plan built to `designs/`. It renders three screen bands and an

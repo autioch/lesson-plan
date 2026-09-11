@@ -27,6 +27,10 @@ html,
 body {
   margin: 0;
   padding: 0;
+  /* Paints the standalone (installed) safe-area strips the shell does not
+   * reach — without it the notch and home-indicator zones fall back to the
+   * webview's black backdrop. */
+  background: var(--surface-raised);
 }
 
 body {
@@ -51,10 +55,18 @@ body {
 /* === Page shell ========================================================== */
 
 /* A day fits the screen: the shell is exactly one viewport tall and the rows
- * divide what is left after the tabs and the header. Nothing scrolls. */
+ * divide what is left after the tabs and the header. Nothing scrolls.
+ *
+ * `svh`, not `dvh`: the page never scrolls, so the browser chrome never
+ * retracts and the small viewport is the real one. `dvh` could resolve to the
+ * taller chrome-hidden height on the first paint and push the last rows off
+ * screen until a reload settled it. The bottom safe-area inset is padded in so
+ * the final row clears the home indicator in a standalone install (0 elsewhere,
+ * box-sizing keeps the shell one viewport tall). */
 .plan {
   position: relative;
-  height: 100dvh;
+  height: 100svh;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -76,6 +88,10 @@ body {
  * lessons read as a first row of content. */
 .tabs {
   display: flex;
+  /* Bleed the header band up through the top safe-area inset so the status bar
+   * sits on the same surface as the tabs in a standalone install, not on a
+   * strip of the plan's white (0 in a normal tab). */
+  padding-top: env(safe-area-inset-top, 0px);
   background: var(--surface-base);
   border-bottom: var(--border-width-thin) solid var(--line-subtle);
 }
