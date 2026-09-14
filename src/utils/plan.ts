@@ -149,9 +149,13 @@ export function buildPlan(data: LessonsPlan): Plan {
      * activity already sits in `lessons`, so an elective here as well would be a
      * data mistake, and a red build beats a tile that quietly picks one. */
     if (lesson && electives) {
-      const type = types.get(lesson.lessonId);
-      const name = [type?.name, ...electives].join(" / ");
-      return { empty: false, elective: true, name, nameShort: name };
+      throw new Error(
+        `${dayId}/${slotId}: a slot cannot hold both a lesson and electives`,
+      );
+
+      // const type = types.get(lesson.lessonId);
+      // const name = [type?.name, ...electives].join(" / ");
+      // return { empty: false, elective: true, name, nameShort: name };
     }
 
     if (!lesson) {
