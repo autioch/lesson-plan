@@ -17,9 +17,11 @@ import Legend from "./Legend.astro";
 type Props = {
   groups: PaletteColor[];
   labels: Labels;
+  /** The electives toggle caption, forwarded to `Legend`; absent when none. */
+  electivesLabel?: string;
 };
 
-const { groups, labels } = Astro.props;
+const { groups, labels, electivesLabel } = Astro.props;
 ---
 
 <button class="fab js-legend-button" type="button" aria-expanded="false">
@@ -33,6 +35,6 @@ const { groups, labels } = Astro.props;
       <span class="sheet__title">{labels.legendTitle}</span>
       <span class="sheet__hint">{labels.legendHint}</span>
     </div>
-    <Legend groups={groups} />
+    <Legend groups={groups} electivesLabel={electivesLabel} />
   </div>
 </div>

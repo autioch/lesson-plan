@@ -19,14 +19,25 @@
 import type { Day, Labels, LessonsPlan, PaletteColor } from "../data/types";
 
 /**
- * One slot on one day: a lesson, or nothing at all. An empty cell carries no
- * other field — the component puts `labels.freeSlot` in its place, so there is
- * no blank name or colour to get wrong.
+ * One slot on one day: a lesson, the pool of electives on offer there, or
+ * nothing at all. An empty cell carries no other field — the component puts
+ * `labels.freeSlot` in its place, so there is no blank name or colour to get
+ * wrong. An elective cell has no teacher and no palette hex: the whole pool is
+ * one merged tile in the fixed elective colour, hidden until the reader toggles
+ * it on, so it reads as a free slot until then.
  */
 export type PlanCell =
   | { empty: true }
   | {
       empty: false;
+      elective: true;
+      name: string;
+      /** Shortened for narrow columns; equals `name` when nothing is shortened. */
+      nameShort: string;
+    }
+  | {
+      empty: false;
+      elective?: false;
       name: string;
       /** Shortened for narrow columns; equals `name` when nothing is shortened. */
       nameShort: string;
@@ -52,6 +63,8 @@ export type Plan = {
   rows: PlanRow[];
   /** Palette rows worth showing, in palette order. Filtered, not reshaped. */
   legend: PaletteColor[];
+  /** Whether any slot offers electives — the legend hides the toggle when not. */
+  hasElectives: boolean;
 };
 
 /** Shared: every free slot renders the same, and none is mutated. */
@@ -96,15 +109,56 @@ export function buildPlan(data: LessonsPlan): Plan {
     }
   }
 
+  /* Electives grouped by their slot, `dayId → slotId → names`. Keys are foreign
+   * keys like a lesson's and checked the same way up front, so a mistyped slot
+   * cannot silently drop an activity. The names keep their file order. */
+  const electivesBySlot = new Map<string, Map<string, string[]>>();
+  for (const elective of data.electives ?? []) {
+    if (!data.days.some((day) => day.id === elective.dayId)) {
+      throw new Error(`Elective filed under unknown day "${elective.dayId}"`);
+    }
+    if (!slotIds.has(elective.slotId)) {
+      throw new Error(
+        `Elective on day "${elective.dayId}": unknown slotId "${elective.slotId}"`,
+      );
+    }
+    const byDay = electivesBySlot.get(elective.dayId) ?? new Map();
+    electivesBySlot.set(elective.dayId, byDay);
+    byDay.set(elective.slotId, [
+      ...(byDay.get(elective.slotId) ?? []),
+      elective.name,
+    ]);
+  }
+
   /** A slot with no row is free; so is one the family does not attend. */
   function lessonAt(dayId: string, slotId: string) {
     const lesson = data.lessons[dayId][slotId];
     return lesson && !lesson.ignored ? lesson : null;
   }
 
+  /** The electives offered at a slot, or null — never an empty list. */
+  function electivesAt(dayId: string, slotId: string): string[] | null {
+    return electivesBySlot.get(dayId)?.get(slotId) ?? null;
+  }
+
   function cellAt(dayId: string, slotId: string): PlanCell {
     const lesson = lessonAt(dayId, slotId);
-    if (!lesson) return EMPTY_CELL;
+    const electives = electivesAt(dayId, slotId);
+
+    /* A slot is a fixed lesson or an elective pool, never both — a chosen
+     * activity already sits in `lessons`, so an elective here as well would be a
+     * data mistake, and a red build beats a tile that quietly picks one. */
+    if (lesson && electives) {
+      const type = types.get(lesson.lessonId);
+      const name = [type?.name, ...electives].join(" / ");
+      return { empty: false, elective: true, name, nameShort: name };
+    }
+
+    if (!lesson) {
+      if (!electives) return EMPTY_CELL;
+      const name = electives.join(" / ");
+      return { empty: false, elective: true, name, nameShort: name };
+    }
 
     const type = types.get(lesson.lessonId);
     if (!type) {
@@ -143,7 +197,9 @@ export function buildPlan(data: LessonsPlan): Plan {
    * than this class's week, not gaps in it. So the grid is a different height
    * each year, by design. */
   const slotUsed = data.slots.map((slot) =>
-    data.days.some((day) => lessonAt(day.id, slot.id)),
+    data.days.some(
+      (day) => lessonAt(day.id, slot.id) || electivesAt(day.id, slot.id),
+    ),
   );
   const firstSlot = slotUsed.indexOf(true);
   const spanSlots =
@@ -169,7 +225,9 @@ export function buildPlan(data: LessonsPlan): Plan {
    * are the source — palette hexes are unique, so a hex names one entry. */
   const usedColors = new Set(
     rows.flatMap((row) =>
-      row.cells.flatMap((cell) => (cell.empty ? [] : [cell.hex])),
+      row.cells.flatMap((cell) =>
+        !cell.empty && !cell.elective ? [cell.hex] : [],
+      ),
     ),
   );
 
@@ -181,5 +239,6 @@ export function buildPlan(data: LessonsPlan): Plan {
     legend: data.palette.filter(
       (color) => color.inLegend && usedColors.has(color.hex),
     ),
+    hasElectives: electivesBySlot.size > 0,
   };
 }

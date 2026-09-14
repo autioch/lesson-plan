@@ -3,14 +3,20 @@
  * The colour legend, one list used by both surfaces it appears on: the fixed
  * sidebar from 1024px and the bottom sheet below it. A lesson colour never
  * appears without it.
+ *
+ * `electivesLabel` adds the electives toggle as the last row — a button, not a
+ * caption, since it both names the elective colour and reveals the electives.
+ * Absent for a year with none, so both surfaces get the toggle from this one
+ * place. Its `.js-electives-toggle` hook is wired by `src/scripts/electives.ts`.
  */
 import type { PaletteColor } from "../data/types";
 
 type Props = {
   groups: PaletteColor[];
-}
+  electivesLabel?: string;
+};
 
-const { groups } = Astro.props;
+const { groups, electivesLabel } = Astro.props;
 ---
 
 <ul class="legend">
@@ -21,5 +27,19 @@ const { groups } = Astro.props;
         <span class="legend__title">{group.name}</span>
       </li>
     ))
+  }
+  {
+    electivesLabel && (
+      <li class="legend__item">
+        <button
+          class="legend__toggle js-electives-toggle"
+          type="button"
+          aria-pressed="false"
+        >
+          <span class="legend__swatch legend__swatch--elective" />
+          <span class="legend__title">{electivesLabel}</span>
+        </button>
+      </li>
+    )
   }
 </ul>

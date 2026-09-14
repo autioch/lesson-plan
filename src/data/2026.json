@@ -178,5 +178,129 @@
         "teacherId": "t7"
       }
     }
-  }
+  },
+  "electives": [
+    {
+      "dayId": "mon",
+      "slotId": "s9",
+      "name": "Ukulele"
+    },
+    {
+      "dayId": "mon",
+      "slotId": "s9",
+      "name": "Kółko plastyczne"
+    },
+    {
+      "dayId": "tue",
+      "slotId": "s9",
+      "name": "Joga"
+    },
+    {
+      "dayId": "tue",
+      "slotId": "s9",
+      "name": "Kółko plastyczne"
+    },
+    {
+      "dayId": "tue",
+      "slotId": "s10",
+      "name": "Joga"
+    },
+    {
+      "dayId": "tue",
+      "slotId": "s10",
+      "name": "Malarstwo"
+    },
+    {
+      "dayId": "wed",
+      "slotId": "s9",
+      "name": "Zespół wokalny"
+    },
+    {
+      "dayId": "wed",
+      "slotId": "s8",
+      "name": "Minecraft"
+    },
+    {
+      "dayId": "wed",
+      "slotId": "s9",
+      "name": "Minecraft"
+    },
+    {
+      "dayId": "wed",
+      "slotId": "s10",
+      "name": "Aikido"
+    },
+    {
+      "dayId": "wed",
+      "slotId": "s11",
+      "name": "Aikido"
+    },
+    {
+      "dayId": "thu",
+      "slotId": "s8",
+      "name": "Robotyka"
+    },
+    {
+      "dayId": "thu",
+      "slotId": "s9",
+      "name": "Robotyka"
+    },
+    {
+      "dayId": "thu",
+      "slotId": "s9",
+      "name": "Arteterapia"
+    },
+    {
+      "dayId": "thu",
+      "slotId": "s9",
+      "name": "Projektowanie 3D"
+    },
+    {
+      "dayId": "thu",
+      "slotId": "s10",
+      "name": "Hajdasz"
+    },
+    {
+      "dayId": "thu",
+      "slotId": "s10",
+      "name": "Kółko dziewiarskie"
+    },
+    {
+      "dayId": "fri",
+      "slotId": "s9",
+      "name": "CUBE"
+    },
+    {
+      "dayId": "fri",
+      "slotId": "s8",
+      "name": "Szachy"
+    },
+    {
+      "dayId": "fri",
+      "slotId": "s9",
+      "name": "Szachy"
+    }
+  ],
+  "electives": [
+    { "dayId": "mon", "slotId": "s9", "name": "Ukulele" },
+    { "dayId": "mon", "slotId": "s9", "name": "Kółko plastyczne" },
+    { "dayId": "tue", "slotId": "s9", "name": "Joga" },
+    { "dayId": "tue", "slotId": "s9", "name": "Kółko plastyczne" },
+    { "dayId": "tue", "slotId": "s10", "name": "Joga" },
+    { "dayId": "tue", "slotId": "s10", "name": "Malarstwo" },
+    { "dayId": "wed", "slotId": "s9", "name": "Zespół wokalny" },
+    { "dayId": "wed", "slotId": "s8", "name": "Minecraft" },
+    { "dayId": "wed", "slotId": "s9", "name": "Minecraft" },
+    { "dayId": "wed", "slotId": "s10", "name": "Aikido" },
+    { "dayId": "wed", "slotId": "s11", "name": "Aikido" },
+    { "dayId": "thu", "slotId": "s8", "name": "Robotyka" },
+    { "dayId": "thu", "slotId": "s9", "name": "Robotyka" },
+    { "dayId": "thu", "slotId": "s9", "name": "Arteterapia" },
+    { "dayId": "thu", "slotId": "s9", "name": "Projektowanie 3D" },
+    { "dayId": "thu", "slotId": "s10", "name": "Hajdasz" },
+    { "dayId": "thu", "slotId": "s10", "name": "Kółko dziewiarskie" },
+    { "dayId": "fri", "slotId": "s9", "name": "CUBE" },
+    { "dayId": "fri", "slotId": "s8", "name": "Szachy" },
+    { "dayId": "fri", "slotId": "s9", "name": "Szachy" }
+  ]
 }

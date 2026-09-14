@@ -287,6 +287,34 @@ body {
   color: var(--text-muted);
 }
 
+/* An elective pool. Shown on demand: closed, it reads as a free slot (same fill
+ * as `.cell--empty`, names held with `visibility` so the box does not resize on
+ * reveal); `.plan--electives` opens every pool at once. `visibility` and colour
+ * transition — a fade in, not a jump — and inherit the reduced-motion zeroing
+ * through `--dur-quick`. */
+.cell--elective {
+  background: var(--surface-raised);
+  transition:
+    background var(--dur-quick) var(--ease-out),
+    color var(--dur-quick) var(--ease-out);
+}
+
+.cell--elective .cell__name,
+.cell--elective .cell__short {
+  visibility: hidden;
+  transition: visibility var(--dur-quick) var(--ease-out);
+}
+
+.plan--electives .cell--elective {
+  background: var(--elective-bg);
+  color: var(--elective-fg);
+}
+
+.plan--electives .cell--elective .cell__name,
+.plan--electives .cell--elective .cell__short {
+  visibility: visible;
+}
+
 .cell__name,
 .cell__short {
   font-size: var(--fs-sm);
@@ -614,6 +642,41 @@ body {
   flex: none;
   border-radius: var(--radius-sm);
   border: var(--border-width-thin) solid var(--line-subtle);
+}
+
+.legend__swatch--elective {
+  background: var(--elective-bg);
+}
+
+/* The electives toggle wears the legend row's own layout — swatch then caption —
+ * so it sits in the list without a seam; only the pressed cue and the pointer
+ * mark it as a control. `aria-pressed` carries the state; the ring is the same
+ * fact for the eye. */
+.legend__toggle {
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+  width: 100%;
+  min-height: var(--control-min-size);
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.legend__toggle[aria-pressed="true"] .legend__swatch--elective {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.legend__toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
 }
 
 /* The title carries the instruction; the lessons that use the colour are

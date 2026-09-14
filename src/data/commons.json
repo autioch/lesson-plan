@@ -8,6 +8,7 @@
     "dayTabsLabel": "Dzień tygodnia",
     "legendTitle": "Rodzaje lekcji",
     "legendHint": "dotknij, aby zamknąć",
+    "electivesLabel": "Zajęcia do wyboru",
     "breakMinutes": "+{value}min przerwy"
   },
   "palette": [

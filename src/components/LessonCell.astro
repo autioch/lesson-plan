@@ -11,6 +11,11 @@
  *
  * `data-day-index` is what band A's day switching reads — on every cell, filled
  * or free, so a free slot slides with its day like any other.
+ *
+ * An elective cell is a third case, not a colour of the second: it carries the
+ * merged names but no teacher and no `--cell-bg`, and reads as a free slot
+ * until `.plan--electives` reveals it (CSS owns that reveal, plan.css). Same
+ * name/short spans as a lesson, so the tile layout stays one thing.
  */
 import type { Labels } from "../data/types";
 import type { PlanCell } from "../utils/plan";
@@ -28,6 +33,11 @@ const { cell, dayIndex, labels } = Astro.props;
   cell.empty ? (
     <div class="cell cell--empty" data-day-index={dayIndex}>
       <span class="cell__free">{labels.freeSlot}</span>
+    </div>
+  ) : cell.elective ? (
+    <div class="cell cell--elective" data-day-index={dayIndex}>
+      <span class="cell__name">{cell.name}</span>
+      <span class="cell__short">{cell.nameShort}</span>
     </div>
   ) : (
     <div class="cell" data-day-index={dayIndex} style={`--cell-bg:${cell.hex}`}>

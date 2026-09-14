@@ -32,6 +32,7 @@ function makePlan(): LessonsPlan {
       dayTabsLabel: "Dzień",
       legendTitle: "Legenda",
       legendHint: "hint",
+      electivesLabel: "Do wyboru",
       breakMinutes: "+{value}min przerwy",
     },
     palette: [
@@ -73,8 +74,20 @@ function makePlan(): LessonsPlan {
 
 function assertFilled(
   cell: PlanCell,
-): asserts cell is Extract<PlanCell, { empty: false }> {
+): asserts cell is Extract<PlanCell, { teacher: string }> {
   assert.equal(cell.empty, false, "expected a filled cell, got the free slot");
+  assert.ok("teacher" in cell, "expected a lesson cell, got an elective");
+}
+
+function assertElective(
+  cell: PlanCell,
+): asserts cell is Extract<PlanCell, { elective: true }> {
+  assert.equal(
+    cell.empty,
+    false,
+    "expected an elective cell, got the free slot",
+  );
+  assert.ok(!("teacher" in cell), "expected an elective cell, got a lesson");
 }
 
 describe("buildPlan — cells", () => {
@@ -154,6 +167,86 @@ describe("buildPlan — legend", () => {
       ["cA"],
     );
   });
+});
+
+describe("buildPlan — electives", () => {
+  function withElectives(): LessonsPlan {
+    const data = makePlan();
+    data.electives = [
+      { dayId: "mon", slotId: "s3", name: "Chess" },
+      { dayId: "mon", slotId: "s3", name: "Pottery" },
+      { dayId: "tue", slotId: "s3", name: "Choir" },
+    ];
+    return data;
+  }
+
+  it("merges a slot's electives into one cell, names joined and no teacher", () => {
+    const cell = buildPlan(withElectives()).rows[1].cells[0]; // mon / s3
+    assertElective(cell);
+    assert.equal(cell.name, "Chess / Pottery");
+    assert.equal(cell.nameShort, "Chess / Pottery");
+  });
+
+  it("flags a plan by whether it offers electives", () => {
+    assert.equal(buildPlan(withElectives()).hasElectives, true);
+    assert.equal(buildPlan(makePlan()).hasElectives, false);
+  });
+
+  it("revives an elective-only slot's row that would otherwise be trimmed", () => {
+    const data = makePlan(); // s5 is unused at the end and normally trimmed
+    data.electives = [{ dayId: "mon", slotId: "s5", name: "Club" }];
+    const rows = buildPlan(data).rows;
+    assert.equal(rows[rows.length - 1].range, "12:00 - 12:45");
+  });
+
+  it("keeps electives out of the colour legend", () => {
+    const legend = buildPlan(withElectives()).legend;
+    assert.deepEqual(
+      legend.map((color) => color.id),
+      ["cA"],
+    );
+  });
+
+  it("treats an ignored lesson's slot as free for electives", () => {
+    const data = makePlan();
+    data.lessons.mon.s2.ignored = true;
+    data.electives = [{ dayId: "mon", slotId: "s2", name: "Club" }];
+    const cell = buildPlan(data).rows[0].cells[0]; // mon / s2
+    assertElective(cell);
+    assert.equal(cell.name, "Club");
+  });
+
+  const throwCases: [string, (data: LessonsPlan) => void, RegExp][] = [
+    [
+      "an elective under an unknown day",
+      (data) => {
+        data.electives = [{ dayId: "sat", slotId: "s3", name: "X" }];
+      },
+      /Elective filed under unknown day "sat"/,
+    ],
+    [
+      "an elective on an unknown slot",
+      (data) => {
+        data.electives = [{ dayId: "mon", slotId: "s99", name: "X" }];
+      },
+      /unknown slotId "s99"/,
+    ],
+    [
+      "a slot holding both a lesson and electives",
+      (data) => {
+        data.electives = [{ dayId: "mon", slotId: "s2", name: "X" }];
+      },
+      /cannot hold both a lesson and electives/,
+    ],
+  ];
+
+  for (const [name, breakIt, message] of throwCases) {
+    it(`throws on ${name}`, () => {
+      const data = makePlan();
+      breakIt(data);
+      assert.throws(() => buildPlan(data), message);
+    });
+  }
 });
 
 describe("buildPlan — validation throws on a broken reference", () => {

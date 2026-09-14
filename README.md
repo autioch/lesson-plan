@@ -22,7 +22,8 @@ its questions.
 2. **Tell the agent which class**, and answer what the PDF can't settle — either/or subjects, group
    splits, after-school activities. These, and how the PDF is read, are in
    [docs/importing-a-plan.md](docs/importing-a-plan.md).
-3. **Write `src/data/<year>.json`** — one `lessons` key, transcribed from the PDF. Append any new
+3. **Write `src/data/<year>.json`** — a `lessons` key transcribed from the PDF, plus an optional
+   `electives` list for extra activities on offer (shown behind the legend toggle). Append any new
    teacher or subject to `catalog.json`; never edit an existing row to mean someone else.
 4. **Register the year** in [`src/data/index.ts`](src/data/index.ts) — import the file and add it to
    `years`.

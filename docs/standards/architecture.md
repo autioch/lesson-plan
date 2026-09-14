@@ -149,8 +149,11 @@ change**, not by who uses them:
   leaves keeps their row and the lessons simply stop referencing it. Rows no year references are
   inert — `buildPlan` renders what the lessons point at, so nothing flags a retired row and nothing
   needs to.
-- **`src/data/<year>.json`** — one year's week, named for the September it starts. One root
-  key, `lessons`: `Day.id` → `Slot.id` → `{ lessonId, teacherId }`. A slot with no entry is free.
+- **`src/data/<year>.json`** — one year's week, named for the September it starts. Root key
+  `lessons`: `Day.id` → `Slot.id` → `{ lessonId, teacherId }`; a slot with no entry is free. An
+  optional `electives` list (`{ dayId, slotId, name }[]`) holds the extra activities on offer — the
+  pool the family picks from, not the pick; `buildPlan` merges one slot's names into a single tile,
+  the legend toggle reveals them. A slot is a lesson or an elective pool, never both.
 - **`src/data/index.ts`** — merges commons and catalog into **every** year to build `plans`, keyed
   by the September the year starts. Each page picks its own year out of `plans`; every year is merged
   and typed, not just the current one, so a `LessonsPlan` change names every file it breaks via
@@ -184,8 +187,8 @@ migrate; it is the discipline that keeps the files honest while they are hand-ed
   named a different person in each file and nothing could see it.
 - **Absence is a fact, not a blank row.** A free slot has no entry; there is no empty-lesson shape.
 - **Every foreign key is resolved, never trusted.** `src/utils/plan.ts` throws on any id that does
-  not resolve and on any `lessons` key that names no day or slot. A school timetable with a blank
-  tile is worse than a red build.
+  not resolve, on any `lessons` or `electives` key that names no day or slot, and when a slot holds
+  both a lesson and electives. A school timetable with a blank tile is worse than a red build.
 
 Each page reads its own year once and `src/utils/plan.ts` turns it into the render shape
 (shared row set, breaks, cells, legend). Components lay that out and compute nothing. A reference

@@ -78,6 +78,10 @@ header band's colour.
   Each one must clear 4.5:1 at 14px against **both** ink tokens — check the new colour by hand,
   nothing enforces it — and stay separable from the other five under red-green colour blindness. A
   lesson that asks nothing of the family (Kółko, Religia/Etyka) is plain white.
+- **The elective colour is a token, not a palette entry** — `--elective-bg` / `--elective-fg` in
+  `tokens.css`, deliberately outside the six so a revealed elective reads as a different kind of
+  thing, not a seventh subject. It is UI state (a reveal), so it is tokenized, unlike a lesson
+  colour; closed, an elective cell paints as a free slot and shows nothing.
 - **The six are tints, not colours** — each is its saturated base mixed 50% with white, so a tile
   reads as tinted paper and the lesson name keeps the emphasis. Measured at that mix: worst ink
   contrast **7.5:1**, tightest pair **ΔE 6.1** (pool/creative under deuteranopia), and every tile at

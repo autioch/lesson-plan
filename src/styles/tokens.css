@@ -63,6 +63,13 @@
   --text-on-tile-weak: #524f47;
   --text-on-accent: #ffffff;
   --accent: #4a86b8;
+
+  /* Electives — the reveal-on-demand pool. A warm taupe, deliberately outside
+   * the lesson palette (all light pastels) so a revealed elective reads as a
+   * different kind of thing, not another subject; the darker text clears the
+   * reading floor on it. */
+  --elective-bg: #d8d1c0;
+  --elective-fg: #2b2a25;
   --line-subtle: rgba(0, 0, 0, 0.09);
   --overlay-tint: rgba(0, 0, 0, 0.06); /* rules you track a row or column by */
   --scrim-modal: rgba(18, 17, 13, 0.55);

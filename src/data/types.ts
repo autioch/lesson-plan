@@ -25,6 +25,8 @@ export type Labels = {
   dayTabsLabel: string;
   legendTitle: string;
   legendHint: string;
+  /** The legend toggle that reveals the electives, and the caption for their colour. */
+  electivesLabel: string;
   /** `{value}` is replaced with the gap in minutes. */
   breakMinutes: string;
 };
@@ -87,6 +89,20 @@ type Lesson = {
   ignored?: boolean;
 };
 
+/**
+ * One extra activity on offer in a slot — the pool the family picks from, not
+ * the pick. A chosen activity is a normal `Lesson`; these are the alternatives,
+ * hidden until the reader toggles them on. Carries only a display name: no
+ * teacher and no palette colour, since the whole pool renders as one merged
+ * cell in the fixed elective colour (`buildPlan` joins the names). Many may
+ * share one `dayId`/`slotId` — that is the point.
+ */
+type Elective = {
+  dayId: string;
+  slotId: string;
+  name: string;
+};
+
 export type Day = {
   /** Readable, unlike a slot's — a day's identity cannot change. */
   id: string;
@@ -128,6 +144,12 @@ export type SchoolYear = {
    * entry is free.
    */
   lessons: Record<string, Record<string, Lesson>>;
+  /**
+   * The extra activities on offer this year, if any. A flat list, not nested
+   * under day/slot, because it is edited as one block per year and grouped at
+   * build time. Omitted entirely for a year with none, which hides the toggle.
+   */
+  electives?: Elective[];
 };
 
 export type LessonsPlan = PlanCommons & PlanCatalog & SchoolYear;

@@ -6,8 +6,9 @@ built page is checked. The README owns the ordered steps; this file owns the det
 About half an hour of work, most of it checking rather than typing.
 
 The rules the layout enforces: one file per school year in `src/data/`, named for the
-September it starts (`2026.json`), holding **only that year's week** — a single `lessons` key.
-Everything else lives once in the two shared files:
+September it starts (`2026.json`), holding **only that year's week** — a `lessons` key, and an
+optional `electives` list for the extra activities on offer. Everything else lives once in the two
+shared files:
 [`commons.json`](../src/data/commons.json) for the fixtures and
 [`catalog.json`](../src/data/catalog.json) for the teachers and subjects. A published year is
 **never edited again** — its page is a snapshot of the week that hung on the wall.
@@ -37,8 +38,10 @@ Collect these up front — they are the whole reason this is not a one-command j
   the family made at sign-up. The PDF prints both.
 - **Group splits.** `1. Grupa` / `2. Grupa` in one cell means half the class is elsewhere. Which
   half we are in changes two cells and is written nowhere in the PDF.
-- **After-school activities.** Not in the school PDF at all. If they should show, the human supplies
-  the list, the day and the slot.
+- **After-school activities / electives.** Not in the school PDF at all. If they should show, the
+  human supplies the list, the day and the slot; they go in the year file's `electives` array and
+  surface behind the legend's "Zajęcia do wyboru" toggle. A single chosen activity is a normal
+  lesson instead — `electives` is for a pool of options shown on demand.
 - **An unfamiliar subject code.** See the vocabulary below; when a code is not there, ask.
 
 Anything still open at commit time goes in [owner-tasks.md](owner-tasks.md) with the exact edit that
@@ -109,6 +112,9 @@ duplicate the page → verify). What each of those steps must get right:
   but records that the school put something there. All four keys are resolved at build time, so a
   typo is a red build, not a lost lesson. Nothing is copied from last year: the shape is one object,
   and everything shared lives in the shared files.
+- **Electives, if any, go in a sibling `electives` array** — `{ dayId, slotId, name }`, one entry
+  per option, many sharing a slot. Its keys resolve at build time like a lesson's, and a slot that
+  already holds a lesson rejects electives (a red build). Free-form `name`, not a catalog id.
 - **Extend `catalog.json` before writing a lesson that needs it**, and **append only** — a teacher
   or subject the PDF names that is not already there gets a new row. The full discipline (never
   repurpose or delete a row an archived year references; opaque teacher ids, readable subject ids)
@@ -125,8 +131,8 @@ duplicate the page → verify). What each of those steps must get right:
 `npm run verify` is necessary and **not sufficient**.
 
 What the build catches, by throwing in `src/utils/plan.ts`: an unknown `lessonId`, `colorId`,
-`teacherId` or `slotId`, a day with no `lessons` key, and a `lessons` key naming no day. Typos are a
-red build, never a blank tile.
+`teacherId` or `slotId`, a day with no `lessons` key, a `lessons` or `electives` key naming no day
+or slot, and a slot holding both a lesson and electives. Typos are a red build, never a blank tile.
 
 What nothing catches, and so has to be checked cell by cell against the script's grid: a lesson
 filed under the wrong slot id or the wrong day, the right subject with the wrong teacher, a lesson

@@ -14,6 +14,9 @@ import { buildPlan } from "../utils/plan";
 
 const plan = buildPlan(plans["2026"]);
 const { labels } = plan;
+/* The toggle exists only where the year offers electives; the label doubles as
+ * the reveal control and the elective colour's caption. */
+const electivesLabel = plan.hasElectives ? labels.electivesLabel : undefined;
 ---
 
 <Layout title={labels.pageTitle} locale={plan.locale}>
@@ -25,10 +28,14 @@ const { labels } = plan;
 
     <aside class="legend-side">
       <h2 class="legend-side__title">{labels.legendTitle}</h2>
-      <Legend groups={plan.legend} />
+      <Legend groups={plan.legend} electivesLabel={electivesLabel} />
     </aside>
 
-    <LegendSheet groups={plan.legend} labels={labels} />
+    <LegendSheet
+      groups={plan.legend}
+      labels={labels}
+      electivesLabel={electivesLabel}
+    />
   </div>
 </Layout>
 
@@ -40,12 +47,14 @@ const { labels } = plan;
   import { findTodayIndex, markToday } from "../scripts/today";
   import { initDaySelect } from "../scripts/day-select";
   import { initLegendSheet } from "../scripts/legend-sheet";
+  import { initElectives } from "../scripts/electives";
 
   const todayIndex = findTodayIndex();
   markToday(todayIndex);
   /* No column for today means the weekend: open on Monday. */
   initDaySelect(todayIndex < 0 ? 0 : todayIndex);
   initLegendSheet();
+  initElectives();
 
   /* Only now is motion allowed: the day set above is the clock applied, not a
    * pick, and would otherwise slide in from Monday every load. Reading the
