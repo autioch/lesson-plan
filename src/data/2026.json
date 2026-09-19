@@ -96,10 +96,6 @@
       "s8": {
         "lessonId": "minecraft",
         "teacherId": "t7"
-      },
-      "s9": {
-        "lessonId": "hand",
-        "teacherId": "t7"
       }
     },
     "thu": {
@@ -175,21 +171,19 @@
       }
     }
   },
-  "electives": [
-    { "dayId": "tue", "slotId": "s9", "name": "Joga" },
-    { "dayId": "tue", "slotId": "s9", "name": "Kółko plastyczne" },
-    { "dayId": "tue", "slotId": "s10", "name": "Joga" },
-
-    { "dayId": "wed", "slotId": "s10", "name": "Aikido" },
-    { "dayId": "wed", "slotId": "s11", "name": "Aikido" }
-  ],
-  "electives.conflicts": [
+  "electives": [],
+  "electives.other": [
     { "dayId": "mon", "slotId": "s9", "name": "Ukulele" },
     { "dayId": "mon", "slotId": "s9", "name": "Kółko plastyczne" },
     { "dayId": "mon", "slotId": "s10", "name": "Akrobatyka" },
     { "dayId": "mon", "slotId": "s11", "name": "Lekkoatletyka" },
+    { "dayId": "tue", "slotId": "s9", "name": "Joga" },
+    { "dayId": "tue", "slotId": "s9", "name": "Kółko plastyczne" },
+    { "dayId": "tue", "slotId": "s10", "name": "Joga" },
     { "dayId": "wed", "slotId": "s8", "name": "TUS" },
     { "dayId": "wed", "slotId": "s9", "name": "Zespół wokalny" },
+    { "dayId": "wed", "slotId": "s10", "name": "Aikido" },
+    { "dayId": "wed", "slotId": "s11", "name": "Aikido" },
     { "dayId": "thu", "slotId": "s8", "name": "Robotyka" },
     { "dayId": "thu", "slotId": "s9", "name": "Robotyka" },
     { "dayId": "thu", "slotId": "s9", "name": "Arteterapia" },
