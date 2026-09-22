@@ -114,7 +114,7 @@
     padding: var(--space-8) 0 0;
     overflow: visible;
     border-left: none;
-    border-top: var(--border-width-thin) solid var(--line-subtle);
+    /* border-top: var(--border-width-thin) solid var(--line-subtle); */
   }
 
   /* One row, however many colours the year actually uses — the legend is built

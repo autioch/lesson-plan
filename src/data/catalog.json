@@ -124,7 +124,7 @@
     },
     {
       "id": "cube",
-      "name": "? CUBE",
+      "name": "CUBE",
       "colorId": "extra"
     },
     {
@@ -193,7 +193,7 @@
     },
     {
       "id": "hand",
-      "name": "? Terapia ręki",
+      "name": "Terapia ręki",
       "colorId": "special"
     },
     {
@@ -203,8 +203,8 @@
     },
     {
       "id": "3d",
-      "name": "? Projektowanie 3D",
-      "nameShort": "? Projekt 3D",
+      "name": "Projektowanie 3D",
+      "nameShort": "Projekt 3D",
       "colorId": "extra"
     },
     {
